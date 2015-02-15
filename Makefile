@@ -9,8 +9,7 @@ native:
 	@mv main.native luata
 
 js:
-	ocamlbuild -use-ocamlfind -pkgs js_of_ocaml,js_of_ocaml.syntax -syntax camlp4o src/jsbridge.byte && js_of_ocaml --pretty --noinline jsbridge.byte
-
+	ocamlbuild -use-ocamlfind -pkgs js_of_ocaml,js_of_ocaml.syntax -syntax camlp4o src/jsbridge.byte && js_of_ocaml --disable deadcode jsbridge.byte
 
 top:	byte
 #	make
