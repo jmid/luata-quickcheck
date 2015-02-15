@@ -49,6 +49,8 @@
 
   <body>
 
+    <h1>LuaTA : a Lua Type Analysis </h1>
+
     <div style="position: absolute; left: 10px; top: 100px; padding: 10px;
 		border: 1px solid #000000; width: 95%;">
 
@@ -87,13 +89,39 @@ print(y)</textarea>
       </div>
       <div style="clear:both"></div>
 
-      Built with
-      <a href="http://ocsigen.org/js_of_ocaml/">Js_of_ocaml</a>,
-      <a href="http://codemirror.net/">CodeMirror</a>, and
-      the <a href = "https://github.com/angelozerr/CodeMirror-XQuery/tree/master/codemirror-extension/addon/hover">Text Hover addon</a>.
+      <div style="top: 100px; bottom: 100px;">
+	<p>
+	  <b>What?</b> a static analysis for convervatively predicting run-time
+	  types of Lua programs.
+	<br>
+	  <b>Why?</b> To help Lua programmers and to illustrate a paper we wrote.
+	<br>
+	  <b>How?</b> <a href="https://github.com/jmid/luata-quickcheck">an
+	  abstract interpreter implemented in OCaml</a>, glued
+	  together with 
+	  <a href="http://ocsigen.org/js_of_ocaml/">Js_of_ocaml</a>,
+	  <a href="http://codemirror.net/">CodeMirror</a>, and
+	  the <a href =
+	  "https://github.com/angelozerr/CodeMirror-XQuery/tree/master/codemirror-extension/addon/hover">Text
+	    Hover addon</a>.
+        <br>
+	  <b>Caveat:</b> this software is an academic prototype.
+	  The tool calculates a whole-program analysis, hence
+	  requires the full source code. Currently it supports only a subset of Lua 5.1:
+	  <ul>
+	    <li>require, labels, goto, varargs, repeat-until, and co-routines not supported (for now)</li>
+	    <li>Only parts of the standard library covered (for now)</li>
+	    <li>Some metatable/metamethods support (not on strings at the moment)</li>
+	    <li>The analysis models left-to-right argument evaluation of reference implementation</li>
+	  </ul>
+	</p>
+      </div>
+
     </div>
 
     <script src="index.js"></script>
+
+   
   </body>
 
 </html>
