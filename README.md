@@ -39,15 +39,15 @@ Requirements:
   - ocamlp4-extra (for 'camlp4of', required by bisect below)
 - OCaml libraries/tools (through OPAM):
   - ocamlfind
-  - qcheck v.0.2
-  - ounit v.2.0.0
-  - bisect v.1.3 (for coverage reports)
+  - [qcheck](https://github.com/c-cube/qcheck/) v.0.2
+  - [ounit](http://ounit.forge.ocamlcore.org/) v.2.0.0
+  - [bisect](http://bisect.x9c.fr/) v.1.3 (for coverage reports)
 - GNU Make
 
-The web-interface further requires:
-- Js_of_ocaml
-- CodeMirror (included)
-- TextHover addon to CodeMirror (also included)
+The web interface further requires:
+- [Js_of_ocaml](http://ocsigen.org/js_of_ocaml/) (available through OPAM)
+- [CodeMirror](http://codemirror.net) (included)
+- [TextHover addon to CodeMirror]("https://github.com/angelozerr/CodeMirror-XQuery/tree/master/codemirror-extension/addon/hover") (also included)
  
 
 Analysis instructions:
