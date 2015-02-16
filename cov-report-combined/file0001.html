@@ -1,0 +1,237 @@
+<html>
+  <head>
+    <title>Bisect report</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script type="text/javascript">
+      <!--
+        function jump(id) {
+          document.body.scrollTop = document.getElementById(id).offsetTop;
+        }
+      -->
+    </script>
+    <script language="javascript" src="file0001.js"></script>
+  </head>
+  <body>
+    <div class="section">File: src/stringlattice.ml (<a href="index.html">return to index</a>)</div>
+    <br/>
+    <hr class="codeSep"/>
+    <br/>
+    <table>
+      <tr>
+        <td valign="top" class="section">Statistics:&nbsp;&nbsp;</td>
+        <td valign="top">
+          <table class="simple">
+            <tr><th>kind</th><th width="16px">&nbsp;</th><th>coverage</th></tr>
+            <tr><td>binding</td><td width="16px">&nbsp;</td><td>2 / 2 (100%)</td></tr>
+            <tr><td>sequence</td><td width="16px">&nbsp;</td><td>0 / 0 (-%)</td></tr>
+            <tr><td>for</td><td width="16px">&nbsp;</td><td>0 / 0 (-%)</td></tr>
+            <tr><td>if/then</td><td width="16px">&nbsp;</td><td>4 / 4 (100%)</td></tr>
+            <tr><td>try</td><td width="16px">&nbsp;</td><td>0 / 0 (-%)</td></tr>
+            <tr><td>while</td><td width="16px">&nbsp;</td><td>0 / 0 (-%)</td></tr>
+            <tr><td>match/function</td><td width="16px">&nbsp;</td><td>30 / 30 (100%)</td></tr>
+          </table>
+        </td>
+        <td valign="top">
+          <table class="simple">
+            <tr><th>kind</th><th width="16px">&nbsp;</th><th>coverage</th></tr>
+            <tr><td>class expression</td><td width="16px">&nbsp;</td><td>0 / 0 (-%)</td></tr>
+            <tr><td>class initializer</td><td width="16px">&nbsp;</td><td>0 / 0 (-%)</td></tr>
+            <tr><td>class method</td><td width="16px">&nbsp;</td><td>0 / 0 (-%)</td></tr>
+            <tr><td>class value</td><td width="16px">&nbsp;</td><td>0 / 0 (-%)</td></tr>
+            <tr><td>toplevel expression</td><td width="16px">&nbsp;</td><td>0 / 0 (-%)</td></tr>
+            <tr><td>lazy operator</td><td width="16px">&nbsp;</td><td>0 / 0 (-%)</td></tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <br/>
+    <hr class="codeSep"/>
+    <br/>
+    <div class="section">Source:</div>
+    <br/>
+<div style="font-size: smaller;"><a href="javascript:foldAll();">fold all</a> <a href="javascript:unfoldAll();">unfold all</a></div>
+    <code>
+      <div id="fold000001">
+      <div id="line000001" class="lineNone"><a href="javascript:fold('fold000001');"><img border="0" height="10" width="10" src="minus.png" title="fold code"/></a>000001| (**&nbsp;Abstract&nbsp;string&nbsp;datatype&nbsp;and&nbsp;operations&nbsp;*)</div>
+      <div id="line000002" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000002| &nbsp;</div>
+      <div id="line000003" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000003| type&nbsp;elem&nbsp;=</div>
+      <div id="line000004" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000004| &nbsp;&nbsp;|&nbsp;Bot</div>
+      <div id="line000005" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000005| &nbsp;&nbsp;|&nbsp;Const&nbsp;of&nbsp;string</div>
+      <div id="line000006" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000006| &nbsp;&nbsp;|&nbsp;Top</div>
+      <div id="line000007" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000007| &nbsp;</div>
+      <div id="line000008" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000008| (*&nbsp;&nbsp;eq&nbsp;:&nbsp;elem&nbsp;-&gt;&nbsp;elem&nbsp;-&gt;&nbsp;bool&nbsp;&nbsp;*)</div>
+      <div id="line000009" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000009| let&nbsp;eq&nbsp;(a:elem)&nbsp;a'&nbsp;=&nbsp;(*[694023]*)a&nbsp;=&nbsp;a'</div>
+      <div id="line000010" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000010| &nbsp;</div>
+      <div id="line000011" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000011| (*&nbsp;&nbsp;leq&nbsp;:&nbsp;elem&nbsp;-&gt;&nbsp;elem&nbsp;-&gt;&nbsp;bool&nbsp;&nbsp;*)</div>
+      <div id="line000012" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000012| let&nbsp;leq&nbsp;s&nbsp;s'&nbsp;=&nbsp;match&nbsp;s,s'&nbsp;with</div>
+      <div id="line000013" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000013| &nbsp;&nbsp;|&nbsp;Bot,_&nbsp;-&gt;&nbsp;(*[31630503]*)true</div>
+      <div id="line000014" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000014| &nbsp;&nbsp;|&nbsp;_,Bot&nbsp;-&gt;&nbsp;(*[24382069]*)false</div>
+      <div id="line000015" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000015| &nbsp;&nbsp;|&nbsp;_,Top&nbsp;-&gt;&nbsp;(*[55097680]*)true</div>
+      <div id="line000016" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000016| &nbsp;&nbsp;|&nbsp;Top,_&nbsp;-&gt;&nbsp;(*[1374418]*)false</div>
+      <div id="line000017" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000017| &nbsp;&nbsp;|&nbsp;Const&nbsp;c,&nbsp;Const&nbsp;c'&nbsp;-&gt;&nbsp;(*[44229395]*)c=c'</div>
+      <div id="line000018" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000018| &nbsp;</div>
+      <div id="line000019" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000019| (*&nbsp;&nbsp;join&nbsp;:&nbsp;elem&nbsp;-&gt;&nbsp;elem&nbsp;-&gt;&nbsp;elem&nbsp;&nbsp;*)</div>
+      <div id="line000020" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000020| let&nbsp;join&nbsp;s&nbsp;s'&nbsp;=&nbsp;match&nbsp;s,s'&nbsp;with</div>
+      <div id="line000021" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000021| &nbsp;&nbsp;|&nbsp;Bot,_&nbsp;-&gt;&nbsp;(*[31999156]*)s'</div>
+      <div id="line000022" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000022| &nbsp;&nbsp;|&nbsp;_,Bot&nbsp;-&gt;&nbsp;(*[35428058]*)s</div>
+      <div id="line000023" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000023| &nbsp;&nbsp;|&nbsp;Top,_&nbsp;-&gt;&nbsp;(*[6681212]*)Top</div>
+      <div id="line000024" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000024| &nbsp;&nbsp;|&nbsp;_,Top&nbsp;-&gt;&nbsp;(*[2708841]*)Top</div>
+      <div id="line000025" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000025| &nbsp;&nbsp;|&nbsp;Const&nbsp;c,&nbsp;Const&nbsp;c'&nbsp;-&gt;&nbsp;(*[4014382]*)if&nbsp;c=c'&nbsp;then&nbsp;(*[1496101]*)s&nbsp;else&nbsp;(*[2518281]*)Top</div>
+      <div id="line000026" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000026| &nbsp;</div>
+      <div id="line000027" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000027| (*&nbsp;&nbsp;meet&nbsp;:&nbsp;elem&nbsp;-&gt;&nbsp;elem&nbsp;-&gt;&nbsp;elem&nbsp;&nbsp;*)</div>
+      <div id="line000028" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000028| let&nbsp;meet&nbsp;s&nbsp;s'&nbsp;=&nbsp;match&nbsp;s,s'&nbsp;with</div>
+      <div id="line000029" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000029| &nbsp;&nbsp;|&nbsp;Bot,_&nbsp;-&gt;&nbsp;(*[1613530]*)Bot</div>
+      <div id="line000030" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000030| &nbsp;&nbsp;|&nbsp;_,Bot&nbsp;-&gt;&nbsp;(*[129147]*)Bot</div>
+      <div id="line000031" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000031| &nbsp;&nbsp;|&nbsp;Top,_&nbsp;-&gt;&nbsp;(*[1009081]*)s'</div>
+      <div id="line000032" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000032| &nbsp;&nbsp;|&nbsp;_,Top&nbsp;-&gt;&nbsp;(*[131989]*)s</div>
+      <div id="line000033" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000033| &nbsp;&nbsp;|&nbsp;Const&nbsp;c,&nbsp;Const&nbsp;c'&nbsp;-&gt;&nbsp;(*[1048459]*)if&nbsp;c=c'&nbsp;then&nbsp;(*[1030256]*)s&nbsp;else&nbsp;(*[18203]*)Bot</div>
+      <div id="line000034" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000034| &nbsp;</div>
+      <div id="line000035" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000035| (*&nbsp;const&nbsp;:&nbsp;string&nbsp;-&gt;&nbsp;elem&nbsp;&nbsp;*)</div>
+      <div id="line000036" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000036| let&nbsp;const&nbsp;s&nbsp;=&nbsp;(*[91565274]*)Const&nbsp;s</div>
+      <div id="line000037" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000037| &nbsp;</div>
+      <div id="line000038" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000038| (*&nbsp;&nbsp;bot&nbsp;:&nbsp;elem&nbsp;&nbsp;*)</div>
+      <div id="line000039" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000039| let&nbsp;bot&nbsp;=&nbsp;(*[2]*)Bot</div>
+      <div id="line000040" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000040| &nbsp;</div>
+      <div id="line000041" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000041| (*&nbsp;&nbsp;top&nbsp;:&nbsp;elem&nbsp;&nbsp;*)</div>
+      <div id="line000042" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000042| let&nbsp;top&nbsp;=&nbsp;(*[2]*)Top</div>
+      <div id="line000043" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000043| &nbsp;</div>
+      <div id="line000044" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000044| (*&nbsp;&nbsp;upper&nbsp;:&nbsp;elem&nbsp;-&gt;&nbsp;elem&nbsp;*)</div>
+      <div id="line000045" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000045| let&nbsp;upper&nbsp;s&nbsp;=&nbsp;match&nbsp;s&nbsp;with</div>
+      <div id="line000046" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000046| &nbsp;&nbsp;|&nbsp;Bot&nbsp;-&gt;&nbsp;(*[5974]*)Bot</div>
+      <div id="line000047" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000047| &nbsp;&nbsp;|&nbsp;Top&nbsp;-&gt;&nbsp;(*[7766]*)Top</div>
+      <div id="line000048" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000048| &nbsp;&nbsp;|&nbsp;Const&nbsp;c&nbsp;-&gt;&nbsp;(*[3214]*)Const&nbsp;(String.uppercase&nbsp;c)</div>
+      <div id="line000049" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000049| &nbsp;</div>
+      <div id="line000050" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000050| (*&nbsp;&nbsp;lower&nbsp;:&nbsp;elem&nbsp;-&gt;&nbsp;elem&nbsp;*)</div>
+      <div id="line000051" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000051| let&nbsp;lower&nbsp;s&nbsp;=&nbsp;match&nbsp;s&nbsp;with</div>
+      <div id="line000052" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000052| &nbsp;&nbsp;|&nbsp;Bot&nbsp;-&gt;&nbsp;(*[6025]*)Bot</div>
+      <div id="line000053" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000053| &nbsp;&nbsp;|&nbsp;Top&nbsp;-&gt;&nbsp;(*[7828]*)Top</div>
+      <div id="line000054" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000054| &nbsp;&nbsp;|&nbsp;Const&nbsp;c&nbsp;-&gt;&nbsp;(*[3140]*)Const&nbsp;(String.lowercase&nbsp;c)</div>
+      <div id="line000055" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000055| &nbsp;</div>
+      <div id="line000056" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000056| (*&nbsp;&nbsp;concat&nbsp;:&nbsp;elem&nbsp;-&gt;&nbsp;elem&nbsp;-&gt;&nbsp;elem&nbsp;*)</div>
+      <div id="line000057" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000057| let&nbsp;concat&nbsp;s&nbsp;s'&nbsp;=&nbsp;match&nbsp;s,s'&nbsp;with</div>
+      <div id="line000058" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000058| &nbsp;&nbsp;|&nbsp;Bot,_&nbsp;-&gt;&nbsp;(*[5986]*)Bot</div>
+      <div id="line000059" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000059| &nbsp;&nbsp;|&nbsp;_,Bot&nbsp;-&gt;&nbsp;(*[3831]*)Bot</div>
+      <div id="line000060" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000060| &nbsp;&nbsp;|&nbsp;Top,_&nbsp;-&gt;&nbsp;(*[8946]*)Top</div>
+      <div id="line000061" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000061| &nbsp;&nbsp;|&nbsp;_,Top&nbsp;-&gt;&nbsp;(*[1642]*)Top</div>
+      <div id="line000062" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000062| &nbsp;&nbsp;|&nbsp;Const&nbsp;c,&nbsp;Const&nbsp;c'&nbsp;-&gt;&nbsp;(*[2101]*)Const&nbsp;(c&nbsp;^&nbsp;c')</div>
+      <div id="line000063" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000063| &nbsp;</div>
+      <div id="line000064" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000064| (*&nbsp;&nbsp;empty&nbsp;:&nbsp;elem&nbsp;-&gt;&nbsp;bool&nbsp;&nbsp;*)</div>
+      <div id="line000065" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000065| let&nbsp;empty&nbsp;s&nbsp;=&nbsp;(*[5000]*)s&nbsp;=&nbsp;Bot</div>
+      <div id="line000066" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000066| &nbsp;</div>
+      <div id="line000067" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000067| (*&nbsp;&nbsp;nonempty&nbsp;:&nbsp;elem&nbsp;-&gt;&nbsp;bool&nbsp;&nbsp;*)</div>
+      <div id="line000068" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000068| let&nbsp;nonempty&nbsp;s&nbsp;=&nbsp;(*[45245]*)s&nbsp;&lt;&gt;&nbsp;Bot</div>
+      <div id="line000069" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000069| &nbsp;</div>
+      <div id="line000070" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000070| &nbsp;</div>
+      <div id="line000071" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000071| (**&nbsp;{3&nbsp;Pretty&nbsp;printing&nbsp;routine&nbsp;}&nbsp;*)</div>
+      <div id="line000072" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000072| &nbsp;</div>
+      <div id="line000073" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000073| (*&nbsp;&nbsp;to_string&nbsp;:&nbsp;elem&nbsp;-&gt;&nbsp;unit&nbsp;&nbsp;*)</div>
+      <div id="line000074" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000074| let&nbsp;to_string&nbsp;s&nbsp;=&nbsp;match&nbsp;s&nbsp;with</div>
+      <div id="line000075" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000075| &nbsp;&nbsp;|&nbsp;Bot&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&gt;&nbsp;&quot;Bot&quot;</div>
+      <div id="line000076" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000076| &nbsp;&nbsp;|&nbsp;Const&nbsp;c&nbsp;-&gt;&nbsp;&quot;Const&nbsp;\&quot;&quot;&nbsp;^&nbsp;c&nbsp;^&nbsp;&quot;\&quot;&quot;</div>
+      <div id="line000077" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000077| &nbsp;&nbsp;|&nbsp;Top&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&gt;&nbsp;&quot;Top&quot;</div>
+      <div id="line000078" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000078| &nbsp;</div>
+      <div id="line000079" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000079| (*&nbsp;&nbsp;pprint&nbsp;:&nbsp;elem&nbsp;-&gt;&nbsp;unit&nbsp;&nbsp;*)</div>
+      <div id="line000080" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000080| let&nbsp;pprint&nbsp;s&nbsp;=&nbsp;match&nbsp;s&nbsp;with</div>
+      <div id="line000081" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000081| &nbsp;&nbsp;|&nbsp;Bot&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&gt;&nbsp;Format.printf&nbsp;&quot;Bot&quot;</div>
+      <div id="line000082" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000082| &nbsp;&nbsp;|&nbsp;Const&nbsp;c&nbsp;-&gt;&nbsp;Format.printf&nbsp;&quot;Const&nbsp;\&quot;%s\&quot;&quot;&nbsp;c</div>
+      <div id="line000083" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000083| &nbsp;&nbsp;|&nbsp;Top&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&gt;&nbsp;Format.printf&nbsp;&quot;Top&quot;</div>
+      </div>
+    </code>
+    <br/>
+    <div id="navigator" style="border: solid black 1px; position: fixed; z-index:100; right: 10px; top: 10px; bottom: 10px; width: 16px;">
+      <table width="100%" height="100%" border="0" cellspacing="0">
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+      </table>
+    </div>
+    <div class="section">Legend:</div>
+    &nbsp;&nbsp;&nbsp;<span class="lineNone">some code</span>&nbsp;-&nbsp;line containing no point<br/>
+    &nbsp;&nbsp;&nbsp;<span class="lineAllVisited">some code</span>&nbsp;-&nbsp;line containing only visited points<br/>
+    &nbsp;&nbsp;&nbsp;<span class="lineAllUnvisited">some code</span>&nbsp;-&nbsp;line containing only unvisited points<br/>
+    &nbsp;&nbsp;&nbsp;<span class="lineMixed">some code</span>&nbsp;-&nbsp;line containing both visited and unvisited points<br/>
+    <br/>
+    <hr class="codeSep"/>
+    <p class="footer">Generated by <a href="http://bisect.x9c.fr">Bisect 1.3</a> on 2015-02-16 10:26:02</p>
+  </body>
+</html>
