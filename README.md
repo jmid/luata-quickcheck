@@ -1,25 +1,25 @@
 Requirements:
 -------------
 
- OCaml, version 4.01.0 or newer
-   ocamlp4-extra (for 'camlp4of', required by bisect below)
- OCaml libraries/tools (through OPAM):
-   ocamlfind
-   qcheck v.0.2
-   ounit v.2.0.0
-   bisect v.1.3 (for coverage reports)
- GNU Make
+- OCaml, version 4.01.0 or newer
+  - ocamlp4-extra (for 'camlp4of', required by bisect below)
+- OCaml libraries/tools (through OPAM):
+  - ocamlfind
+  - qcheck v.0.2
+  - ounit v.2.0.0
+  - bisect v.1.3 (for coverage reports)
+- GNU Make
 
- The web-interface further requires:
-   Js_of_ocaml
-   CodeMirror (included)
-   TextHover addon to CodeMirror (also included)
+The web-interface further requires:
+- Js_of_ocaml
+- CodeMirror (included)
+- TextHover addon to CodeMirror (also included)
  
 
 Analysis instructions:
 ----------------------
 
-The file doc/luata-doc.txt provides a basic description of the
+The file doc/luata-doc.md provides a basic description of the
 analysis architecture as well as an explanation of its output.
 
 The analysis comes with both a command line interface and a web
@@ -78,9 +78,9 @@ instructions.
 
 * To reproduce the QuickCheck coverage numbers:
 
-    $ make -B edslcheckcov
-    $ make -B runedslcheckcov
-    $ make -B checkreport
+      $ make -B edslcheckcov
+      $ make -B runedslcheckcov
+      $ make -B checkreport
 
   (Warning: the last step takes a full lunchbreak)
   The resulting report is now available in HTML format in cov-report-qcheck/index.html
@@ -88,18 +88,18 @@ instructions.
 
 * To reproduce the original test suite coverage numbers:
 
-    $ make -B testcov
-    $ make -B runtestcov
-    $ make -B testreport
+      $ make -B testcov
+      $ make -B runtestcov
+      $ make -B testreport
 
   The resulting report is now available in HTML format in cov-report-test/index.html
 
 
 * To reproduce the combined coverage numbers:
 
-   First run both the above (which will generate cov-report-qcheck.out
-   and cov-report-test.out). Then
+  First run both the above (which will generate cov-report-qcheck.out
+  and cov-report-test.out). Then
 
-    $ make -B combinedreport
+      $ make -B combinedreport
 
   The resulting report is now available in HTML format in cov-report-combined/index.html
