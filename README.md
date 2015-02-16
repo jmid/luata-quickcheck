@@ -4,10 +4,10 @@ LuaTA : Lua Type Analysis and corresponding QuickCheck code
 This is a static analysis for conservatively inferring run-time types
 of Lua programs. It forms the case study contained in the paper
 
-  QuickChecking Static Analysis Properties
-  Jan Midtgaard and Anders Møller
-  Proceedings of ICST'15
-  http://janmidtgaard.dk/papers/Midtgaard-Moeller:ICST15.pdf
+    QuickChecking Static Analysis Properties
+    Jan Midtgaard and Anders Møller
+    Proceedings of ICST'15
+    http://janmidtgaard.dk/papers/Midtgaard-Moeller:ICST15.pdf
 
 which focuses on testing properties related to static analyses
 (lattice properties, and monotonicity, strictness, and invariance of
