@@ -47,7 +47,7 @@ Requirements:
 The web interface further requires:
 - [Js_of_ocaml](http://ocsigen.org/js_of_ocaml/) (available through OPAM)
 - [CodeMirror](http://codemirror.net) (included)
-- [TextHover addon to CodeMirror]("https://github.com/angelozerr/CodeMirror-XQuery/tree/master/codemirror-extension/addon/hover") (also included)
+- [TextHover addon]("https://github.com/angelozerr/CodeMirror-XQuery/tree/master/codemirror-extension/addon/hover") to CodeMirror (also included)
  
 
 Analysis instructions:
