@@ -22,9 +22,14 @@ available at http://jmid.github.io/luata-quickcheck/
 
 The coverage reports mentioned in the paper are available in the sub-directories:
 
- - cov-report-qcheck/  is based solely on QuickChecking.
- - cov-report-test/  is based solely on our test suite of programs.
- - cov-report-combined/  is the combination of the two above.
+ - [cov-report-qcheck](http://jmid.github.io/luata-quickcheck/cov-report-qcheck/)
+   is based solely on QuickChecking.
+
+ - [cov-report-test](http://jmid.github.io/luata-quickcheck/cov-report-test/)
+   is based solely on our test suite of programs.
+
+ - [cov-report-combined](http://jmid.github.io/luata-quickcheck/cov-report-combined/)
+   is the combination of the two above.
 
 
 Requirements:
@@ -48,7 +53,7 @@ The web-interface further requires:
 Analysis instructions:
 ----------------------
 
-The file doc/luata-doc.md provides a basic description of the
+The file `doc/luata-doc.md` provides a basic description of the
 analysis architecture as well as an explanation of its output.
 
 The analysis comes with both a command line interface and a web
@@ -65,7 +70,7 @@ examples/ directory for other examples):
 
 The result will now be printed to the console.
 
-To reduce the amount of console output passing the option '-no-heap'
+To reduce the amount of console output passing the option `-no-heap`
 will just emit the warnings:
 
     $ ./luata -no-heap examples/table06.lua
@@ -76,18 +81,18 @@ Alternatively you can build the web client with
     $ make js
 
 The web client is now available as an HTML page with overlays
-in 'index.html' (view with a web browser and shrink fontsize).
+in `index.html` (view with a web browser and shrink fontsize).
 
 
 Quickcheck instructions:
 ------------------------
 
  The source code for the QuickCheck LCheck module is included
- in src/lCheck.ml for convenience, but is also separately available
+ in `src/lCheck.ml` for convenience, but is also separately available
  from http://github.com/jmid/lcheck
 
  The source code applying LCheck to the Lua type analyses is
- available in src/edslcheck.ml
+ available in `src/edslcheck.ml`
 
  To rerun our quickchecking on the type analysis:
 
@@ -95,7 +100,7 @@ Quickcheck instructions:
     $ ./edslcheck
 
  Warning: the last step takes a full lunchbreak! You can comment out
- some tests at the bottom of src/edslcheck.ml to run fewer tests.
+ some tests at the bottom of `src/edslcheck.ml` to run fewer tests.
 
 
 Report instructions:
@@ -114,7 +119,7 @@ instructions.
       $ make -B checkreport
 
   (Warning: the last step takes a full lunchbreak)
-  The resulting report is now available in HTML format in cov-report-qcheck/index.html
+  The resulting report is now available in HTML format in `cov-report-qcheck/index.html`
 
 
 * To reproduce the original test suite coverage numbers:
@@ -125,7 +130,7 @@ instructions.
       $ make -B runtestcov
       $ make -B testreport
 
-  The resulting report is now available in HTML format in cov-report-test/index.html
+  The resulting report is now available in HTML format in `cov-report-test/index.html`
 
 
 * To reproduce the combined coverage numbers:
@@ -135,4 +140,4 @@ instructions.
 
       $ make -B combinedreport
 
-  The resulting report is now available in HTML format in cov-report-combined/index.html
+  The resulting report is now available in HTML format in `cov-report-combined/index.html`
