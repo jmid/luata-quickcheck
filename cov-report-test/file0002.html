@@ -70,11 +70,11 @@
       <div id="line000016" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000016| let&nbsp;reset,make_label,make_res_label&nbsp;=</div>
       <div id="line000017" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000017| &nbsp;&nbsp;(*[1]*)let&nbsp;count&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ref&nbsp;1&nbsp;in</div>
       <div id="line000018" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000018| &nbsp;&nbsp;(*[1]*)let&nbsp;res_count&nbsp;=&nbsp;ref&nbsp;0&nbsp;in</div>
-      <div id="line000019" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000019| &nbsp;&nbsp;(*[1]*)(fun&nbsp;()&nbsp;-&gt;&nbsp;(*[155]*)count&nbsp;:=&nbsp;1),</div>
-      <div id="line000020" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000020| &nbsp;&nbsp;(fun&nbsp;()&nbsp;-&gt;&nbsp;(*[1847]*)let&nbsp;label&nbsp;=&nbsp;!count&nbsp;in</div>
-      <div id="line000021" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000021| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[1847]*)begin&nbsp;</div>
-      <div id="line000022" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000022| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[1847]*)incr&nbsp;count;</div>
-      <div id="line000023" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000023| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[1847]*)label</div>
+      <div id="line000019" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000019| &nbsp;&nbsp;(*[1]*)(fun&nbsp;()&nbsp;-&gt;&nbsp;(*[170]*)count&nbsp;:=&nbsp;1),</div>
+      <div id="line000020" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000020| &nbsp;&nbsp;(fun&nbsp;()&nbsp;-&gt;&nbsp;(*[2015]*)let&nbsp;label&nbsp;=&nbsp;!count&nbsp;in</div>
+      <div id="line000021" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000021| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[2015]*)begin&nbsp;</div>
+      <div id="line000022" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000022| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[2015]*)incr&nbsp;count;</div>
+      <div id="line000023" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000023| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[2015]*)label</div>
       <div id="line000024" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000024| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;end),</div>
       <div id="line000025" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000025| &nbsp;&nbsp;(fun&nbsp;()&nbsp;-&gt;&nbsp;(*[8]*)let&nbsp;label&nbsp;=&nbsp;!res_count&nbsp;in</div>
       <div id="line000026" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000026| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[8]*)begin&nbsp;</div>
@@ -90,57 +90,57 @@
       <div id="line000036" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000036| &nbsp;&nbsp;&nbsp;&nbsp;mutable&nbsp;table_map&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;(L.label&nbsp;*&nbsp;L.lit)&nbsp;list;&nbsp;}</div>
       <div id="line000037" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000037| &nbsp;</div>
       <div id="line000038" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000038| let&nbsp;rec&nbsp;label_lit&nbsp;info&nbsp;l&nbsp;=&nbsp;match&nbsp;l&nbsp;with</div>
-      <div id="line000039" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000039| &nbsp;&nbsp;|&nbsp;A.Nil&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&gt;&nbsp;(*[64]*)L.Nil</div>
-      <div id="line000040" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000040| &nbsp;&nbsp;|&nbsp;A.Bool&nbsp;b&nbsp;&nbsp;&nbsp;-&gt;&nbsp;(*[48]*)L.Bool&nbsp;b</div>
-      <div id="line000041" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000041| &nbsp;&nbsp;|&nbsp;A.Number&nbsp;n&nbsp;-&gt;&nbsp;(*[219]*)L.Number&nbsp;n</div>
-      <div id="line000042" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000042| &nbsp;&nbsp;|&nbsp;A.String&nbsp;s&nbsp;-&gt;&nbsp;(*[272]*)L.String&nbsp;s</div>
+      <div id="line000039" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000039| &nbsp;&nbsp;|&nbsp;A.Nil&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&gt;&nbsp;(*[70]*)L.Nil</div>
+      <div id="line000040" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000040| &nbsp;&nbsp;|&nbsp;A.Bool&nbsp;b&nbsp;&nbsp;&nbsp;-&gt;&nbsp;(*[50]*)L.Bool&nbsp;b</div>
+      <div id="line000041" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000041| &nbsp;&nbsp;|&nbsp;A.Number&nbsp;n&nbsp;-&gt;&nbsp;(*[260]*)L.Number&nbsp;n</div>
+      <div id="line000042" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000042| &nbsp;&nbsp;|&nbsp;A.String&nbsp;s&nbsp;-&gt;&nbsp;(*[301]*)L.String&nbsp;s</div>
       <div id="line000043" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000043| &nbsp;&nbsp;|&nbsp;A.Table&nbsp;(unnamed,named)&nbsp;-&gt;&nbsp;</div>
-      <div id="line000044" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000044| &nbsp;&nbsp;&nbsp;&nbsp;(*[113]*)let&nbsp;lab&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;make_label&nbsp;()&nbsp;in</div>
-      <div id="line000045" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000045| &nbsp;&nbsp;&nbsp;&nbsp;(*[113]*)let&nbsp;unnamed'&nbsp;=&nbsp;List.map&nbsp;(fun&nbsp;e&nbsp;-&gt;&nbsp;(*[21]*)label_exp&nbsp;info&nbsp;e)&nbsp;unnamed&nbsp;in</div>
-      <div id="line000046" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000046| &nbsp;&nbsp;&nbsp;&nbsp;(*[113]*)let&nbsp;named'&nbsp;&nbsp;&nbsp;=&nbsp;List.map&nbsp;(fun&nbsp;(s,e)&nbsp;-&gt;&nbsp;((*[106]*)s,label_exp&nbsp;info&nbsp;e))&nbsp;named&nbsp;in</div>
-      <div id="line000047" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000047| &nbsp;&nbsp;&nbsp;&nbsp;(*[113]*)let&nbsp;tab&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;L.Table&nbsp;(lab,unnamed',named')&nbsp;in</div>
-      <div id="line000048" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000048| &nbsp;&nbsp;&nbsp;&nbsp;(*[113]*)info.table_map&nbsp;&lt;-&nbsp;(lab,tab)::info.table_map;&nbsp;(*add&nbsp;table*)</div>
-      <div id="line000049" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000049| &nbsp;&nbsp;&nbsp;&nbsp;(*[113]*)tab</div>
+      <div id="line000044" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000044| &nbsp;&nbsp;&nbsp;&nbsp;(*[120]*)let&nbsp;lab&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;make_label&nbsp;()&nbsp;in</div>
+      <div id="line000045" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000045| &nbsp;&nbsp;&nbsp;&nbsp;(*[120]*)let&nbsp;unnamed'&nbsp;=&nbsp;List.map&nbsp;(fun&nbsp;e&nbsp;-&gt;&nbsp;(*[27]*)label_exp&nbsp;info&nbsp;e)&nbsp;unnamed&nbsp;in</div>
+      <div id="line000046" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000046| &nbsp;&nbsp;&nbsp;&nbsp;(*[120]*)let&nbsp;named'&nbsp;&nbsp;&nbsp;=&nbsp;List.map&nbsp;(fun&nbsp;(s,e)&nbsp;-&gt;&nbsp;((*[108]*)s,label_exp&nbsp;info&nbsp;e))&nbsp;named&nbsp;in</div>
+      <div id="line000047" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000047| &nbsp;&nbsp;&nbsp;&nbsp;(*[120]*)let&nbsp;tab&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;L.Table&nbsp;(lab,unnamed',named')&nbsp;in</div>
+      <div id="line000048" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000048| &nbsp;&nbsp;&nbsp;&nbsp;(*[120]*)info.table_map&nbsp;&lt;-&nbsp;(lab,tab)::info.table_map;&nbsp;(*add&nbsp;table*)</div>
+      <div id="line000049" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000049| &nbsp;&nbsp;&nbsp;&nbsp;(*[120]*)tab</div>
       <div id="line000050" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000050| &nbsp;&nbsp;&nbsp;&nbsp;</div>
       <div id="line000051" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000051| &nbsp;&nbsp;|&nbsp;A.Fun&nbsp;(xs,bl)&nbsp;-&gt;</div>
-      <div id="line000052" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000052| &nbsp;&nbsp;&nbsp;&nbsp;(*[107]*)let&nbsp;old_lab&nbsp;&nbsp;=&nbsp;info.enclosing_fun&nbsp;in</div>
-      <div id="line000053" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000053| &nbsp;&nbsp;&nbsp;&nbsp;(*[107]*)let&nbsp;old_flag&nbsp;=&nbsp;info.inside_loop&nbsp;in</div>
-      <div id="line000054" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000054| &nbsp;&nbsp;&nbsp;&nbsp;(*[107]*)let&nbsp;lab&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;make_label&nbsp;()&nbsp;in</div>
-      <div id="line000055" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000055| &nbsp;&nbsp;&nbsp;&nbsp;(*[107]*)let&nbsp;()&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;info.enclosing_fun&nbsp;&lt;-&nbsp;Some&nbsp;lab&nbsp;in&nbsp;(*new&nbsp;enclosing*)</div>
-      <div id="line000056" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000056| &nbsp;&nbsp;&nbsp;&nbsp;(*[107]*)let&nbsp;()&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;info.inside_loop&nbsp;&nbsp;&nbsp;&lt;-&nbsp;false&nbsp;in&nbsp;&nbsp;&nbsp;&nbsp;(*inside&nbsp;function,&nbsp;not&nbsp;loop*)</div>
-      <div id="line000057" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000057| &nbsp;&nbsp;&nbsp;&nbsp;(*[107]*)let&nbsp;bl'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;label_block&nbsp;info&nbsp;bl&nbsp;in</div>
-      <div id="line000058" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000058| &nbsp;&nbsp;&nbsp;&nbsp;(*[107]*)let&nbsp;()&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;info.enclosing_fun&nbsp;&lt;-&nbsp;old_lab&nbsp;in&nbsp;&nbsp;(*reset&nbsp;label*)</div>
-      <div id="line000059" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000059| &nbsp;&nbsp;&nbsp;&nbsp;(*[107]*)let&nbsp;()&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;info.inside_loop&nbsp;&nbsp;&nbsp;&lt;-&nbsp;old_flag&nbsp;in&nbsp;(*reset&nbsp;flag*)</div>
-      <div id="line000060" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000060| &nbsp;&nbsp;&nbsp;&nbsp;(*[107]*)let&nbsp;endlab&nbsp;&nbsp;&nbsp;=&nbsp;make_label&nbsp;()&nbsp;in</div>
-      <div id="line000061" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000061| &nbsp;&nbsp;&nbsp;&nbsp;(*[107]*)let&nbsp;f&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;L.Fun&nbsp;(lab,xs,bl',endlab)&nbsp;in</div>
-      <div id="line000062" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000062| &nbsp;&nbsp;&nbsp;&nbsp;(*[107]*)info.fun_map&nbsp;&lt;-&nbsp;(lab,f)::info.fun_map;&nbsp;(*add&nbsp;function*)</div>
-      <div id="line000063" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000063| &nbsp;&nbsp;&nbsp;&nbsp;(*[107]*)f</div>
+      <div id="line000052" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000052| &nbsp;&nbsp;&nbsp;&nbsp;(*[108]*)let&nbsp;old_lab&nbsp;&nbsp;=&nbsp;info.enclosing_fun&nbsp;in</div>
+      <div id="line000053" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000053| &nbsp;&nbsp;&nbsp;&nbsp;(*[108]*)let&nbsp;old_flag&nbsp;=&nbsp;info.inside_loop&nbsp;in</div>
+      <div id="line000054" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000054| &nbsp;&nbsp;&nbsp;&nbsp;(*[108]*)let&nbsp;lab&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;make_label&nbsp;()&nbsp;in</div>
+      <div id="line000055" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000055| &nbsp;&nbsp;&nbsp;&nbsp;(*[108]*)let&nbsp;()&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;info.enclosing_fun&nbsp;&lt;-&nbsp;Some&nbsp;lab&nbsp;in&nbsp;(*new&nbsp;enclosing*)</div>
+      <div id="line000056" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000056| &nbsp;&nbsp;&nbsp;&nbsp;(*[108]*)let&nbsp;()&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;info.inside_loop&nbsp;&nbsp;&nbsp;&lt;-&nbsp;false&nbsp;in&nbsp;&nbsp;&nbsp;&nbsp;(*inside&nbsp;function,&nbsp;not&nbsp;loop*)</div>
+      <div id="line000057" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000057| &nbsp;&nbsp;&nbsp;&nbsp;(*[108]*)let&nbsp;bl'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;label_block&nbsp;info&nbsp;bl&nbsp;in</div>
+      <div id="line000058" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000058| &nbsp;&nbsp;&nbsp;&nbsp;(*[108]*)let&nbsp;()&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;info.enclosing_fun&nbsp;&lt;-&nbsp;old_lab&nbsp;in&nbsp;&nbsp;(*reset&nbsp;label*)</div>
+      <div id="line000059" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000059| &nbsp;&nbsp;&nbsp;&nbsp;(*[108]*)let&nbsp;()&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;info.inside_loop&nbsp;&nbsp;&nbsp;&lt;-&nbsp;old_flag&nbsp;in&nbsp;(*reset&nbsp;flag*)</div>
+      <div id="line000060" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000060| &nbsp;&nbsp;&nbsp;&nbsp;(*[108]*)let&nbsp;endlab&nbsp;&nbsp;&nbsp;=&nbsp;make_label&nbsp;()&nbsp;in</div>
+      <div id="line000061" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000061| &nbsp;&nbsp;&nbsp;&nbsp;(*[108]*)let&nbsp;f&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;L.Fun&nbsp;(lab,xs,bl',endlab)&nbsp;in</div>
+      <div id="line000062" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000062| &nbsp;&nbsp;&nbsp;&nbsp;(*[108]*)info.fun_map&nbsp;&lt;-&nbsp;(lab,f)::info.fun_map;&nbsp;(*add&nbsp;function*)</div>
+      <div id="line000063" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000063| &nbsp;&nbsp;&nbsp;&nbsp;(*[108]*)f</div>
       <div id="line000064" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000064| &nbsp;</div>
       <div id="line000065" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000065| and&nbsp;label_lvalue&nbsp;info&nbsp;lv&nbsp;=&nbsp;match&nbsp;lv&nbsp;with</div>
-      <div id="line000066" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000066| &nbsp;&nbsp;|&nbsp;A.Name&nbsp;n&nbsp;-&gt;&nbsp;(*[1193]*)L.Name&nbsp;n</div>
+      <div id="line000066" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000066| &nbsp;&nbsp;|&nbsp;A.Name&nbsp;n&nbsp;-&gt;&nbsp;(*[1356]*)L.Name&nbsp;n</div>
       <div id="line000067" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000067| &nbsp;&nbsp;|&nbsp;A.Index&nbsp;(e,f)&nbsp;-&gt;&nbsp;</div>
-      <div id="line000068" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000068| &nbsp;&nbsp;&nbsp;&nbsp;(*[113]*)let&nbsp;clab&nbsp;=&nbsp;make_label&nbsp;()&nbsp;in</div>
-      <div id="line000069" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000069| &nbsp;&nbsp;&nbsp;&nbsp;(*[113]*)let&nbsp;e'&nbsp;=&nbsp;label_exp&nbsp;info&nbsp;e&nbsp;in</div>
+      <div id="line000068" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000068| &nbsp;&nbsp;&nbsp;&nbsp;(*[128]*)let&nbsp;clab&nbsp;=&nbsp;make_label&nbsp;()&nbsp;in</div>
+      <div id="line000069" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000069| &nbsp;&nbsp;&nbsp;&nbsp;(*[128]*)let&nbsp;e'&nbsp;=&nbsp;label_exp&nbsp;info&nbsp;e&nbsp;in</div>
       <div id="line000070" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000070| &nbsp;&nbsp;&nbsp;&nbsp;(*&nbsp;L.Index&nbsp;(e',f)&nbsp;*)</div>
-      <div id="line000071" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000071| &nbsp;&nbsp;&nbsp;&nbsp;(*[113]*)let&nbsp;e''&nbsp;=&nbsp;label_exp&nbsp;info&nbsp;(A.Lit&nbsp;(A.String&nbsp;(A.Normal&nbsp;f)))&nbsp;in</div>
-      <div id="line000072" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000072| &nbsp;&nbsp;&nbsp;&nbsp;(*[113]*)L.DynIndex(clab,e',e'')</div>
+      <div id="line000071" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000071| &nbsp;&nbsp;&nbsp;&nbsp;(*[128]*)let&nbsp;e''&nbsp;=&nbsp;label_exp&nbsp;info&nbsp;(A.Lit&nbsp;(A.String&nbsp;(A.Normal&nbsp;f)))&nbsp;in</div>
+      <div id="line000072" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000072| &nbsp;&nbsp;&nbsp;&nbsp;(*[128]*)L.DynIndex(clab,e',e'')</div>
       <div id="line000073" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000073| &nbsp;&nbsp;|&nbsp;A.DynIndex&nbsp;(e0,e1)&nbsp;-&gt;</div>
-      <div id="line000074" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000074| &nbsp;&nbsp;&nbsp;&nbsp;(*[82]*)let&nbsp;clab&nbsp;=&nbsp;make_label&nbsp;()&nbsp;in</div>
-      <div id="line000075" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000075| &nbsp;&nbsp;&nbsp;&nbsp;(*[82]*)let&nbsp;e0'&nbsp;=&nbsp;label_exp&nbsp;info&nbsp;e0&nbsp;in</div>
-      <div id="line000076" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000076| &nbsp;&nbsp;&nbsp;&nbsp;(*[82]*)let&nbsp;e1'&nbsp;=&nbsp;label_exp&nbsp;info&nbsp;e1&nbsp;in</div>
-      <div id="line000077" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000077| &nbsp;&nbsp;&nbsp;&nbsp;(*[82]*)L.DynIndex&nbsp;(clab,e0',e1')</div>
+      <div id="line000074" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000074| &nbsp;&nbsp;&nbsp;&nbsp;(*[90]*)let&nbsp;clab&nbsp;=&nbsp;make_label&nbsp;()&nbsp;in</div>
+      <div id="line000075" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000075| &nbsp;&nbsp;&nbsp;&nbsp;(*[90]*)let&nbsp;e0'&nbsp;=&nbsp;label_exp&nbsp;info&nbsp;e0&nbsp;in</div>
+      <div id="line000076" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000076| &nbsp;&nbsp;&nbsp;&nbsp;(*[90]*)let&nbsp;e1'&nbsp;=&nbsp;label_exp&nbsp;info&nbsp;e1&nbsp;in</div>
+      <div id="line000077" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000077| &nbsp;&nbsp;&nbsp;&nbsp;(*[90]*)L.DynIndex&nbsp;(clab,e0',e1')</div>
       <div id="line000078" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000078| &nbsp;</div>
       <div id="line000079" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000079| and&nbsp;label_exp&nbsp;info&nbsp;e&nbsp;=&nbsp;match&nbsp;e&nbsp;with</div>
-      <div id="line000080" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000080| &nbsp;&nbsp;|&nbsp;A.Lit&nbsp;l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&gt;&nbsp;(*[823]*)L.Lit&nbsp;(label_lit&nbsp;info&nbsp;l)</div>
-      <div id="line000081" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000081| &nbsp;&nbsp;|&nbsp;A.Lvalue&nbsp;lv&nbsp;-&gt;&nbsp;(*[1117]*)L.Lvalue&nbsp;(label_lvalue&nbsp;info&nbsp;lv)</div>
+      <div id="line000080" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000080| &nbsp;&nbsp;|&nbsp;A.Lit&nbsp;l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&gt;&nbsp;(*[909]*)L.Lit&nbsp;(label_lit&nbsp;info&nbsp;l)</div>
+      <div id="line000081" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000081| &nbsp;&nbsp;|&nbsp;A.Lvalue&nbsp;lv&nbsp;-&gt;&nbsp;(*[1257]*)L.Lvalue&nbsp;(label_lvalue&nbsp;info&nbsp;lv)</div>
       <div id="line000082" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000082| &nbsp;&nbsp;|&nbsp;A.Unop&nbsp;(uo,e)&nbsp;-&gt;</div>
       <div id="line000083" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000083| &nbsp;&nbsp;&nbsp;&nbsp;(*[8]*)let&nbsp;e'&nbsp;=&nbsp;label_exp&nbsp;info&nbsp;e&nbsp;in</div>
       <div id="line000084" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000084| &nbsp;&nbsp;&nbsp;&nbsp;(*[8]*)L.Unop&nbsp;(uo,e')</div>
       <div id="line000085" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000085| &nbsp;&nbsp;|&nbsp;A.Binop&nbsp;(e0,bo,e1)&nbsp;-&gt;</div>
-      <div id="line000086" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000086| &nbsp;&nbsp;&nbsp;&nbsp;(*[117]*)let&nbsp;clab&nbsp;=&nbsp;make_label&nbsp;()&nbsp;in</div>
-      <div id="line000087" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000087| &nbsp;&nbsp;&nbsp;&nbsp;(*[117]*)let&nbsp;e0'&nbsp;&nbsp;=&nbsp;label_exp&nbsp;info&nbsp;e0&nbsp;in</div>
-      <div id="line000088" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000088| &nbsp;&nbsp;&nbsp;&nbsp;(*[117]*)let&nbsp;e1'&nbsp;&nbsp;=&nbsp;label_exp&nbsp;info&nbsp;e1&nbsp;in</div>
-      <div id="line000089" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000089| &nbsp;&nbsp;&nbsp;&nbsp;(*[117]*)L.Binop&nbsp;(clab,e0',bo,e1')</div>
+      <div id="line000086" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000086| &nbsp;&nbsp;&nbsp;&nbsp;(*[134]*)let&nbsp;clab&nbsp;=&nbsp;make_label&nbsp;()&nbsp;in</div>
+      <div id="line000087" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000087| &nbsp;&nbsp;&nbsp;&nbsp;(*[134]*)let&nbsp;e0'&nbsp;&nbsp;=&nbsp;label_exp&nbsp;info&nbsp;e0&nbsp;in</div>
+      <div id="line000088" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000088| &nbsp;&nbsp;&nbsp;&nbsp;(*[134]*)let&nbsp;e1'&nbsp;&nbsp;=&nbsp;label_exp&nbsp;info&nbsp;e1&nbsp;in</div>
+      <div id="line000089" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000089| &nbsp;&nbsp;&nbsp;&nbsp;(*[134]*)L.Binop&nbsp;(clab,e0',bo,e1')</div>
       <div id="line000090" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000090| &nbsp;&nbsp;|&nbsp;A.And&nbsp;(e0,e1)&nbsp;-&gt;</div>
       <div id="line000091" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000091| &nbsp;&nbsp;&nbsp;&nbsp;(*[13]*)let&nbsp;e0'&nbsp;=&nbsp;label_exp&nbsp;info&nbsp;e0&nbsp;in</div>
       <div id="line000092" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000092| &nbsp;&nbsp;&nbsp;&nbsp;(*[13]*)let&nbsp;e1'&nbsp;=&nbsp;label_exp&nbsp;info&nbsp;e1&nbsp;in</div>
@@ -150,10 +150,10 @@
       <div id="line000096" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000096| &nbsp;&nbsp;&nbsp;&nbsp;(*[4]*)let&nbsp;e1'&nbsp;=&nbsp;label_exp&nbsp;info&nbsp;e1&nbsp;in</div>
       <div id="line000097" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000097| &nbsp;&nbsp;&nbsp;&nbsp;(*[4]*)L.Or&nbsp;(e0',e1')</div>
       <div id="line000098" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000098| &nbsp;&nbsp;|&nbsp;A.Call&nbsp;(e,es)&nbsp;-&gt;</div>
-      <div id="line000099" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000099| &nbsp;&nbsp;&nbsp;&nbsp;(*[113]*)let&nbsp;clab&nbsp;=&nbsp;make_label&nbsp;()&nbsp;in</div>
-      <div id="line000100" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000100| &nbsp;&nbsp;&nbsp;&nbsp;(*[113]*)let&nbsp;e'&nbsp;&nbsp;&nbsp;=&nbsp;label_exp&nbsp;info&nbsp;e&nbsp;in</div>
-      <div id="line000101" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000101| &nbsp;&nbsp;&nbsp;&nbsp;(*[113]*)let&nbsp;es'&nbsp;&nbsp;=&nbsp;List.map&nbsp;(label_exp&nbsp;info)&nbsp;es&nbsp;in</div>
-      <div id="line000102" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000102| &nbsp;&nbsp;&nbsp;&nbsp;(*[113]*)L.Call&nbsp;(clab,e',es')</div>
+      <div id="line000099" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000099| &nbsp;&nbsp;&nbsp;&nbsp;(*[138]*)let&nbsp;clab&nbsp;=&nbsp;make_label&nbsp;()&nbsp;in</div>
+      <div id="line000100" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000100| &nbsp;&nbsp;&nbsp;&nbsp;(*[138]*)let&nbsp;e'&nbsp;&nbsp;&nbsp;=&nbsp;label_exp&nbsp;info&nbsp;e&nbsp;in</div>
+      <div id="line000101" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000101| &nbsp;&nbsp;&nbsp;&nbsp;(*[138]*)let&nbsp;es'&nbsp;&nbsp;=&nbsp;List.map&nbsp;(label_exp&nbsp;info)&nbsp;es&nbsp;in</div>
+      <div id="line000102" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000102| &nbsp;&nbsp;&nbsp;&nbsp;(*[138]*)L.Call&nbsp;(clab,e',es')</div>
       <div id="line000103" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000103| &nbsp;&nbsp;|&nbsp;A.Methcall&nbsp;(e,mname,es)&nbsp;-&gt;</div>
       <div id="line000104" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000104| &nbsp;&nbsp;&nbsp;&nbsp;(*[8]*)let&nbsp;clab&nbsp;=&nbsp;make_label&nbsp;()&nbsp;in</div>
       <div id="line000105" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000105| &nbsp;&nbsp;&nbsp;&nbsp;(*[8]*)let&nbsp;ilab&nbsp;=&nbsp;make_label&nbsp;()&nbsp;in</div>
@@ -161,75 +161,75 @@
       <div id="line000107" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000107| &nbsp;&nbsp;&nbsp;&nbsp;(*[8]*)let&nbsp;es'&nbsp;&nbsp;=&nbsp;List.map&nbsp;(label_exp&nbsp;info)&nbsp;es&nbsp;in</div>
       <div id="line000108" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000108| &nbsp;&nbsp;&nbsp;&nbsp;(*[8]*)L.Methcall&nbsp;(clab,ilab,e',mname,es')</div>
       <div id="line000109" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000109| &nbsp;&nbsp;|&nbsp;A.Paren&nbsp;e0&nbsp;-&gt;</div>
-      <div id="line000110" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000110| &nbsp;&nbsp;&nbsp;&nbsp;(*[9]*)let&nbsp;e0'&nbsp;=&nbsp;label_exp&nbsp;info&nbsp;e0&nbsp;in</div>
-      <div id="line000111" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000111| &nbsp;&nbsp;&nbsp;&nbsp;(*[9]*)L.Paren&nbsp;e0'</div>
+      <div id="line000110" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000110| &nbsp;&nbsp;&nbsp;&nbsp;(*[14]*)let&nbsp;e0'&nbsp;=&nbsp;label_exp&nbsp;info&nbsp;e0&nbsp;in</div>
+      <div id="line000111" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000111| &nbsp;&nbsp;&nbsp;&nbsp;(*[14]*)L.Paren&nbsp;e0'</div>
       <div id="line000112" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000112| &nbsp;</div>
       <div id="line000113" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000113| and&nbsp;label_stmt&nbsp;info&nbsp;s&nbsp;=</div>
-      <div id="line000114" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000114| &nbsp;&nbsp;(*[888]*)let&nbsp;line_lab&nbsp;=&nbsp;make_label&nbsp;()&nbsp;in</div>
-      <div id="line000115" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000115| &nbsp;&nbsp;(*[888]*)let&nbsp;pos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;{&nbsp;L.lex_pos&nbsp;=&nbsp;s.A.stmt_pos;</div>
+      <div id="line000114" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000114| &nbsp;&nbsp;(*[966]*)let&nbsp;line_lab&nbsp;=&nbsp;make_label&nbsp;()&nbsp;in</div>
+      <div id="line000115" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000115| &nbsp;&nbsp;(*[966]*)let&nbsp;pos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;{&nbsp;L.lex_pos&nbsp;=&nbsp;s.A.stmt_pos;</div>
       <div id="line000116" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000116| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;L.func&nbsp;=&nbsp;info.enclosing_fun;</div>
       <div id="line000117" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000117| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;L.line_label&nbsp;=&nbsp;line_lab;&nbsp;}&nbsp;in</div>
-      <div id="line000118" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000118| &nbsp;&nbsp;(*[888]*)let&nbsp;mkstmt&nbsp;s&nbsp;=</div>
-      <div id="line000119" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000119| &nbsp;&nbsp;&nbsp;&nbsp;(*[888]*)let&nbsp;stm&nbsp;=&nbsp;{&nbsp;L.stmt_pos&nbsp;=&nbsp;pos;&nbsp;L.stmt&nbsp;=&nbsp;s&nbsp;}&nbsp;in</div>
-      <div id="line000120" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000120| &nbsp;&nbsp;&nbsp;&nbsp;(*[888]*)info.pos_map&nbsp;&lt;-&nbsp;(line_lab,stm)::info.pos_map;&nbsp;(*&nbsp;add&nbsp;stm&nbsp;*)</div>
-      <div id="line000121" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000121| &nbsp;&nbsp;&nbsp;&nbsp;(*[888]*)stm&nbsp;in</div>
+      <div id="line000118" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000118| &nbsp;&nbsp;(*[966]*)let&nbsp;mkstmt&nbsp;s&nbsp;=</div>
+      <div id="line000119" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000119| &nbsp;&nbsp;&nbsp;&nbsp;(*[966]*)let&nbsp;stm&nbsp;=&nbsp;{&nbsp;L.stmt_pos&nbsp;=&nbsp;pos;&nbsp;L.stmt&nbsp;=&nbsp;s&nbsp;}&nbsp;in</div>
+      <div id="line000120" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000120| &nbsp;&nbsp;&nbsp;&nbsp;(*[966]*)info.pos_map&nbsp;&lt;-&nbsp;(line_lab,stm)::info.pos_map;&nbsp;(*&nbsp;add&nbsp;stm&nbsp;*)</div>
+      <div id="line000121" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000121| &nbsp;&nbsp;&nbsp;&nbsp;(*[966]*)stm&nbsp;in</div>
       <div id="line000122" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000122| &nbsp;&nbsp;match&nbsp;s.A.stmt&nbsp;with</div>
       <div id="line000123" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000123| &nbsp;&nbsp;|&nbsp;A.Break&nbsp;-&gt;</div>
-      <div id="line000124" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000124| &nbsp;&nbsp;&nbsp;&nbsp;(*[10]*)if&nbsp;info.inside_loop</div>
-      <div id="line000125" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000125| &nbsp;&nbsp;&nbsp;&nbsp;then&nbsp;(*[10]*)mkstmt&nbsp;L.Break</div>
+      <div id="line000124" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000124| &nbsp;&nbsp;&nbsp;&nbsp;(*[11]*)if&nbsp;info.inside_loop</div>
+      <div id="line000125" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000125| &nbsp;&nbsp;&nbsp;&nbsp;then&nbsp;(*[11]*)mkstmt&nbsp;L.Break</div>
       </div>
       <div id="line000126" class="lineAllUnvisited"><img border="0" height="10" width="10"src="blank.png"/>000126| &nbsp;&nbsp;&nbsp;&nbsp;else&nbsp;(*[0]*)Error.error&nbsp;&quot;Structural&nbsp;error&quot;&nbsp;&quot;break&nbsp;not&nbsp;inside&nbsp;loop&quot;&nbsp;s.A.stmt_pos</div>
       <div id="fold000127">
       <div id="line000127" class="lineNone"><a href="javascript:fold('fold000127');"><img border="0" height="10" width="10" src="minus.png" title="fold code"/></a>000127| &nbsp;&nbsp;|&nbsp;A.If&nbsp;(e,bl1,bl2)&nbsp;-&gt;</div>
-      <div id="line000128" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000128| &nbsp;&nbsp;&nbsp;&nbsp;(*[28]*)let&nbsp;e'&nbsp;&nbsp;&nbsp;=&nbsp;label_exp&nbsp;info&nbsp;e&nbsp;in</div>
-      <div id="line000129" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000129| &nbsp;&nbsp;&nbsp;&nbsp;(*[28]*)let&nbsp;bl1'&nbsp;=&nbsp;label_block&nbsp;info&nbsp;bl1&nbsp;in</div>
-      <div id="line000130" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000130| &nbsp;&nbsp;&nbsp;&nbsp;(*[28]*)let&nbsp;bl2'&nbsp;=&nbsp;label_block&nbsp;info&nbsp;bl2&nbsp;in</div>
-      <div id="line000131" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000131| &nbsp;&nbsp;&nbsp;&nbsp;(*[28]*)mkstmt&nbsp;(L.If&nbsp;(e',bl1',bl2'))</div>
+      <div id="line000128" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000128| &nbsp;&nbsp;&nbsp;&nbsp;(*[34]*)let&nbsp;e'&nbsp;&nbsp;&nbsp;=&nbsp;label_exp&nbsp;info&nbsp;e&nbsp;in</div>
+      <div id="line000129" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000129| &nbsp;&nbsp;&nbsp;&nbsp;(*[34]*)let&nbsp;bl1'&nbsp;=&nbsp;label_block&nbsp;info&nbsp;bl1&nbsp;in</div>
+      <div id="line000130" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000130| &nbsp;&nbsp;&nbsp;&nbsp;(*[34]*)let&nbsp;bl2'&nbsp;=&nbsp;label_block&nbsp;info&nbsp;bl2&nbsp;in</div>
+      <div id="line000131" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000131| &nbsp;&nbsp;&nbsp;&nbsp;(*[34]*)mkstmt&nbsp;(L.If&nbsp;(e',bl1',bl2'))</div>
       <div id="line000132" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000132| &nbsp;&nbsp;|&nbsp;A.WhileDo&nbsp;(e,bl)&nbsp;-&gt;</div>
-      <div id="line000133" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000133| &nbsp;&nbsp;&nbsp;&nbsp;(*[34]*)let&nbsp;elab&nbsp;=&nbsp;make_label&nbsp;()&nbsp;in</div>
-      <div id="line000134" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000134| &nbsp;&nbsp;&nbsp;&nbsp;(*[34]*)let&nbsp;flag&nbsp;=&nbsp;info.inside_loop&nbsp;in</div>
-      <div id="line000135" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000135| &nbsp;&nbsp;&nbsp;&nbsp;(*[34]*)let&nbsp;e'&nbsp;&nbsp;&nbsp;=&nbsp;label_exp&nbsp;info&nbsp;e&nbsp;in</div>
-      <div id="line000136" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000136| &nbsp;&nbsp;&nbsp;&nbsp;(*[34]*)info.inside_loop&nbsp;&lt;-&nbsp;true;&nbsp;(*&nbsp;entering&nbsp;loop&nbsp;*)</div>
-      <div id="line000137" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000137| &nbsp;&nbsp;&nbsp;&nbsp;(*[34]*)let&nbsp;bl'&nbsp;&nbsp;=&nbsp;label_block&nbsp;info&nbsp;bl&nbsp;in</div>
-      <div id="line000138" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000138| &nbsp;&nbsp;&nbsp;&nbsp;(*[34]*)let&nbsp;()&nbsp;&nbsp;&nbsp;=&nbsp;info.inside_loop&nbsp;&lt;-&nbsp;flag&nbsp;in&nbsp;(*;*)&nbsp;(*&nbsp;reset&nbsp;loop&nbsp;flag&nbsp;*)</div>
-      <div id="line000139" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000139| &nbsp;&nbsp;&nbsp;&nbsp;(*[34]*)let&nbsp;stm&nbsp;=&nbsp;mkstmt&nbsp;(L.WhileDo&nbsp;(e',bl',elab))&nbsp;in</div>
-      <div id="line000140" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000140| &nbsp;&nbsp;&nbsp;&nbsp;(*[34]*)let&nbsp;()&nbsp;=&nbsp;info.pos_map&nbsp;&lt;-&nbsp;(elab,stm)::info.pos_map&nbsp;in(*;*)&nbsp;(*&nbsp;add&nbsp;end-label&nbsp;to&nbsp;while-stm&nbsp;binding&nbsp;*)</div>
-      <div id="line000141" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000141| &nbsp;&nbsp;&nbsp;&nbsp;(*[34]*)stm</div>
+      <div id="line000133" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000133| &nbsp;&nbsp;&nbsp;&nbsp;(*[35]*)let&nbsp;elab&nbsp;=&nbsp;make_label&nbsp;()&nbsp;in</div>
+      <div id="line000134" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000134| &nbsp;&nbsp;&nbsp;&nbsp;(*[35]*)let&nbsp;flag&nbsp;=&nbsp;info.inside_loop&nbsp;in</div>
+      <div id="line000135" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000135| &nbsp;&nbsp;&nbsp;&nbsp;(*[35]*)let&nbsp;e'&nbsp;&nbsp;&nbsp;=&nbsp;label_exp&nbsp;info&nbsp;e&nbsp;in</div>
+      <div id="line000136" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000136| &nbsp;&nbsp;&nbsp;&nbsp;(*[35]*)info.inside_loop&nbsp;&lt;-&nbsp;true;&nbsp;(*&nbsp;entering&nbsp;loop&nbsp;*)</div>
+      <div id="line000137" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000137| &nbsp;&nbsp;&nbsp;&nbsp;(*[35]*)let&nbsp;bl'&nbsp;&nbsp;=&nbsp;label_block&nbsp;info&nbsp;bl&nbsp;in</div>
+      <div id="line000138" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000138| &nbsp;&nbsp;&nbsp;&nbsp;(*[35]*)let&nbsp;()&nbsp;&nbsp;&nbsp;=&nbsp;info.inside_loop&nbsp;&lt;-&nbsp;flag&nbsp;in&nbsp;(*;*)&nbsp;(*&nbsp;reset&nbsp;loop&nbsp;flag&nbsp;*)</div>
+      <div id="line000139" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000139| &nbsp;&nbsp;&nbsp;&nbsp;(*[35]*)let&nbsp;stm&nbsp;=&nbsp;mkstmt&nbsp;(L.WhileDo&nbsp;(e',bl',elab))&nbsp;in</div>
+      <div id="line000140" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000140| &nbsp;&nbsp;&nbsp;&nbsp;(*[35]*)let&nbsp;()&nbsp;=&nbsp;info.pos_map&nbsp;&lt;-&nbsp;(elab,stm)::info.pos_map&nbsp;in(*;*)&nbsp;(*&nbsp;add&nbsp;end-label&nbsp;to&nbsp;while-stm&nbsp;binding&nbsp;*)</div>
+      <div id="line000141" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000141| &nbsp;&nbsp;&nbsp;&nbsp;(*[35]*)stm</div>
       <div id="line000142" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000142| (*&nbsp;&nbsp;|&nbsp;A.For&nbsp;(x,e0,e1,bl)&nbsp;-&gt;</div>
       <div id="line000143" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000143| &nbsp;&nbsp;&nbsp;&nbsp;let&nbsp;e0'&nbsp;&nbsp;=&nbsp;label_exp&nbsp;info&nbsp;e0&nbsp;in</div>
       <div id="line000144" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000144| &nbsp;&nbsp;&nbsp;&nbsp;let&nbsp;e1'&nbsp;&nbsp;=&nbsp;label_exp&nbsp;info&nbsp;e1&nbsp;in</div>
       <div id="line000145" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000145| &nbsp;&nbsp;&nbsp;&nbsp;let&nbsp;bl'&nbsp;&nbsp;=&nbsp;label_block&nbsp;info&nbsp;bl&nbsp;in</div>
       <div id="line000146" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000146| &nbsp;&nbsp;&nbsp;&nbsp;mkstmt&nbsp;(L.For&nbsp;(x,e0',e1',bl'))&nbsp;*)</div>
       <div id="line000147" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000147| &nbsp;&nbsp;|&nbsp;A.Doend&nbsp;bl&nbsp;-&gt;</div>
-      <div id="line000148" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000148| &nbsp;&nbsp;&nbsp;&nbsp;(*[17]*)let&nbsp;bl'&nbsp;&nbsp;=&nbsp;label_block&nbsp;info&nbsp;bl&nbsp;in</div>
-      <div id="line000149" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000149| &nbsp;&nbsp;&nbsp;&nbsp;(*[17]*)mkstmt&nbsp;(L.Doend&nbsp;bl')</div>
+      <div id="line000148" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000148| &nbsp;&nbsp;&nbsp;&nbsp;(*[18]*)let&nbsp;bl'&nbsp;&nbsp;=&nbsp;label_block&nbsp;info&nbsp;bl&nbsp;in</div>
+      <div id="line000149" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000149| &nbsp;&nbsp;&nbsp;&nbsp;(*[18]*)mkstmt&nbsp;(L.Doend&nbsp;bl')</div>
       <div id="line000150" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000150| &nbsp;&nbsp;|&nbsp;A.Assign&nbsp;(lvs,es)&nbsp;-&gt;</div>
-      <div id="line000151" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000151| &nbsp;&nbsp;&nbsp;&nbsp;(*[259]*)let&nbsp;lvs'&nbsp;=&nbsp;List.map&nbsp;(label_lvalue&nbsp;info)&nbsp;lvs&nbsp;in</div>
-      <div id="line000152" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000152| &nbsp;&nbsp;&nbsp;&nbsp;(*[259]*)let&nbsp;es'&nbsp;&nbsp;=&nbsp;List.map&nbsp;(label_exp&nbsp;info)&nbsp;es&nbsp;in</div>
-      <div id="line000153" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000153| &nbsp;&nbsp;&nbsp;&nbsp;(*[259]*)mkstmt&nbsp;(L.Assign&nbsp;(lvs',es'))</div>
+      <div id="line000151" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000151| &nbsp;&nbsp;&nbsp;&nbsp;(*[305]*)let&nbsp;lvs'&nbsp;=&nbsp;List.map&nbsp;(label_lvalue&nbsp;info)&nbsp;lvs&nbsp;in</div>
+      <div id="line000152" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000152| &nbsp;&nbsp;&nbsp;&nbsp;(*[305]*)let&nbsp;es'&nbsp;&nbsp;=&nbsp;List.map&nbsp;(label_exp&nbsp;info)&nbsp;es&nbsp;in</div>
+      <div id="line000153" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000153| &nbsp;&nbsp;&nbsp;&nbsp;(*[305]*)mkstmt&nbsp;(L.Assign&nbsp;(lvs',es'))</div>
       <div id="line000154" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000154| &nbsp;&nbsp;|&nbsp;A.Local&nbsp;(xs,es)&nbsp;-&gt;</div>
-      <div id="line000155" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000155| &nbsp;&nbsp;&nbsp;&nbsp;(*[236]*)let&nbsp;es'&nbsp;&nbsp;=&nbsp;List.map&nbsp;(label_exp&nbsp;info)&nbsp;es&nbsp;in</div>
-      <div id="line000156" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000156| &nbsp;&nbsp;&nbsp;&nbsp;(*[236]*)mkstmt&nbsp;(L.Local&nbsp;(xs,es'))</div>
+      <div id="line000155" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000155| &nbsp;&nbsp;&nbsp;&nbsp;(*[240]*)let&nbsp;es'&nbsp;&nbsp;=&nbsp;List.map&nbsp;(label_exp&nbsp;info)&nbsp;es&nbsp;in</div>
+      <div id="line000156" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000156| &nbsp;&nbsp;&nbsp;&nbsp;(*[240]*)mkstmt&nbsp;(L.Local&nbsp;(xs,es'))</div>
       <div id="line000157" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000157| &nbsp;&nbsp;|&nbsp;A.Callstmt&nbsp;(e,es)&nbsp;-&gt;</div>
-      <div id="line000158" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000158| &nbsp;&nbsp;&nbsp;&nbsp;(*[183]*)let&nbsp;e'&nbsp;&nbsp;&nbsp;=&nbsp;label_exp&nbsp;info&nbsp;e&nbsp;in</div>
-      <div id="line000159" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000159| &nbsp;&nbsp;&nbsp;&nbsp;(*[183]*)let&nbsp;es'&nbsp;&nbsp;=&nbsp;List.map&nbsp;(label_exp&nbsp;info)&nbsp;es&nbsp;in</div>
-      <div id="line000160" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000160| &nbsp;&nbsp;&nbsp;&nbsp;(*[183]*)mkstmt&nbsp;(L.Callstmt&nbsp;(e',es'))</div>
+      <div id="line000158" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000158| &nbsp;&nbsp;&nbsp;&nbsp;(*[201]*)let&nbsp;e'&nbsp;&nbsp;&nbsp;=&nbsp;label_exp&nbsp;info&nbsp;e&nbsp;in</div>
+      <div id="line000159" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000159| &nbsp;&nbsp;&nbsp;&nbsp;(*[201]*)let&nbsp;es'&nbsp;&nbsp;=&nbsp;List.map&nbsp;(label_exp&nbsp;info)&nbsp;es&nbsp;in</div>
+      <div id="line000160" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000160| &nbsp;&nbsp;&nbsp;&nbsp;(*[201]*)mkstmt&nbsp;(L.Callstmt&nbsp;(e',es'))</div>
       <div id="line000161" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000161| &nbsp;&nbsp;|&nbsp;A.Methcallstmt&nbsp;(e,mname,es)&nbsp;-&gt;</div>
       <div id="line000162" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000162| &nbsp;&nbsp;&nbsp;&nbsp;(*[2]*)let&nbsp;ilab&nbsp;=&nbsp;make_label&nbsp;()&nbsp;in</div>
       <div id="line000163" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000163| &nbsp;&nbsp;&nbsp;&nbsp;(*[2]*)let&nbsp;e'&nbsp;&nbsp;&nbsp;=&nbsp;label_exp&nbsp;info&nbsp;e&nbsp;in</div>
       <div id="line000164" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000164| &nbsp;&nbsp;&nbsp;&nbsp;(*[2]*)let&nbsp;es'&nbsp;&nbsp;=&nbsp;List.map&nbsp;(label_exp&nbsp;info)&nbsp;es&nbsp;in</div>
       <div id="line000165" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000165| &nbsp;&nbsp;&nbsp;&nbsp;(*[2]*)mkstmt&nbsp;(L.Methcallstmt&nbsp;(ilab,e',mname,es'))</div>
       <div id="line000166" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000166| &nbsp;&nbsp;|&nbsp;A.Return&nbsp;es&nbsp;-&gt;</div>
-      <div id="line000167" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000167| &nbsp;&nbsp;&nbsp;&nbsp;(*[119]*)let&nbsp;es'&nbsp;&nbsp;=&nbsp;List.map&nbsp;(label_exp&nbsp;info)&nbsp;es&nbsp;in</div>
-      <div id="line000168" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000168| &nbsp;&nbsp;&nbsp;&nbsp;(*[119]*)mkstmt&nbsp;(L.Return&nbsp;es')</div>
+      <div id="line000167" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000167| &nbsp;&nbsp;&nbsp;&nbsp;(*[120]*)let&nbsp;es'&nbsp;&nbsp;=&nbsp;List.map&nbsp;(label_exp&nbsp;info)&nbsp;es&nbsp;in</div>
+      <div id="line000168" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000168| &nbsp;&nbsp;&nbsp;&nbsp;(*[120]*)mkstmt&nbsp;(L.Return&nbsp;es')</div>
       <div id="line000169" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000169| &nbsp;</div>
       <div id="line000170" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000170| and&nbsp;label_block&nbsp;info&nbsp;bl&nbsp;=&nbsp;</div>
-      <div id="line000171" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000171| &nbsp;&nbsp;(*[369]*)let&nbsp;stmts&nbsp;=&nbsp;List.map&nbsp;(label_stmt&nbsp;info)&nbsp;bl&nbsp;in</div>
+      <div id="line000171" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000171| &nbsp;&nbsp;(*[399]*)let&nbsp;stmts&nbsp;=&nbsp;List.map&nbsp;(label_stmt&nbsp;info)&nbsp;bl&nbsp;in</div>
       <div id="line000172" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000172| &nbsp;&nbsp;match&nbsp;stmts&nbsp;with</div>
-      <div id="line000173" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000173| &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;[]&nbsp;&nbsp;&nbsp;-&gt;&nbsp;(*[16]*)None</div>
+      <div id="line000173" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000173| &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;[]&nbsp;&nbsp;&nbsp;-&gt;&nbsp;(*[22]*)None</div>
       <div id="line000174" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000174| &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;s::_&nbsp;-&gt;&nbsp;</div>
-      <div id="line000175" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000175| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[353]*)let&nbsp;lab&nbsp;=&nbsp;s.L.stmt_pos.L.line_label&nbsp;in</div>
-      <div id="line000176" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000176| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[353]*)Some&nbsp;{&nbsp;L.label&nbsp;=&nbsp;lab;</div>
+      <div id="line000175" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000175| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[377]*)let&nbsp;lab&nbsp;=&nbsp;s.L.stmt_pos.L.line_label&nbsp;in</div>
+      <div id="line000176" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000176| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[377]*)Some&nbsp;{&nbsp;L.label&nbsp;=&nbsp;lab;</div>
       <div id="line000177" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000177| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;L.stmts&nbsp;=&nbsp;stmts;&nbsp;}</div>
       <div id="line000178" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000178| &nbsp;</div>
       <div id="line000179" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000179| (*&nbsp;&nbsp;label_prog&nbsp;:&nbsp;string&nbsp;option&nbsp;-&gt;&nbsp;Ast.block&nbsp;-&gt;&nbsp;Last.last&nbsp;&nbsp;*)</div>
@@ -460,6 +460,6 @@
     &nbsp;&nbsp;&nbsp;<span class="lineMixed">some code</span>&nbsp;-&nbsp;line containing both visited and unvisited points<br/>
     <br/>
     <hr class="codeSep"/>
-    <p class="footer">Generated by <a href="http://bisect.x9c.fr">Bisect 1.3</a> on 2015-02-16 10:22:43</p>
+    <p class="footer">Generated by <a href="http://bisect.x9c.fr">Bisect 1.3</a> on 2015-09-19 00:13:58</p>
   </body>
 </html>

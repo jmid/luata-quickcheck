@@ -3,10 +3,8 @@ var states = new Array();
 
 texts['fold000001'] = '<a href="javascript:fold(\'fold000001\');"><img border="0" height="10" width="10" src="plus.png" title="unfold code"/></a><i>&nbsp;&nbsp;code folded from line 1 to line 17</i>';
 states['fold000001'] = false;
-texts['fold000019'] = '<a href="javascript:fold(\'fold000019\');"><img border="0" height="10" width="10" src="plus.png" title="unfold code"/></a><i>&nbsp;&nbsp;code folded from line 19 to line 41</i>';
+texts['fold000019'] = '<a href="javascript:fold(\'fold000019\');"><img border="0" height="10" width="10" src="plus.png" title="unfold code"/></a><i>&nbsp;&nbsp;code folded from line 19 to line 93</i>';
 states['fold000019'] = false;
-texts['fold000045'] = '<a href="javascript:fold(\'fold000045\');"><img border="0" height="10" width="10" src="plus.png" title="unfold code"/></a><i>&nbsp;&nbsp;code folded from line 45 to line 100</i>';
-states['fold000045'] = false;
 
 function fold(id) {
   tmp = document.getElementById(id).innerHTML;

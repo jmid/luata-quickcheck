@@ -64,23 +64,23 @@
       <div id="line000010" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000010| &nbsp;&nbsp;let&nbsp;compare&nbsp;k&nbsp;k'&nbsp;=&nbsp;match&nbsp;(k,k')&nbsp;with</div>
       <div id="line000011" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000011| &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Metatable,&nbsp;Metatable&nbsp;-&gt;&nbsp;&nbsp;(*[2210]*)0</div>
       <div id="line000012" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000012| &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;String&nbsp;_,&nbsp;Metatable&nbsp;-&gt;&nbsp;(*[473]*)-1&nbsp;&nbsp;(*&nbsp;ordering:&nbsp;forall&nbsp;s.&nbsp;s&nbsp;&lt;&nbsp;metatable&nbsp;=&nbsp;metatable&nbsp;*)</div>
-      <div id="line000013" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000013| &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Metatable,&nbsp;&nbsp;String&nbsp;_&nbsp;-&gt;&nbsp;&nbsp;(*[1395]*)1</div>
-      <div id="line000014" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000014| &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;String&nbsp;s,&nbsp;String&nbsp;s'&nbsp;-&gt;&nbsp;(*[3629341]*)String.compare&nbsp;s&nbsp;s'</div>
+      <div id="line000013" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000013| &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Metatable,&nbsp;&nbsp;String&nbsp;_&nbsp;-&gt;&nbsp;&nbsp;(*[1455]*)1</div>
+      <div id="line000014" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000014| &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;String&nbsp;s,&nbsp;String&nbsp;s'&nbsp;-&gt;&nbsp;(*[3647308]*)String.compare&nbsp;s&nbsp;s'</div>
       <div id="line000015" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000015| end</div>
       <div id="line000016" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000016| module&nbsp;TableMap&nbsp;=&nbsp;Map.Make(TableKey)</div>
       <div id="line000017" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000017| &nbsp;</div>
       <div id="line000018" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000018| module&nbsp;ScopeChainSet&nbsp;=&nbsp;</div>
       <div id="line000019" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000019| &nbsp;&nbsp;Set.Make(struct&nbsp;type&nbsp;t&nbsp;=&nbsp;int&nbsp;list</div>
       <div id="line000020" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000020| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;let&nbsp;rec&nbsp;compare&nbsp;is1&nbsp;is2&nbsp;=&nbsp;match&nbsp;is1,is2&nbsp;with</div>
-      <div id="line000021" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000021| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;[],[]&nbsp;-&gt;&nbsp;(*[197614]*)0</div>
+      <div id="line000021" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000021| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;[],[]&nbsp;-&gt;&nbsp;(*[197626]*)0</div>
       </div>
       <div id="line000022" class="lineAllUnvisited"><img border="0" height="10" width="10"src="blank.png"/>000022| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;[],_&nbsp;&nbsp;-&gt;&nbsp;(*[0]*)1</div>
       <div id="line000023" class="lineAllUnvisited"><img border="0" height="10" width="10"src="blank.png"/>000023| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;_,[]&nbsp;&nbsp;-&gt;&nbsp;(*[0]*)-1</div>
       <div id="fold000024">
       <div id="line000024" class="lineNone"><a href="javascript:fold('fold000024');"><img border="0" height="10" width="10" src="minus.png" title="fold code"/></a>000024| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;i1::is1',i2::is2'&nbsp;-&gt;</div>
-      <div id="line000025" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000025| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[404595]*)let&nbsp;r&nbsp;=&nbsp;compare&nbsp;is1'&nbsp;is2'&nbsp;in</div>
+      <div id="line000025" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000025| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[404619]*)let&nbsp;r&nbsp;=&nbsp;compare&nbsp;is1'&nbsp;is2'&nbsp;in</div>
       <div id="line000026" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000026| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(match&nbsp;r&nbsp;with</div>
-      <div id="line000027" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000027| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;0&nbsp;-&gt;&nbsp;(*[404595]*)i1&nbsp;-&nbsp;i2</div>
+      <div id="line000027" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000027| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;0&nbsp;-&gt;&nbsp;(*[404619]*)i1&nbsp;-&nbsp;i2</div>
       </div>
       <div id="line000028" class="lineAllUnvisited"><img border="0" height="10" width="10"src="blank.png"/>000028| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;_&nbsp;-&gt;&nbsp;(*[0]*)r)&nbsp;end)</div>
       <div id="fold000029">
@@ -93,30 +93,30 @@
       <div id="line000035" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000035| &nbsp;</div>
       <div id="line000036" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000036| (*&nbsp;&nbsp;leq&nbsp;:&nbsp;elem&nbsp;-&gt;&nbsp;elem&nbsp;-&gt;&nbsp;bool&nbsp;&nbsp;*)</div>
       <div id="line000037" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000037| let&nbsp;leq&nbsp;m0&nbsp;m1&nbsp;=</div>
-      <div id="line000038" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000038| &nbsp;&nbsp;(*[87141]*)VL.leq&nbsp;m0.default_key&nbsp;m1.default_key</div>
+      <div id="line000038" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000038| &nbsp;&nbsp;(*[89675]*)VL.leq&nbsp;m0.default_key&nbsp;m1.default_key</div>
       <div id="line000039" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000039| &nbsp;&nbsp;&amp;&amp;</div>
-      <div id="line000040" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000040| &nbsp;&nbsp;(*[87117]*)VL.leq&nbsp;m0.default&nbsp;m1.default</div>
+      <div id="line000040" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000040| &nbsp;&nbsp;(*[89651]*)VL.leq&nbsp;m0.default&nbsp;m1.default</div>
       <div id="line000041" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000041| &nbsp;&nbsp;&amp;&amp;</div>
-      <div id="line000042" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000042| &nbsp;&nbsp;(*[87115]*)((*[87115]*)TableMap.fold&nbsp;(fun&nbsp;p&nbsp;(v,a)&nbsp;acc&nbsp;-&gt;</div>
-      <div id="line000043" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000043| &nbsp;&nbsp;&nbsp;&nbsp;(*[209084]*)let&nbsp;v'',a''&nbsp;=&nbsp;(match&nbsp;p&nbsp;with</div>
+      <div id="line000042" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000042| &nbsp;&nbsp;(*[89649]*)((*[89649]*)TableMap.fold&nbsp;(fun&nbsp;p&nbsp;(v,a)&nbsp;acc&nbsp;-&gt;</div>
+      <div id="line000043" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000043| &nbsp;&nbsp;&nbsp;&nbsp;(*[215475]*)let&nbsp;v'',a''&nbsp;=&nbsp;(match&nbsp;p&nbsp;with</div>
       <div id="line000044" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000044| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;TableKey.String&nbsp;s&nbsp;&nbsp;-&gt;</div>
-      <div id="line000045" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000045| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[208985]*)if&nbsp;VL.leq&nbsp;(VL.string&nbsp;s)&nbsp;m1.default_key</div>
+      <div id="line000045" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000045| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[215376]*)if&nbsp;VL.leq&nbsp;(VL.string&nbsp;s)&nbsp;m1.default_key</div>
       <div id="line000046" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000046| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;then&nbsp;((*[1013]*)m1.default,Abs.maybe_absent)</div>
-      <div id="line000047" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000047| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else&nbsp;((*[207972]*)VL.bot,Abs.maybe_absent)</div>
+      <div id="line000047" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000047| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else&nbsp;((*[214363]*)VL.bot,Abs.maybe_absent)</div>
       <div id="line000048" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000048| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;TableKey.Metatable&nbsp;-&gt;</div>
       <div id="line000049" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000049| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[99]*)if&nbsp;VL.leq&nbsp;VL.anystring&nbsp;m1.default_key</div>
       </div>
       <div id="line000050" class="lineAllUnvisited"><img border="0" height="10" width="10"src="blank.png"/>000050| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;then&nbsp;((*[0]*)m1.default,Abs.maybe_absent)</div>
       <div id="fold000051">
       <div id="line000051" class="lineAllVisited"><a href="javascript:fold('fold000051');"><img border="0" height="10" width="10" src="minus.png" title="fold code"/></a>000051| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else&nbsp;((*[99]*)VL.bot,Abs.maybe_absent))&nbsp;in</div>
-      <div id="line000052" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000052| &nbsp;&nbsp;&nbsp;&nbsp;(*[209084]*)let&nbsp;v',a'&nbsp;=&nbsp;try&nbsp;(*[209084]*)TableMap.find&nbsp;p&nbsp;m1.table</div>
-      <div id="line000053" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000053| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;with&nbsp;Not_found&nbsp;-&gt;&nbsp;((*[14859]*)VL.bot,Abs.maybe_absent)&nbsp;(*(m1.default,Abs.maybe_absent)*)</div>
+      <div id="line000052" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000052| &nbsp;&nbsp;&nbsp;&nbsp;(*[215475]*)let&nbsp;v',a'&nbsp;=&nbsp;try&nbsp;(*[215475]*)TableMap.find&nbsp;p&nbsp;m1.table</div>
+      <div id="line000053" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000053| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;with&nbsp;Not_found&nbsp;-&gt;&nbsp;((*[16020]*)VL.bot,Abs.maybe_absent)&nbsp;(*(m1.default,Abs.maybe_absent)*)</div>
       <div id="line000054" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000054| &nbsp;&nbsp;&nbsp;&nbsp;in</div>
-      <div id="line000055" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000055| &nbsp;&nbsp;&nbsp;&nbsp;(*[209084]*)let&nbsp;v'&nbsp;=&nbsp;VL.join&nbsp;v'&nbsp;v''&nbsp;in</div>
-      <div id="line000056" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000056| &nbsp;&nbsp;&nbsp;&nbsp;(*[209084]*)let&nbsp;a'&nbsp;=&nbsp;Abs.join&nbsp;a'&nbsp;a''</div>
-      <div id="line000057" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000057| &nbsp;&nbsp;&nbsp;&nbsp;in&nbsp;(*[209084]*)acc&nbsp;&amp;&amp;&nbsp;(*[208987]*)VL.leq&nbsp;v&nbsp;v'&nbsp;&amp;&amp;&nbsp;(*[194123]*)Abs.leq&nbsp;a&nbsp;a')&nbsp;m0.table&nbsp;true)</div>
+      <div id="line000055" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000055| &nbsp;&nbsp;&nbsp;&nbsp;(*[215475]*)let&nbsp;v'&nbsp;=&nbsp;VL.join&nbsp;v'&nbsp;v''&nbsp;in</div>
+      <div id="line000056" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000056| &nbsp;&nbsp;&nbsp;&nbsp;(*[215475]*)let&nbsp;a'&nbsp;=&nbsp;Abs.join&nbsp;a'&nbsp;a''</div>
+      <div id="line000057" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000057| &nbsp;&nbsp;&nbsp;&nbsp;in&nbsp;(*[215475]*)acc&nbsp;&amp;&amp;&nbsp;(*[215378]*)VL.leq&nbsp;v&nbsp;v'&nbsp;&amp;&amp;&nbsp;(*[199351]*)Abs.leq&nbsp;a&nbsp;a')&nbsp;m0.table&nbsp;true)</div>
       <div id="line000058" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000058| &nbsp;&nbsp;&amp;&amp;</div>
-      <div id="line000059" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000059| &nbsp;&nbsp;(*[72251]*)ScopeChainSet.subset&nbsp;m0.scopechain&nbsp;m1.scopechain</div>
+      <div id="line000059" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000059| &nbsp;&nbsp;(*[73622]*)ScopeChainSet.subset&nbsp;m0.scopechain&nbsp;m1.scopechain</div>
       <div id="line000060" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000060| &nbsp;</div>
       <div id="line000061" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000061| (*&nbsp;&nbsp;eq&nbsp;:&nbsp;elem&nbsp;-&gt;&nbsp;elem&nbsp;-&gt;&nbsp;bool&nbsp;&nbsp;*)</div>
       </div>
@@ -125,9 +125,9 @@
       <div id="line000063" class="lineNone"><a href="javascript:fold('fold000063');"><img border="0" height="10" width="10" src="minus.png" title="fold code"/></a>000063| &nbsp;</div>
       <div id="line000064" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000064| (*&nbsp;&nbsp;join&nbsp;:&nbsp;elem&nbsp;-&gt;&nbsp;elem&nbsp;-&gt;&nbsp;elem&nbsp;&nbsp;*)</div>
       <div id="line000065" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000065| let&nbsp;join&nbsp;m0&nbsp;m1&nbsp;=&nbsp;</div>
-      <div id="line000066" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000066| &nbsp;&nbsp;(*[1256186]*)let&nbsp;def_key&nbsp;=&nbsp;VL.join&nbsp;m0.default_key&nbsp;m1.default_key&nbsp;in</div>
-      <div id="line000067" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000067| &nbsp;&nbsp;(*[1256186]*)let&nbsp;def&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;VL.join&nbsp;m0.default&nbsp;m1.default&nbsp;in</div>
-      <div id="line000068" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000068| &nbsp;&nbsp;(*[1256186]*)let&nbsp;tab&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;TableMap.merge&nbsp;(fun&nbsp;s&nbsp;l0&nbsp;l1&nbsp;-&gt;&nbsp;match&nbsp;l0,l1&nbsp;with</div>
+      <div id="line000066" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000066| &nbsp;&nbsp;(*[1264314]*)let&nbsp;def_key&nbsp;=&nbsp;VL.join&nbsp;m0.default_key&nbsp;m1.default_key&nbsp;in</div>
+      <div id="line000067" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000067| &nbsp;&nbsp;(*[1264314]*)let&nbsp;def&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;VL.join&nbsp;m0.default&nbsp;m1.default&nbsp;in</div>
+      <div id="line000068" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000068| &nbsp;&nbsp;(*[1264314]*)let&nbsp;tab&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;TableMap.merge&nbsp;(fun&nbsp;s&nbsp;l0&nbsp;l1&nbsp;-&gt;&nbsp;match&nbsp;l0,l1&nbsp;with</div>
       </div>
       <div id="line000069" class="lineAllUnvisited"><img border="0" height="10" width="10"src="blank.png"/>000069| &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;None,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;None&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&gt;&nbsp;(*[0]*)None</div>
       <div id="fold000070">
@@ -157,9 +157,9 @@
       <div id="line000088" class="lineAllUnvisited"><img border="0" height="10" width="10"src="blank.png"/>000088| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;then&nbsp;(*[0]*)Some&nbsp;(VL.join&nbsp;v0&nbsp;m1.default,&nbsp;Abs.maybe_absent)</div>
       <div id="line000089" class="lineAllUnvisited"><img border="0" height="10" width="10"src="blank.png"/>000089| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else&nbsp;(*[0]*)Some&nbsp;(v0,&nbsp;Abs.maybe_absent))</div>
       <div id="fold000090">
-      <div id="line000090" class="lineAllVisited"><a href="javascript:fold('fold000090');"><img border="0" height="10" width="10" src="minus.png" title="fold code"/></a>000090| &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Some&nbsp;(v0,a0),&nbsp;Some&nbsp;(v1,a1)&nbsp;-&gt;&nbsp;(*[2796942]*)Some&nbsp;(VL.join&nbsp;v0&nbsp;v1,&nbsp;Abs.join&nbsp;a0&nbsp;a1))&nbsp;m0.table&nbsp;m1.table&nbsp;in</div>
-      <div id="line000091" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000091| &nbsp;&nbsp;(*[1256186]*)let&nbsp;sch&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ScopeChainSet.union&nbsp;m0.scopechain&nbsp;m1.scopechain&nbsp;in</div>
-      <div id="line000092" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000092| &nbsp;&nbsp;(*[1256186]*){&nbsp;table&nbsp;=&nbsp;tab;&nbsp;default_key&nbsp;=&nbsp;def_key;&nbsp;default&nbsp;=&nbsp;def;&nbsp;scopechain&nbsp;=&nbsp;sch&nbsp;}</div>
+      <div id="line000090" class="lineAllVisited"><a href="javascript:fold('fold000090');"><img border="0" height="10" width="10" src="minus.png" title="fold code"/></a>000090| &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Some&nbsp;(v0,a0),&nbsp;Some&nbsp;(v1,a1)&nbsp;-&gt;&nbsp;(*[2832252]*)Some&nbsp;(VL.join&nbsp;v0&nbsp;v1,&nbsp;Abs.join&nbsp;a0&nbsp;a1))&nbsp;m0.table&nbsp;m1.table&nbsp;in</div>
+      <div id="line000091" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000091| &nbsp;&nbsp;(*[1264314]*)let&nbsp;sch&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ScopeChainSet.union&nbsp;m0.scopechain&nbsp;m1.scopechain&nbsp;in</div>
+      <div id="line000092" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000092| &nbsp;&nbsp;(*[1264314]*){&nbsp;table&nbsp;=&nbsp;tab;&nbsp;default_key&nbsp;=&nbsp;def_key;&nbsp;default&nbsp;=&nbsp;def;&nbsp;scopechain&nbsp;=&nbsp;sch&nbsp;}</div>
       <div id="line000093" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000093| &nbsp;</div>
       <div id="line000094" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000094| (*&nbsp;&nbsp;meet&nbsp;:&nbsp;elem&nbsp;-&gt;&nbsp;elem&nbsp;-&gt;&nbsp;elem&nbsp;&nbsp;*)</div>
       <div id="line000095" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000095| let&nbsp;meet&nbsp;m0&nbsp;m1&nbsp;=&nbsp;</div>
@@ -208,36 +208,36 @@
       <div id="line000128" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000128| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;scopechain&nbsp;&nbsp;=&nbsp;ScopeChainSet.empty;&nbsp;}</div>
       <div id="line000129" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000129| &nbsp;</div>
       <div id="line000130" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000130| (*&nbsp;&nbsp;mem&nbsp;:&nbsp;str&nbsp;-&gt;&nbsp;map&nbsp;-&gt;&nbsp;bool&nbsp;*)</div>
-      <div id="line000131" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000131| let&nbsp;mem&nbsp;s&nbsp;map&nbsp;=&nbsp;(*[996]*)TableMap.mem&nbsp;(TableKey.String&nbsp;s)&nbsp;map.table</div>
+      <div id="line000131" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000131| let&nbsp;mem&nbsp;s&nbsp;map&nbsp;=&nbsp;(*[1092]*)TableMap.mem&nbsp;(TableKey.String&nbsp;s)&nbsp;map.table</div>
       <div id="line000132" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000132| &nbsp;</div>
       <div id="line000133" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000133| (*&nbsp;&nbsp;find_exn&nbsp;:&nbsp;str&nbsp;-&gt;&nbsp;map&nbsp;-&gt;&nbsp;VL&nbsp;*)</div>
       <div id="line000134" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000134| let&nbsp;find_exn&nbsp;str&nbsp;map&nbsp;=</div>
-      <div id="line000135" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000135| &nbsp;&nbsp;(*[9505]*)let&nbsp;(vlat,_abs)&nbsp;=&nbsp;TableMap.find&nbsp;(TableKey.String&nbsp;str)&nbsp;map.table&nbsp;in&nbsp;(*&nbsp;used&nbsp;for&nbsp;variable&nbsp;lookup&nbsp;*)</div>
-      <div id="line000136" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000136| &nbsp;&nbsp;(*[4627]*)vlat</div>
+      <div id="line000135" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000135| &nbsp;&nbsp;(*[10064]*)let&nbsp;(vlat,_abs)&nbsp;=&nbsp;TableMap.find&nbsp;(TableKey.String&nbsp;str)&nbsp;map.table&nbsp;in&nbsp;(*&nbsp;used&nbsp;for&nbsp;variable&nbsp;lookup&nbsp;*)</div>
+      <div id="line000136" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000136| &nbsp;&nbsp;(*[4916]*)vlat</div>
       <div id="line000137" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000137| &nbsp;</div>
       <div id="line000138" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000138| (*&nbsp;&nbsp;find&nbsp;:&nbsp;str&nbsp;-&gt;&nbsp;map&nbsp;-&gt;&nbsp;VL&nbsp;*)</div>
       <div id="line000139" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000139| let&nbsp;find&nbsp;str&nbsp;map&nbsp;=</div>
-      <div id="line000140" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000140| &nbsp;&nbsp;(*[758]*)try</div>
-      <div id="line000141" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000141| &nbsp;&nbsp;&nbsp;&nbsp;(*[758]*)let&nbsp;(vlat,abs)&nbsp;=&nbsp;TableMap.find&nbsp;(TableKey.String&nbsp;str)&nbsp;map.table&nbsp;in</div>
-      <div id="line000142" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000142| &nbsp;&nbsp;&nbsp;&nbsp;(*[455]*)if&nbsp;abs&nbsp;=&nbsp;Abs.is_present</div>
-      <div id="line000143" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000143| &nbsp;&nbsp;&nbsp;&nbsp;then&nbsp;(*[438]*)vlat</div>
+      <div id="line000140" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000140| &nbsp;&nbsp;(*[794]*)try</div>
+      <div id="line000141" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000141| &nbsp;&nbsp;&nbsp;&nbsp;(*[794]*)let&nbsp;(vlat,abs)&nbsp;=&nbsp;TableMap.find&nbsp;(TableKey.String&nbsp;str)&nbsp;map.table&nbsp;in</div>
+      <div id="line000142" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000142| &nbsp;&nbsp;&nbsp;&nbsp;(*[487]*)if&nbsp;abs&nbsp;=&nbsp;Abs.is_present</div>
+      <div id="line000143" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000143| &nbsp;&nbsp;&nbsp;&nbsp;then&nbsp;(*[470]*)vlat</div>
       <div id="line000144" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000144| &nbsp;&nbsp;&nbsp;&nbsp;else&nbsp;(*[17]*)VL.join&nbsp;vlat&nbsp;VL.nil&nbsp;(*&nbsp;not&nbsp;definite&nbsp;read&nbsp;--&gt;&nbsp;include&nbsp;nil&nbsp;*)</div>
-      <div id="line000145" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000145| &nbsp;&nbsp;with&nbsp;Not_found&nbsp;-&gt;&nbsp;(*[303]*)VL.join&nbsp;map.default&nbsp;VL.nil&nbsp;(*&nbsp;maybe&nbsp;not&nbsp;covered&nbsp;by&nbsp;default&nbsp;*)</div>
+      <div id="line000145" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000145| &nbsp;&nbsp;with&nbsp;Not_found&nbsp;-&gt;&nbsp;(*[307]*)VL.join&nbsp;map.default&nbsp;VL.nil&nbsp;(*&nbsp;maybe&nbsp;not&nbsp;covered&nbsp;by&nbsp;default&nbsp;*)</div>
       <div id="line000146" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000146| &nbsp;</div>
       <div id="line000147" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000147| (*&nbsp;&nbsp;find_default&nbsp;:&nbsp;map&nbsp;-&gt;&nbsp;VL&nbsp;*&nbsp;VL&nbsp;*)</div>
-      <div id="line000148" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000148| let&nbsp;find_default&nbsp;map&nbsp;=&nbsp;((*[340]*)map.default_key,&nbsp;map.default)</div>
+      <div id="line000148" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000148| let&nbsp;find_default&nbsp;map&nbsp;=&nbsp;((*[362]*)map.default_key,&nbsp;map.default)</div>
       <div id="line000149" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000149| &nbsp;</div>
       <div id="line000150" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000150| (*&nbsp;&nbsp;find_all_keys&nbsp;:&nbsp;map&nbsp;-&gt;&nbsp;VL&nbsp;*)</div>
       <div id="line000151" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000151| let&nbsp;find_all_keys&nbsp;map&nbsp;=</div>
-      <div id="line000152" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000152| &nbsp;&nbsp;(*[112]*)TableMap.fold&nbsp;(fun&nbsp;name&nbsp;(_vlat,_abs)&nbsp;acc&nbsp;-&gt;&nbsp;match&nbsp;name&nbsp;with</div>
+      <div id="line000152" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000152| &nbsp;&nbsp;(*[118]*)TableMap.fold&nbsp;(fun&nbsp;name&nbsp;(_vlat,_abs)&nbsp;acc&nbsp;-&gt;&nbsp;match&nbsp;name&nbsp;with</div>
       </div>
       <div id="line000153" class="lineAllUnvisited"><img border="0" height="10" width="10"src="blank.png"/>000153| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;TableKey.Metatable&nbsp;&nbsp;&nbsp;&nbsp;-&gt;&nbsp;(*[0]*)acc&nbsp;&nbsp;(*&nbsp;excluding&nbsp;metatable&nbsp;*)</div>
       <div id="fold000154">
-      <div id="line000154" class="lineAllVisited"><a href="javascript:fold('fold000154');"><img border="0" height="10" width="10" src="minus.png" title="fold code"/></a>000154| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;TableKey.String&nbsp;kname&nbsp;-&gt;&nbsp;(*[251]*)VL.join&nbsp;(VL.string&nbsp;kname)&nbsp;acc)&nbsp;map.table&nbsp;map.default_key</div>
+      <div id="line000154" class="lineAllVisited"><a href="javascript:fold('fold000154');"><img border="0" height="10" width="10" src="minus.png" title="fold code"/></a>000154| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;TableKey.String&nbsp;kname&nbsp;-&gt;&nbsp;(*[256]*)VL.join&nbsp;(VL.string&nbsp;kname)&nbsp;acc)&nbsp;map.table&nbsp;map.default_key</div>
       <div id="line000155" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000155| &nbsp;</div>
       <div id="line000156" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000156| (*&nbsp;&nbsp;find_all&nbsp;:&nbsp;map&nbsp;-&gt;&nbsp;VL&nbsp;*)</div>
       <div id="line000157" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000157| let&nbsp;find_all&nbsp;map&nbsp;=&nbsp;</div>
-      <div id="line000158" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000158| &nbsp;&nbsp;(*[145]*)TableMap.fold&nbsp;(fun&nbsp;name&nbsp;(vlat,_abs)&nbsp;acc&nbsp;-&gt;&nbsp;match&nbsp;name&nbsp;with</div>
+      <div id="line000158" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000158| &nbsp;&nbsp;(*[146]*)TableMap.fold&nbsp;(fun&nbsp;name&nbsp;(vlat,_abs)&nbsp;acc&nbsp;-&gt;&nbsp;match&nbsp;name&nbsp;with</div>
       </div>
       <div id="line000159" class="lineAllUnvisited"><img border="0" height="10" width="10"src="blank.png"/>000159| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;TableKey.Metatable&nbsp;&nbsp;&nbsp;-&gt;&nbsp;(*[0]*)acc&nbsp;&nbsp;(*&nbsp;excluding&nbsp;metatable&nbsp;*)</div>
       <div id="fold000160">
@@ -245,12 +245,12 @@
       <div id="line000161" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000161| &nbsp;</div>
       <div id="line000162" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000162| (*&nbsp;&nbsp;get_metatable&nbsp;:&nbsp;map&nbsp;-&gt;&nbsp;VL&nbsp;*)</div>
       <div id="line000163" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000163| let&nbsp;get_metatable&nbsp;map&nbsp;=</div>
-      <div id="line000164" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000164| &nbsp;&nbsp;(*[632]*)try</div>
-      <div id="line000165" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000165| &nbsp;&nbsp;&nbsp;&nbsp;(*[632]*)let&nbsp;(vlat,abs)&nbsp;=&nbsp;TableMap.find&nbsp;TableKey.Metatable&nbsp;map.table&nbsp;in</div>
+      <div id="line000164" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000164| &nbsp;&nbsp;(*[674]*)try</div>
+      <div id="line000165" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000165| &nbsp;&nbsp;&nbsp;&nbsp;(*[674]*)let&nbsp;(vlat,abs)&nbsp;=&nbsp;TableMap.find&nbsp;TableKey.Metatable&nbsp;map.table&nbsp;in</div>
       <div id="line000166" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000166| &nbsp;&nbsp;&nbsp;&nbsp;(*[144]*)if&nbsp;abs&nbsp;=&nbsp;Abs.is_present</div>
       <div id="line000167" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000167| &nbsp;&nbsp;&nbsp;&nbsp;then&nbsp;(*[140]*)vlat</div>
       <div id="line000168" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000168| &nbsp;&nbsp;&nbsp;&nbsp;else&nbsp;(*[4]*)VL.join&nbsp;vlat&nbsp;VL.nil&nbsp;(*&nbsp;not&nbsp;definite&nbsp;read&nbsp;--&gt;&nbsp;include&nbsp;nil&nbsp;*)</div>
-      <div id="line000169" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000169| &nbsp;&nbsp;with&nbsp;Not_found&nbsp;-&gt;&nbsp;(*[488]*)VL.nil&nbsp;&nbsp;&nbsp;(*&nbsp;failure:&nbsp;return&nbsp;nil&nbsp;*)</div>
+      <div id="line000169" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000169| &nbsp;&nbsp;with&nbsp;Not_found&nbsp;-&gt;&nbsp;(*[530]*)VL.nil&nbsp;&nbsp;&nbsp;(*&nbsp;failure:&nbsp;return&nbsp;nil&nbsp;*)</div>
       <div id="line000170" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000170| &nbsp;</div>
       <div id="line000171" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000171| (*&nbsp;&nbsp;set_metatable&nbsp;:&nbsp;VL&nbsp;-&gt;&nbsp;map&nbsp;-&gt;&nbsp;map&nbsp;&nbsp;*)</div>
       <div id="line000172" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000172| let&nbsp;set_metatable&nbsp;v&nbsp;map&nbsp;=</div>
@@ -273,18 +273,18 @@
       <div id="line000185" class="lineNone"><a href="javascript:fold('fold000185');"><img border="0" height="10" width="10" src="minus.png" title="fold code"/></a>000185| &nbsp;</div>
       <div id="line000186" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000186| (*&nbsp;&nbsp;add&nbsp;:&nbsp;str&nbsp;-&gt;&nbsp;val&nbsp;-&gt;&nbsp;map&nbsp;-&gt;&nbsp;map&nbsp;*)</div>
       <div id="line000187" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000187| let&nbsp;add&nbsp;s&nbsp;v&nbsp;map&nbsp;=</div>
-      <div id="line000188" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000188| &nbsp;&nbsp;(*[2903]*){&nbsp;map&nbsp;with&nbsp;table&nbsp;=&nbsp;TableMap.add&nbsp;(TableKey.String&nbsp;s)&nbsp;(v,Abs.is_present)&nbsp;map.table&nbsp;}</div>
+      <div id="line000188" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000188| &nbsp;&nbsp;(*[3022]*){&nbsp;map&nbsp;with&nbsp;table&nbsp;=&nbsp;TableMap.add&nbsp;(TableKey.String&nbsp;s)&nbsp;(v,Abs.is_present)&nbsp;map.table&nbsp;}</div>
       <div id="line000189" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000189| &nbsp;</div>
       <div id="line000190" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000190| (*&nbsp;&nbsp;add_default&nbsp;:&nbsp;val&nbsp;-&gt;&nbsp;val&nbsp;-&gt;&nbsp;map&nbsp;-&gt;&nbsp;map&nbsp;*)</div>
       <div id="line000191" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000191| let&nbsp;add_default&nbsp;k&nbsp;v&nbsp;map&nbsp;=</div>
-      <div id="line000192" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000192| &nbsp;&nbsp;(*[489]*)let&nbsp;k&nbsp;=&nbsp;VL.exclude_nil&nbsp;k&nbsp;in</div>
-      <div id="line000193" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000193| &nbsp;&nbsp;(*[489]*)if&nbsp;(*[489]*)k&nbsp;=&nbsp;VL.bot&nbsp;||&nbsp;(*[489]*)v&nbsp;=&nbsp;VL.bot</div>
-      <div id="line000194" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000194| &nbsp;&nbsp;then&nbsp;(*[308]*){&nbsp;map&nbsp;with&nbsp;default_key&nbsp;=&nbsp;VL.bot;&nbsp;default&nbsp;=&nbsp;VL.bot&nbsp;}&nbsp;(*&nbsp;reduce&nbsp;domain&nbsp;*)</div>
-      <div id="line000195" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000195| &nbsp;&nbsp;else&nbsp;(*[181]*){&nbsp;map&nbsp;with&nbsp;default_key&nbsp;=&nbsp;k;&nbsp;default&nbsp;=&nbsp;v&nbsp;}</div>
+      <div id="line000192" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000192| &nbsp;&nbsp;(*[510]*)let&nbsp;k&nbsp;=&nbsp;VL.exclude_nil&nbsp;k&nbsp;in</div>
+      <div id="line000193" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000193| &nbsp;&nbsp;(*[510]*)if&nbsp;(*[510]*)k&nbsp;=&nbsp;VL.bot&nbsp;||&nbsp;(*[505]*)v&nbsp;=&nbsp;VL.bot</div>
+      <div id="line000194" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000194| &nbsp;&nbsp;then&nbsp;(*[323]*){&nbsp;map&nbsp;with&nbsp;default_key&nbsp;=&nbsp;VL.bot;&nbsp;default&nbsp;=&nbsp;VL.bot&nbsp;}&nbsp;(*&nbsp;reduce&nbsp;domain&nbsp;*)</div>
+      <div id="line000195" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000195| &nbsp;&nbsp;else&nbsp;(*[187]*){&nbsp;map&nbsp;with&nbsp;default_key&nbsp;=&nbsp;k;&nbsp;default&nbsp;=&nbsp;v&nbsp;}</div>
       <div id="line000196" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000196| &nbsp;</div>
       <div id="line000197" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000197| (*&nbsp;&nbsp;add_scopechain&nbsp;:&nbsp;map&nbsp;-&gt;&nbsp;label&nbsp;list&nbsp;-&gt;&nbsp;map&nbsp;*)</div>
       <div id="line000198" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000198| let&nbsp;add_scopechain&nbsp;map&nbsp;sc&nbsp;=</div>
-      <div id="line000199" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000199| &nbsp;&nbsp;(*[371]*){&nbsp;map&nbsp;with&nbsp;scopechain&nbsp;=&nbsp;ScopeChainSet.add&nbsp;sc&nbsp;map.scopechain&nbsp;}</div>
+      <div id="line000199" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000199| &nbsp;&nbsp;(*[373]*){&nbsp;map&nbsp;with&nbsp;scopechain&nbsp;=&nbsp;ScopeChainSet.add&nbsp;sc&nbsp;map.scopechain&nbsp;}</div>
       <div id="line000200" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000200| &nbsp;</div>
       <div id="line000201" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000201| (*&nbsp;&nbsp;add_all&nbsp;:&nbsp;val&nbsp;-&gt;&nbsp;val&nbsp;-&gt;&nbsp;map&nbsp;-&gt;&nbsp;map&nbsp;*)</div>
       <div id="line000202" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000202| let&nbsp;add_all&nbsp;k&nbsp;v&nbsp;map&nbsp;=&nbsp;</div>
@@ -722,6 +722,6 @@
     &nbsp;&nbsp;&nbsp;<span class="lineMixed">some code</span>&nbsp;-&nbsp;line containing both visited and unvisited points<br/>
     <br/>
     <hr class="codeSep"/>
-    <p class="footer">Generated by <a href="http://bisect.x9c.fr">Bisect 1.3</a> on 2015-02-16 10:22:43</p>
+    <p class="footer">Generated by <a href="http://bisect.x9c.fr">Bisect 1.3</a> on 2015-09-19 00:13:58</p>
   </body>
 </html>
