@@ -18,7 +18,6 @@ type lit =
 
 and lvalue =
  | Name of string
-(* | Index of exp * string *)
  | DynIndex of label(*NEW*) * exp * exp
 
 and exp =

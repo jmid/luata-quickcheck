@@ -51,7 +51,6 @@ let red_list_return vlats =
 let bind v f = fun (alat,slat) -> match v (alat,slat) with
   | (alat',slat',vlat) -> f vlat (alat',slat')
 let ( >>= ) = bind
-(*let ( >> ) m f = bind m (fun _ -> f ())*)
 
 
 (** {3 Monadic operations } *)
@@ -61,7 +60,6 @@ let adjust_to_single vlats = match vlats with
 			       | vlat::_ -> return vlat
 
 let merror     = fun (alat,slat) -> (alat,SL.bot,VL.bot)
-(*let list_error = fun (alat,slat) -> (alat,SL.bot,[VL.bot])*)
 
 let curr_scope_chain        = fun (alat,slat) -> (alat,slat,slat.SL.env)
 let restore_scope_chain env = fun (alat,slat) -> (alat,{slat with SL.env = env},())
@@ -82,19 +80,14 @@ let add_locals xs vlats = fun (alat,slat) -> (alat, SL.add_local_list slat vlats
 
 (** {4 lvalue read/write operations } *)
 
-let read_name x           = get_curr_state >>= fun slat -> red_return (SL.read_name slat x)
-(*let lookup_prop v x       = get_curr_state >>= fun slat -> red_return (ST.lookup_prop slat.SL.store v x)*)
-(*let lookup_dyn_prop v0 v1 = get_curr_state >>= fun slat -> red_return (ST.lookup_dyn_prop slat.SL.store v0 v1)*)
-
+let read_name x             = get_curr_state >>= fun slat -> red_return (SL.read_name slat x)
 let lookup_event tabv strev = get_curr_state >>= fun slat -> return (ST.lookup_event slat.SL.store tabv strev)
 let raw_get tabv idxv       = get_curr_state >>= fun slat -> return (ST.raw_get slat.SL.store tabv idxv)
 
 let write_name n vlat = get_curr_state >>= fun slat ->
                         let slat' = SL.write_name slat n vlat in
  		        restore_state slat'
-(*let write_prop vlat x vlat' = get_curr_state >>= fun slat ->
-                              let slat' = SL.write_prop slat vlat x vlat' in
-			       restore_state slat'*)
+
 let write_dyn_prop vlat0 vlat1 vlat = get_curr_state >>= fun slat ->
                                       let slat' = SL.write_dyn_prop slat vlat0 vlat1 vlat in
 				       restore_state slat'
@@ -332,14 +325,10 @@ and transfer_lvalue_read lv info =
   match lv with
   | L.Name x ->
     read_name x
-(*  | L.Index (e,x) ->
-    transfer_exp e info >>= adjust_to_single >>= fun vlat ->
-     lookup_prop vlat x *)
   | L.DynIndex (clab,e0,e1) ->
     transfer_exp e0 info >>= adjust_to_single >>= fun vlat0 ->
      transfer_exp e1 info >>= adjust_to_single >>= fun vlat1 ->
       transfer_gettable_event clab info vlat0 vlat1
-      (*lookup_dyn_prop vlat0 vlat1*)
 
 (*  transfer_lvalue_write_list : lvalue list -> exp list -> info -> (AL * SL) -> (AL * SL * unit) *)
 and transfer_lvalue_write_list lvals exps info =

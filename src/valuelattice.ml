@@ -263,8 +263,8 @@ let typep lat =
    (join (if may_be_bool lat       then string "boolean" else bot)
      (join (if may_be_number lat     then string "number" else bot)
 	(join (if may_be_userdata lat  then string "userdata" else bot)
-	   (join (if may_be_table lat    then string "string" else bot)
-	      (join (if may_be_strings lat then string "table" else bot)
+	   (join (if may_be_table lat    then string "table" else bot)
+	      (join (if may_be_strings lat then string "string" else bot)
 	 	       (if may_be_proc lat   then string "function" else bot))))))
 
 (*  unop : unop -> VL -> VL  *)

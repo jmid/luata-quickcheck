@@ -85,9 +85,7 @@ let init =
 					  ]);
 		          (arglabel,    PL.add_default VL.number VL.anystring PL.bot);
 			  (iolabel,     build_record
- 			                  [ ("exit",   VL.builtin VL.Exit);
-					    ("write",  VL.builtin VL.Write);
-					  ]);
+ 			                  [ ("write",  VL.builtin VL.Write); ]);
 		          (mathlabel,   build_record
  			                  [ ("abs",    VL.builtin VL.Abs);
 					    ("ceil",   VL.builtin VL.Ceil);
@@ -96,7 +94,8 @@ let init =
 					    ("random", VL.builtin VL.Random);
 					    ("sqrt",   VL.builtin VL.Sqrt);
 					  ]);
-		          (oslabel,     build_record []);
+		          (oslabel,     build_record
+			                  [ ("exit",   VL.builtin VL.Exit); ]);
 		          (stringlabel, build_record
  			                  [ ("len",    VL.builtin VL.Strlen);
 					    ("upper",  VL.builtin VL.Strupper);
@@ -373,10 +372,6 @@ let enter_scope slat label =
   else
     { store = ST.add_label slat.store label PL.bot; 
       env   = EL.enter_scope slat.env label }
-
-(*  exit_scope : SL -> SL  *)
-let exit_scope slat =
-  { slat with env = EL.exit_scope slat.env } (* Suggestion: potentially GC label *)
 
 (*  build_prop_chain : EL -> PL  *)
 let build_prop_chain scopechain =

@@ -69,7 +69,7 @@ let ws          = [' ' '\t' '\r'] (* newline gets extra treatment! *)
 let tab   = '\009'
 let cr    = '\013'
 let lf    = '\010'
-let nl   = cr | lf | cr lf 
+let nl   = cr | lf | cr lf
 
 rule token = parse      (* raise Error in case of error *)
     eof         { P.EOF }

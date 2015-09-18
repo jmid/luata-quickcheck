@@ -37,13 +37,6 @@ let enter_scope env lab =
   fold (fun (envlab,scopechain) envpairs -> PairSet.add (lab,envlab::scopechain) envpairs)
     env PairSet.empty
 
-(*  exit_scope : EL -> EL *)
-let exit_scope env =
-  fold (fun (envlab,scopechain) envpairs -> match scopechain with
-         | [] -> failwith "Leaving global environment\n";
-	 | outerlab::scopechain' -> PairSet.add (outerlab,scopechain') envpairs)
-    env PairSet.empty
-
 
 (** {3 Pretty printing routines } *)
 

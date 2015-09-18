@@ -469,20 +469,11 @@ let enter_scope_tests = (*  enter_scope : EL -> label -> EL *)
     pw_right (module Label) op_monotone  (module EL) (module EL) =:: el_enter_scope;
     pw_right (module Label) op_invariant (module EL) (module EL) =:: el_enter_scope; ]
 
-let enter_exit_scope = (* forall e,l: exit_scope (enter_scope e l) = e *)
-  let pp_pair = PP.pair EL.to_string string_of_int in
-  mk_test ~n:1000 ~pp:pp_pair ~limit:1 ~name:("enter_scope/exit_scope invariant in " ^ EL.name)
-          ~size:(fun p -> String.length (pp_pair p))
-    (Arbitrary.pair EL.arb_elem Label.arb_elem)
-    (fun (e,l) -> EL.eq e (EL.exit_scope (EL.enter_scope e l)))
-
 (* test suite for specific environment operations *)
 let spec_env_operations =
   flatten [
     is_bot_tests;
     enter_scope_tests;
-    (* EL.exit_scope  is effectful (may exit program) and hence cannot be tested in this manner *)
-    [ enter_exit_scope; ]
   ]
 
 
@@ -966,18 +957,6 @@ let enter_scope_tests = (* enter_scope : SL -> label -> SL *)
     pw_right (module Label) op_monotone  (module SL) (module SL) =:: sl_enter_scope;
     pw_right (module Label) op_invariant (module SL) (module SL) =:: sl_enter_scope; ]
 
-let enter_exit_scope = (* forall sl,l: exit_scope (enter_scope sl l) = sl *)
-  let pp_pair = PP.pair SL.to_string PP.int in
-  mk_test ~n:1000 ~pp:pp_pair ~limit:1 ~name:("SL.enter_scope/SL.exit_scope invariant") ~size:(fun p -> String.length (pp_pair p)) 
-    (Arbitrary.pair SL.arb_elem Label.arb_elem)
-    (fun (sl,l) -> SL.eq sl (SL.exit_scope (SL.enter_scope sl l)))
-
-let exit_scope_tests =
-  let sl_exit_scope = ("SL.exit_scope",SL.exit_scope) in
-  [ testsig (module SL) -$-> (module SL) =: sl_exit_scope;
-    testsig (module SL) -<-> (module SL) =: sl_exit_scope;
-    testsig (module SL) -~-> (module SL) =: sl_exit_scope; ]
-
 let build_prop_chain_tests =
   let sl_build_prop_chain = ("SL.build_prop_chain",SL.build_prop_chain) in
   [ testsig (module EL) -$-> (module PL) =: sl_build_prop_chain;
@@ -1030,9 +1009,7 @@ let spec_state_operations =
       apply_builtin_tests;
       add_local_tests;
       add_local_list_tests;
-      (*[enter_exit_scope];*) (* doesn't hold, as added label is not removed/GC'ed *)
       enter_scope_tests;
-      exit_scope_tests;
       build_prop_chain_tests;
       read_name_tests;
       write_name_tests;
@@ -1069,7 +1046,7 @@ let _ =
   run_tests
     (flatten
        [(* generic lattice tests *)
-	GenAbsTests.suite;
+(*	GenAbsTests.suite;
 	GenNumTests.suite;
 	GenStrTests.suite;
 	GenValTests.suite;
@@ -1089,7 +1066,7 @@ let _ =
 	GenDBoolTopTests.suite;
 	GenVLVLpairTests.suite;
 	GenVLlistTests.suite;
-	GenSLVLlistpairTests.suite;
+	GenSLVLlistpairTests.suite;*)
 	(* specific lattice operation tests *)
 	spec_str_operations; 
 	spec_vl_operations;

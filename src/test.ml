@@ -119,7 +119,13 @@ let test_simpl = "simple tests" >:::
 			     assert_bool "simpl37" (VL.may_be_number vlat_r));
     "simpl38" >:: (fun () -> let _,_,slat = parse_analyze_lookup "examples/simpl38.lua" in
 			     let vlat_r   = SL.read_name slat "r" in
-			     assert_bool "simpl38" (VL.leq (VL.string "19406028921940602892") vlat_r)); ]
+			     assert_bool "simpl38"
+			       (VL.leq (VL.string "19406028921940602892") vlat_r));
+    "simpl39" >:: (fun () -> let _,_,slat = parse_analyze_lookup "examples/simpl39.lua" in
+			     let vlat_i   = SL.read_name slat "i" in
+			     let vlat_i2  = SL.read_name slat "i2" in
+			     assert_bool "simpl39" (VL.may_be_number vlat_i &&
+						    VL.may_be_number vlat_i2)); ]
 
 let test_for = "for loop tests" >:::
   [ "for01" >:: (fun () -> let _,_,slat   = parse_analyze_lookup "examples/for01.lua" in
@@ -244,6 +250,15 @@ let test_for = "for loop tests" >:::
 						  VL.leq (VL.builtin VL.Print) vlat_props &&
 						  VL.may_be_proc vlat_props &&
 						  VL.may_be_table vlat_props ));
+    "for12" >:: (fun () -> let _,_,slat = parse_analyze_lookup "examples/for12.lua" in
+			   let vlat_s     = SL.read_name slat "s" in
+			   let vlat_keys  = ST.lookup_all_keys slat.SL.store vlat_s in
+			   let vlat_props = ST.lookup_all_props slat.SL.store vlat_s in
+			   let vlat_def   = ST.lookup_default_prop slat.SL.store vlat_s VL.number in
+			   assert_bool "for12" (VL.may_be_table vlat_s &&
+						  vlcmp vlat_keys VL.bot &&
+				                  vlcmp vlat_props VL.bot &&
+						  vlcmp vlat_def VL.nil));
   ]
 
 let test_unop = "unary operation tests" >:::
@@ -678,6 +693,40 @@ let test_meta = "meta tests" >:::
 			    assert_bool "meta019" (VL.may_be_nil (SL.read_name slat "mt2")));
  ]
 
+let test_builtin = "builtin tests" >:::
+  let s_maybe_number_in prog_name =
+    let _,_,slat = parse_analyze_lookup prog_name in
+    let sval = SL.read_name slat "s" in
+    assert_bool "tonumber" (VL.may_be_number sval) in
+
+  [ "builtin_os_exit"  >:: (fun () -> let _,_,slat =
+					parse_analyze_lookup "examples/builtin_os_exit.lua" in
+				      assert_bool "os_exit" (slcmp SL.bot slat));
+    "builtin_type" >:: (fun () -> let _,_,slat =
+				    parse_analyze_lookup "examples/builtin_type.lua" in
+				  assert_bool "type"
+				    ((VL.leq (VL.string "function") (SL.read_name slat "f")) &&
+  				     (VL.leq (VL.string "function") (SL.read_name slat "bf")) &&
+				     (VL.leq (VL.string "number") (SL.read_name slat "i")) &&
+				     (VL.leq (VL.string "boolean") (SL.read_name slat "b")) &&
+				     (VL.leq (VL.string "string") (SL.read_name slat "s")) &&
+				     (VL.leq (VL.string "table") (SL.read_name slat "t")) ));
+    "builtin_tostring" >:: (fun () -> let _,_,slat =
+					parse_analyze_lookup "examples/builtin_tostring.lua" in
+				      let sval = SL.read_name slat "s" in
+				      assert_bool "tostring" (VL.may_be_strings sval));
+    "builtin_tonumber"      >:: (fun () -> s_maybe_number_in "examples/builtin_tonumber.lua");
+    "builtin_rawget"        >:: (fun () -> s_maybe_number_in "examples/builtin_rawget.lua" );
+    "builtin_rawset"        >:: (fun () -> s_maybe_number_in "examples/builtin_rawset.lua" );
+    "builtin_math_sqrt"     >:: (fun () -> s_maybe_number_in  "examples/builtin_math_sqrt.lua");
+    "builtin_math_floor"    >:: (fun () -> s_maybe_number_in "examples/builtin_math_floor.lua");
+    "builtin_math_random"   >:: (fun () -> s_maybe_number_in "examples/builtin_math_random.lua");
+    "builtin_string_sub"    >:: (fun () -> s_maybe_number_in "examples/builtin_string_sub.lua");
+    "builtin_string_byte"   >:: (fun () -> s_maybe_number_in "examples/builtin_string_byte.lua");
+    "builtin_string_format" >:: (fun () -> s_maybe_number_in "examples/builtin_string_format.lua");
+    "builtin_table_concat"  >:: (fun () -> s_maybe_number_in "examples/builtin_table_concat.lua");
+  ]
+      
 let test_warn = "warning tests" >:::
   let unreachable prog_name = 
      (fun () -> let _,_,slat = parse_analyze_lookup prog_name in
@@ -699,6 +748,7 @@ let basic_tests =
     test_scope;
     test_table;
     test_meta;
+    test_builtin;
     test_warn; ]
 
 let test_programs = "program tests" >:::
