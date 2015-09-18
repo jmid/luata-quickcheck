@@ -1046,7 +1046,7 @@ let _ =
   run_tests
     (flatten
        [(* generic lattice tests *)
-(*	GenAbsTests.suite;
+	GenAbsTests.suite;
 	GenNumTests.suite;
 	GenStrTests.suite;
 	GenValTests.suite;
@@ -1066,7 +1066,7 @@ let _ =
 	GenDBoolTopTests.suite;
 	GenVLVLpairTests.suite;
 	GenVLlistTests.suite;
-	GenSLVLlistpairTests.suite;*)
+	GenSLVLlistpairTests.suite;
 	(* specific lattice operation tests *)
 	spec_str_operations; 
 	spec_vl_operations;
