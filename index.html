@@ -91,19 +91,26 @@ print(y)</textarea>
 
       <div style="top: 100px; bottom: 100px;">
 	<p>
-	  <b>What?</b> a static analysis for convervatively predicting run-time
-	  types of Lua programs.
+	  <b>What?</b> This is a static analysis prototype for
+	  convervatively predicting run-time types of Lua programs.
 	<br>
-	  <b>Why?</b> To help Lua programmers and to illustrate a paper we wrote.
+	  <b>Why?</b> To push the bounds for static checking of
+	  dynamically-typed languages, to help Lua
+	  programmers, and to illustrate a paper we wrote.
 	<br>
-	  <b>How?</b> <a href="https://github.com/jmid/luata-quickcheck">an
-	  abstract interpreter implemented in OCaml</a>, glued
-	  together with 
-	  <a href="http://ocsigen.org/js_of_ocaml/">Js_of_ocaml</a>,
-	  <a href="http://codemirror.net/">CodeMirror</a>, and
+	  <b>How?</b> The analysis
+	  is <a href="https://github.com/jmid/luata-quickcheck">an 
+	    abstract interpreter implemented in OCaml</a>, that is,
+	  it computes a sound, compile-time overapproximation of the
+	  run-time values of a Lua program over a dedicated
+	  lattice structure.
+	  
+	  The analysis has been compiled to JavaScript with
+	  <a href="http://ocsigen.org/js_of_ocaml/">Js_of_ocaml</a>
+	  and glued together with 
+	  <a href="http://codemirror.net/">CodeMirror</a> and
 	  the <a href =
-	  "https://github.com/angelozerr/CodeMirror-XQuery/tree/master/codemirror-extension/addon/hover">Text
-	    Hover addon</a>.
+	  "https://github.com/angelozerr/CodeMirror-XQuery/tree/master/codemirror-extension/addon/hover">Text Hover addon</a>.
         <br>
 	  <b>Caveat:</b> this software is an academic prototype.
 	  The tool calculates a whole-program analysis, hence

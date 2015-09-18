@@ -31,6 +31,10 @@ The coverage reports mentioned in the paper are available in the sub-directories
  - [cov-report-combined](http://jmid.github.io/luata-quickcheck/cov-report-combined/)
    is the combination of the two above.
 
+Please note that the analysis and the coverage reports have been
+revised since the above paper was published. The original source code
+and the reports can be downloaded [here](http://janmidtgaard.dk/luata0.012-icst15.tar.gz).
+
 
 Requirements:
 -------------
