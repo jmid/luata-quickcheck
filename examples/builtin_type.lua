@@ -1,0 +1,7 @@
+f = type(function (x) return x end)
+bf = type(type)
+i = type(42.0)
+b = type(true)
+s = type("hello, world")
+t = type({ x = 4})
+print(f,bf,i,b,s,t)
