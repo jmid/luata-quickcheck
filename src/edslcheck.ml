@@ -811,6 +811,15 @@ let set_metatable_tests = (* set_metatable : ST -> VL -> VL -> ST *)
       Arbitrary.(triple VL.arb_elem VL.arb_elem ST.arb_elem)
       (fun (v,v',st) -> VL.leq (VL.only_tables v') (ST.get_metatable (ST.set_metatable st v (VL.only_tables v')) v)) *)
 
+let myget_metatable_tests = (* get_metatable : ST -> VL -> VL *)
+  let st_myget_metatable = ("ST.myget_metatable",ST.myget_metatable) in
+  [ testsig (module ST) -$-> (module VL) ---> (module VL) =: st_myget_metatable;
+    testsig (module ST) -<-> (module VL) ---> (module VL) =: st_myget_metatable;
+    testsig (module ST) -~-> (module VL) ---> (module VL) =: st_myget_metatable;
+    testsig (module ST) ---> (module VL) -$-> (module VL) =: st_myget_metatable;
+    testsig (module ST) ---> (module VL) -<-> (module VL) =: st_myget_metatable;
+    testsig (module ST) ---> (module VL) -~-> (module VL) =: st_myget_metatable; ]
+    
 let lookup_event_tests = (* lookup_event : ST -> VL -> string -> VL *)
   let st_lookup_event = ("ST.lookup_event",ST.lookup_event) in
   [ pw_right (module VL) (pw_right (module Str_arg) op_strict)    (module ST) (module VL) =:: st_lookup_event;
@@ -851,6 +860,7 @@ let spec_store_operations =
     get_metatable_tests;
     set_metatable_tests;
     (*[get_metatable_set_metatable_extensive];*)
+    myget_metatable_tests;
     lookup_event_tests;
     getbinhandler_tests;
   ]

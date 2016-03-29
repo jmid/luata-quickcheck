@@ -761,6 +761,8 @@ let test_programs = "program tests" >:::
     "hello" >::         may_terminate "benchmarks/lua.org/hello.lua";
     "account" >::       may_terminate "benchmarks/lua.org/account.lua";
     "bisect" >::        may_terminate "benchmarks/lua.org/bisect.lua";
+    (* from Eric Mertens *)
+    "ericmertens1" >::  may_terminate "benchmarks/ericmertens1.lua";
     (* adapted from PPDP13 to Lua 5+ *)
     "ackermann" >::     may_terminate "benchmarks/PPDP13-Lua5/ackermann.lua";
     "ary" >::           may_terminate "benchmarks/PPDP13-Lua5/ary.lua";

@@ -184,15 +184,15 @@ let get_metatable st vlat =   (* fixme: strings have a metatable with a __index 
   else        (* semantics: http://www.lua.org/manual/5.1/manual.html#pdf-getmetatable  *)
     let tables = vlat.VL.tables in
     VL.LabelSet.fold (fun lab acc -> 
-      let plat         = find_label st lab in                (* for each table:  *)
-      let metatabs     = PL.get_metatable plat in            (*    lookup metatable *)
+      let plat         = find_label st lab in      (* for each table:  *)
+      let metatabs     = PL.get_metatable plat in  (*    lookup metatable *)
       let metametatabs = 
 	VL.LabelSet.fold (fun metalab acc ->
 	  let metatab     = find_label st metalab in         (*    and __metatable in metatable *)
 	  let metametatab = PL.find "__metatable" metatab in
 	  if VL.may_be_nil metametatab (* second lookup may fail: include metatab *)
-	  then VL.join (VL.table metalab) (VL.join (VL.only_tables metametatab) acc)
-	  else VL.join (VL.only_tables metametatab) acc) metatabs.VL.tables VL.bot in
+	  then VL.join (VL.table metalab) (VL.join (VL.exclude_nil metametatab) acc)
+	  else VL.join (VL.exclude_nil metametatab) acc) metatabs.VL.tables VL.bot in
       VL.join acc
 	(VL.join (VL.exclude_tables metatabs) metametatabs)) tables VL.bot
 
@@ -240,9 +240,24 @@ let set_metatable st vlat metavlat =
 		       stacc)) tables bot
 
 
+(* The following function helps to implement the metatable(obj)[event] notation *)
+(*  modelling an internal metatable lookup *)
+(* This operation differs from the semantics of the API getmetatable (it is unprotected)  *)
+(*  despite the explanation in http://www.lua.org/manual/5.1/manual.html#2.8 *)
+(*  myget_metatable : store -> VL -> VL *)
+let myget_metatable st vlat =   (* fixme: strings have a metatable with a __index metamethod? *)
+  if st = bot
+  then VL.bot
+  else
+    let tables = vlat.VL.tables in
+    VL.LabelSet.fold (fun lab acc -> 
+      let plat     = find_label st lab in       (* for each table:  *)
+      let metatabs = PL.get_metatable plat in   (*    lookup metatable *)
+      VL.join acc metatabs) tables VL.bot
+
 (*  lookup_event : ST -> VL -> string -> VL *)
 let lookup_event st vlat strevent =   (* corresponds to metatable(obj)[event] notation in manual *)
-  let base = get_metatable st vlat in  (* http://www.lua.org/manual/5.1/manual.html#2.8 *)
+  let base = myget_metatable st vlat in  (* http://www.lua.org/manual/5.1/manual.html#2.8 *)
   let res  = raw_get st (VL.exclude_nil base) (VL.string strevent) in
   if VL.may_be_nil base
   then VL.join VL.nil res
