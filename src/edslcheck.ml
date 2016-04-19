@@ -479,12 +479,13 @@ let spec_env_operations =
 
 (** Property lattice *)
 
+module VLAbsPair = MkPairLattice(VL)(Abs)
 let find_exn_tests = (* find_exn : string -> PL -> VL + Not_found *)
-  let find_exn' str map = try PL.find_exn str map with Not_found -> VL.bot in (* wrap 'find_exn' (which may raise exception) *)
+  let find_exn' str map = try PL.find_exn str map with Not_found -> (VL.bot,Abs.bot) in (* wrap 'find_exn' (which may raise exception) *)
   let pl_find_exn = ("PL.find_exn",find_exn') in
-  [ pw_left (module Str_arg) op_strict    (module PL) (module VL) =:: pl_find_exn;
-    pw_left (module Str_arg) op_monotone  (module PL) (module VL) =:: pl_find_exn;
-    pw_left (module Str_arg) op_invariant (module PL) (module VL) =:: pl_find_exn; ]
+  [ pw_left (module Str_arg) op_strict    (module PL) (module VLAbsPair) =:: pl_find_exn;
+    pw_left (module Str_arg) op_monotone  (module PL) (module VLAbsPair) =:: pl_find_exn;
+    pw_left (module Str_arg) op_invariant (module PL) (module VLAbsPair) =:: pl_find_exn; ]
 
 let find_fail = (* forall s. find s bot = VL.nil *)
   mk_test ~n:1000 ~pp:PP.string ~limit:1 ~name:("find fail in " ^ PL.name) ~size:(fun s -> String.length (PP.string s))
@@ -604,7 +605,7 @@ let find_exn_add_extensive = (* forall s,v,p. v <= find_exn s (add s v p) *)
   mk_test ~n:1000 ~pp:pp_triple ~limit:1 ~name:("find_exn-add extensive in " ^ PL.name)
           ~size:(fun t -> String.length (pp_triple t))
     Arbitrary.(triple string VL.arb_elem PL.arb_elem)
-    (fun (s,v,p) -> VL.leq v (PL.find_exn s (PL.add s v p)))
+    (fun (s,v,p) -> VLAbsPair.leq (v,Abs.bot) (PL.find_exn s (PL.add s v p)))
 
 let find_exn_add_monotone = (* forall s,v,v',p. v <= v'
                                             ==> find_exn s (add s v p) <= find_exn s (add s v' p) *)
@@ -613,7 +614,7 @@ let find_exn_add_monotone = (* forall s,v,v',p. v <= v'
           ~size:(fun t -> String.length (pp_triple t))
     Arbitrary.(triple string GenValTests.ord_pair PL.arb_elem)
     (fun (s,(v,v'),p) -> Prop.assume (VL.leq v v');
-		         VL.leq (PL.find_exn s (PL.add s v p)) (PL.find_exn s (PL.add s v' p)))
+		         VLAbsPair.leq (PL.find_exn s (PL.add s v p)) (PL.find_exn s (PL.add s v' p)))
 
 (* test suite for specific property operations *)
 let spec_prop_operations =

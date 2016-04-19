@@ -8,6 +8,7 @@
  *)
 
 module L   = Last
+module Abs = Absencelattice
 module Str = Stringlattice
 module VL  = Valuelattice
 module EL  = Envlattice
@@ -17,10 +18,9 @@ module SL  = Statelattice
 module AL  = Analysislattice
 
 (* a record type of commonly passed arguments *)
-type info = { fun_map     : L.label -> L.lit;
-	      break_label : L.label;
-	      ret_label   : L.label }
-
+type info = { fun_map        : L.label -> L.lit;
+	      break_label    : L.label;
+	      ret_label      : L.label }
 
 (** {3 A helper function} *)
 
@@ -30,7 +30,6 @@ let rec join_rlat_lists vs ws = match vs,ws with
   | [], ws      -> ws
   | vs, []      -> vs
   | v::vs,w::ws -> (VL.join v w)::(join_rlat_lists vs ws)
-
 
 (** {2 Monad } *)
 
@@ -206,15 +205,18 @@ let transfer_call clab tgtlabel vlats info (alat,slat) =
 	  else
 	  let exit_prop    = ST.find_label exit_state.SL.store ret_label in
 
-	  let rec build_res_lat i = (try
-				       let entry = "res" ^ (string_of_int i) in
-				       let vlat  = PL.find_exn entry exit_prop in
-				       let vlats = build_res_lat (i+1) in
-				       vlat::vlats
-	                             with Not_found ->
-				       if i=1
-				       then [VL.bot] (* no result yet: head is bot *)
-				       else [] ) in  (* Hack: read 'result' local *)
+	  let rec build_res_lat i =
+	    (try
+	       let entry    = "res" ^ (string_of_int i) in
+	       let vlat,abs = PL.find_exn entry exit_prop in
+	       let vlats    = build_res_lat (i+1) in
+	       if abs = Abs.is_present (* result arity may vary: if so, include nil *)
+	       then vlat::vlats
+	       else (VL.join vlat VL.nil)::vlats
+	     with Not_found ->
+	       if i=1
+	       then [VL.bot] (* no result yet: head is bot *)
+	       else []) in  (* Hack: read 'result' local *)
 
 	  let res_lats      = build_res_lat 1 in
 	  (* Note: L.Return is responsible for propagating to ret_label
@@ -532,9 +534,9 @@ and transfer_block bl info = match bl with
 (*  transfer_prog : Last.prog -> AL  *)
 let transfer_prog p =
   let init = (AL.init, SL.init) in
-  let info = { fun_map     = p.L.fun_map;
-	       break_label = p.L.ret_label;
-	       ret_label   = p.L.ret_label } in
+  let info = { fun_map        = p.L.fun_map;
+	       break_label    = p.L.ret_label;
+	       ret_label      = p.L.ret_label } in
   let stmts = match p.L.last with
     | None    -> []
     | Some bl -> bl.L.stmts in

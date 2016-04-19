@@ -472,6 +472,12 @@ let test_return = "return tests" >:::
 							vlat_l = (VL.string "jens") &&
 				                        VL.leq (VL.string "foo") vlat_r2 &&
 				                        vlat_r3 = (VL.string "hest") ));
+    "return08" >:: (fun () -> let _,_,slat = parse_analyze_lookup "examples/return08.lua" in
+			      let vlat_b   = SL.read_name slat "b" in
+			      assert_bool "return08" (VL.may_be_nil vlat_b));
+    "return09" >:: (fun () -> let _,_,slat = parse_analyze_lookup "examples/return09.lua" in
+			      let vlat_b   = SL.read_name slat "b" in
+			      assert_bool "return09" (VL.may_be_number vlat_b));
   ]
 
 let test_scope = "scope tests" >:::

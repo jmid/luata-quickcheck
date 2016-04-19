@@ -382,7 +382,9 @@ let read_name slat name =
   (*      scope_read : lab -> lab list -> VL  *)
   let rec scope_read envlab scopechain =
     let env = ST.find_label slat.store envlab in
-    try PL.find_exn name env (* slight hack: direct lookup *)
+    try
+      let vl,_ = PL.find_exn name env in (* slight hack: direct lookup *)
+      vl
     with Not_found ->
       (match scopechain with
 	| [] -> VL.nil  (* not found: return nil *)

@@ -130,10 +130,10 @@ let bot = { table       = TableMap.empty;
 (*  mem : str -> map -> bool *)
 let mem s map = TableMap.mem (TableKey.String s) map.table
 
-(*  find_exn : str -> map -> VL *)
+(*  find_exn : str -> map -> VL * Abs *)
 let find_exn str map =
-  let (vlat,_abs) = TableMap.find (TableKey.String str) map.table in (* used for variable lookup *)
-  vlat
+  (*let (vlat,_abs) =*) TableMap.find (TableKey.String str) map.table (*in*) (* used for variable lookup *)
+  (*vlat*)
 
 (*  find : str -> map -> VL *)
 let find str map =
