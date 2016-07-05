@@ -54,14 +54,3 @@ let parse_pprint str =
 (* export the parse_pprint and heaps_as_array functions to JS's global scope *)
 let () = JsUn.global##parsePPrint <- Js.wrap_callback parse_pprint
 let () = JsUn.global##heapsAsStrArray <- Js.wrap_callback heaps_as_array
-
-(*  test_conversion : js_string t -> js_string t  *)
-(*
-let test_conversion str =
-  (*let str' = Js.to_string str in*) (* note: result is identical on float_of_string str' *)
-  let res = (try let _ = float_of_string "foo" in "foo-conversion succeeded!"
-             with (Failure _) -> "foo-conversion failed!") in
-  Js.string res
-  
-let () = Js.Unsafe.global##convert <- Js.wrap_callback test_conversion
-*)

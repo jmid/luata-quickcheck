@@ -63,10 +63,10 @@
       <div id="line000009" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000009| let&nbsp;eq&nbsp;=&nbsp;(*[1]*)PairSet.equal</div>
       <div id="line000010" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000010| &nbsp;</div>
       <div id="line000011" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000011| (*&nbsp;&nbsp;leq&nbsp;:&nbsp;elem&nbsp;-&gt;&nbsp;elem&nbsp;-&gt;&nbsp;bool&nbsp;&nbsp;*)</div>
-      <div id="line000012" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000012| let&nbsp;leq&nbsp;env0&nbsp;env1&nbsp;=&nbsp;(*[12991]*)PairSet.subset&nbsp;env0&nbsp;env1</div>
+      <div id="line000012" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000012| let&nbsp;leq&nbsp;env0&nbsp;env1&nbsp;=&nbsp;(*[13686]*)PairSet.subset&nbsp;env0&nbsp;env1</div>
       <div id="line000013" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000013| &nbsp;</div>
       <div id="line000014" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000014| (*&nbsp;&nbsp;join&nbsp;:&nbsp;elem&nbsp;-&gt;&nbsp;elem&nbsp;-&gt;&nbsp;elem&nbsp;&nbsp;*)</div>
-      <div id="line000015" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000015| let&nbsp;join&nbsp;env0&nbsp;env1&nbsp;=&nbsp;(*[61070]*)PairSet.union&nbsp;env0&nbsp;env1</div>
+      <div id="line000015" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000015| let&nbsp;join&nbsp;env0&nbsp;env1&nbsp;=&nbsp;(*[61142]*)PairSet.union&nbsp;env0&nbsp;env1</div>
       <div id="line000016" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000016| &nbsp;</div>
       <div id="line000017" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000017| (*&nbsp;&nbsp;meet&nbsp;:&nbsp;elem&nbsp;-&gt;&nbsp;elem&nbsp;-&gt;&nbsp;elem&nbsp;&nbsp;*)</div>
       </div>
@@ -80,7 +80,7 @@
       <div id="line000024" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000024| (**&nbsp;{3&nbsp;Lattice&nbsp;operations&nbsp;}&nbsp;*)</div>
       <div id="line000025" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000025| &nbsp;</div>
       <div id="line000026" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000026| (*&nbsp;&nbsp;is_bot&nbsp;:&nbsp;EL&nbsp;-&gt;&nbsp;bool&nbsp;&nbsp;*)</div>
-      <div id="line000027" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000027| let&nbsp;is_bot&nbsp;env&nbsp;=&nbsp;(*[7780]*)leq&nbsp;env&nbsp;bot</div>
+      <div id="line000027" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000027| let&nbsp;is_bot&nbsp;env&nbsp;=&nbsp;(*[8219]*)leq&nbsp;env&nbsp;bot</div>
       <div id="line000028" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000028| &nbsp;</div>
       <div id="line000029" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000029| (*&nbsp;&nbsp;init&nbsp;:&nbsp;label&nbsp;-&gt;&nbsp;label&nbsp;-&gt;&nbsp;elem&nbsp;*)</div>
       <div id="line000030" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000030| let&nbsp;init&nbsp;lenvlab&nbsp;genvlab&nbsp;=&nbsp;(*[1]*)PairSet.add&nbsp;(lenvlab,[genvlab])&nbsp;bot</div>
@@ -90,7 +90,7 @@
       <div id="line000034" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000034| &nbsp;</div>
       <div id="line000035" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000035| (*&nbsp;&nbsp;enter_scope&nbsp;:&nbsp;EL&nbsp;-&gt;&nbsp;label&nbsp;-&gt;&nbsp;EL&nbsp;*)</div>
       <div id="line000036" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000036| let&nbsp;enter_scope&nbsp;env&nbsp;lab&nbsp;=</div>
-      <div id="line000037" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000037| &nbsp;&nbsp;(*[667]*)fold&nbsp;(fun&nbsp;(envlab,scopechain)&nbsp;envpairs&nbsp;-&gt;&nbsp;(*[745]*)PairSet.add&nbsp;(lab,envlab::scopechain)&nbsp;envpairs)</div>
+      <div id="line000037" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000037| &nbsp;&nbsp;(*[671]*)fold&nbsp;(fun&nbsp;(envlab,scopechain)&nbsp;envpairs&nbsp;-&gt;&nbsp;(*[749]*)PairSet.add&nbsp;(lab,envlab::scopechain)&nbsp;envpairs)</div>
       <div id="line000038" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000038| &nbsp;&nbsp;&nbsp;&nbsp;env&nbsp;PairSet.empty</div>
       <div id="line000039" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000039| &nbsp;</div>
       <div id="line000040" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000040| &nbsp;</div>
@@ -254,6 +254,6 @@
     &nbsp;&nbsp;&nbsp;<span class="lineMixed">some code</span>&nbsp;-&nbsp;line containing both visited and unvisited points<br/>
     <br/>
     <hr class="codeSep"/>
-    <p class="footer">Generated by <a href="http://bisect.x9c.fr">Bisect 1.3</a> on 2015-09-19 00:13:58</p>
+    <p class="footer">Generated by <a href="http://bisect.x9c.fr">Bisect 1.3</a> on 2016-07-04 16:56:57</p>
   </body>
 </html>

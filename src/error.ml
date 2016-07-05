@@ -73,7 +73,3 @@ let error msg1 msg2 pos =
 	       print_endline "Unexpected end of file";
 	       exit 1)
 	end
-(*
-      let myConsole = Js.Unsafe.variable "console" in
-      let () = myConsole##log(Js.string s) in
-*)

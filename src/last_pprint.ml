@@ -105,11 +105,6 @@ and pprint_var_list info xs =
 
 and pprint_lvalue info lv = match lv with
   | L.Name n -> fprintf info.fmt "%s" n
-(*  | L.Index (e,f) -> 
-    begin
-      pprint_exp info e;
-      fprintf info.fmt ".%s" f;
-    end *)
   | L.DynIndex (clabel,e,e') -> 
     begin
       fprintf info.fmt "%i:" clabel;

@@ -1,5 +1,6 @@
 (** Abstract state datatype and operations *)
 
+module Abs = Absencelattice
 module VL = Valuelattice
 module EL = Envlattice
 module PL = Proplattice
@@ -39,7 +40,7 @@ let is_bot slat = leq slat bot
 (*  build_record : (string * VL) list -> PL *)
 let build_record bs =
   let props, vls = List.split bs in
-  PL.add_all_params props vls PL.bot
+  PL.add_all_params props vls PL.mt
 
 (*  init : elem  *)
 let init =
@@ -53,7 +54,7 @@ let init =
   let tablelabel  = Label.make_res_label() in
   let store       = List.fold_left
                       (fun store (lab,table) -> ST.add_label store lab table) ST.bot
-		        [ (localenvlab, PL.bot);
+		        [ (localenvlab, PL.mt);
 			  (globallabel, build_record
 			                  [ ("error",    VL.builtin VL.Error);
 					    ("next",     VL.builtin VL.Next);
@@ -83,7 +84,7 @@ let init =
 					    ("rawget",   VL.builtin VL.Rawget);
 					    ("rawset",   VL.builtin VL.Rawset);
 					  ]);
-		          (arglabel,    PL.add_default VL.number VL.anystring PL.bot);
+		          (arglabel,    PL.add_nonstr_default VL.number VL.anystring PL.mt);
 			  (iolabel,     build_record
  			                  [ ("write",  VL.builtin VL.Write); ]);
 		          (mathlabel,   build_record
@@ -116,7 +117,7 @@ let init =
 
 (*  apply_builtin : builtin -> SL -> VL list -> SL * VL list *)
 let rec apply_builtin bi slat vlats = 
-  if slat = bot then (bot,[]) else
+  if is_bot slat then (bot,[]) else
   match bi with
   | VL.Error    -> (bot,[]) (* unreachable *)
   | VL.Exit     -> (bot,[]) (* unreachable *)
@@ -143,7 +144,7 @@ let rec apply_builtin bi slat vlats =
 	   then
 	      let keys   = VL.join VL.nil VL.number in (* potentially: end of table *)
 	      let values = VL.join VL.nil              (* potentially: end of table *)
- 	                     (ST.lookup_all_props slat.store vlat) in
+		             (ST.lookup_all_nonstr_props slat.store vlat) in (* array entries are nonstr *)
 	      (slat,[keys;values])
 	   else
 	      let keys,values = VL.nil,VL.nil in       (* end of table *)
@@ -341,18 +342,20 @@ let rec apply_builtin bi slat vlats =
 
 (*  add_local : SL -> VL -> str -> SL *)
 let add_local slat vlat x =
-  if slat = bot || vlat = VL.bot
+  if is_bot slat || VL.is_bot vlat
   then bot
   else
-  let store' = EL.fold (fun (localslab,_) storeacc ->
+    let store' =
+      EL.fold (fun (localslab,_) storeacc ->
                             let env  = ST.find_label slat.store localslab in
-			    let env' = PL.add x vlat env in (* strong update *)
-			      ST.add_label storeacc localslab env') slat.env slat.store in
-  { slat with store = store' }
+			    let env' = PL.add_local x vlat env in (* strong update *)
+			    ST.join (ST.add_label slat.store localslab env') storeacc)
+        slat.env ST.bot in
+    { slat with store = store' }
 
 (*  add_local_list : SL -> VL list -> str list -> SL *)
 let rec add_local_list slat vlats xs =
-  if slat = bot
+  if is_bot slat
   then bot
   else match (xs,vlats) with
     | [],   []          -> slat
@@ -367,55 +370,83 @@ let rec add_local_list slat vlats xs =
 
 (*  enter_scope : SL -> label -> SL  *)
 let enter_scope slat label =
-  if slat = bot
+  if is_bot slat
   then bot
   else
-    { store = ST.add_label slat.store label PL.bot; 
+    { store = ST.add_label slat.store label PL.mt; 
       env   = EL.enter_scope slat.env label }
 
 (*  build_prop_chain : EL -> PL  *)
 let build_prop_chain scopechain =
-  EL.fold (fun (i,is) scset -> PL.add_scopechain scset (i::is)) scopechain PL.bot
+  if EL.is_bot scopechain
+  then PL.bot
+  else
+    EL.fold (fun (i,is) scset -> PL.add_scopechain scset (i::is)) scopechain PL.mt
 
 (*  read_name : SL -> string -> VL *)
 let read_name slat name = 
   (*      scope_read : lab -> lab list -> VL  *)
   let rec scope_read envlab scopechain =
-    let env = ST.find_label slat.store envlab in
-    try
-      let vl,_ = PL.find_exn name env in (* slight hack: direct lookup *)
-      vl
-    with Not_found ->
-      (match scopechain with
-	| [] -> VL.nil  (* not found: return nil *)
-	| outerenvlab::scopechain' -> scope_read outerenvlab scopechain')
+    if ST.is_bot slat.store
+    then VL.bot
+    else
+      let env = ST.find_label slat.store envlab in
+      if PL.is_bot env
+      then VL.bot
+      else
+	try
+	  let vl,abs = PL.find_exn name env in (* slight hack: direct lookup *)
+	  if Abs.eq abs Abs.maybe_absent
+	  then VL.join vl (continue_read scopechain)
+	  else vl (* certain entry, don't continue *)
+	with Not_found -> continue_read scopechain
+  (*  continue_read : lab list -> VL  *)
+  and continue_read scopechain = match scopechain with
+      | [] -> VL.nil (* not found: return nil *)
+      | outerenvlab::scopechain' -> scope_read outerenvlab scopechain'
   in
   EL.fold (fun (envlab,chain) a -> VL.join (scope_read envlab chain) a) slat.env VL.bot
 
 (*  write_name : SL -> string -> VL -> SL *)
 let write_name slat name vlat =
-  (*      scope_write : SL -> lab -> lab list -> SL  *)
-  let rec scope_write slat' envlab scopechain =
-    let env = ST.find_label_exn slat.store envlab in
-    if PL.mem name env (* slight hack: direct lookup *)
-    then
-      let env'   = PL.add name vlat env in (* strong update the local variable *)
-      let store' = ST.add_label slat'.store envlab env' in
-      { slat' with store = store' }
-    else
-      (match scopechain with
-	| []          -> failwith "Outside any environment\n";
-	| [globallab] ->
+  if is_bot slat || VL.is_bot vlat
+  then bot
+  else
+    (*      scope_write : lab -> lab list -> SL  *)
+    let rec scope_write envlab scopechain =
+      try
+	let env = ST.find_label_exn slat.store envlab in
+	if PL.is_bot env
+	then bot
+	else
+	  if PL.mem name env (* slight hack: direct lookup *)
+	  then
+	    let _,abs  = PL.find_exn name env in (* slight hack: direct lookup *)
+	    let env'   = PL.add_local name vlat env in (* strong update the local variable *)
+	    let store' = ST.add_label slat.store envlab env' in
+	    let slat'  = { slat with store = store' } in
+	    (if Abs.eq abs Abs.maybe_absent
+	     then join slat' (continue_write scopechain)
+	     else slat')
+	  else continue_write scopechain
+      with Not_found -> bot
+    (*  continue_write : list -> SL  *)
+    and continue_write scopechain = match scopechain with
+      | []          -> failwith "Outside any environment\n";
+      | [globallab] ->
+	(try
 	  let globalenv  = ST.find_label_exn slat.store globallab in
 	  let globalenv' = PL.add name vlat globalenv in  (* strong update: only *one* global env *)
-	  let store'     = ST.add_label slat'.store globallab globalenv' in
-	  { slat' with store = store' }
-	| outerenvlab::scopechain' -> scope_write slat' outerenvlab scopechain')
-  in
-  EL.fold (fun (envlab,chain) slat' -> 
-             try scope_write slat' envlab chain
-	     with Not_found -> (*Printf.printf "Unknown environment label\n";*)
-	                       slat') slat.env slat
+	  let store'     = ST.add_label slat.store globallab globalenv' in
+	  { slat with store = store' }
+	 with Not_found -> bot)
+      | outerenvlab::scopechain' -> scope_write outerenvlab scopechain'
+    in
+    EL.fold
+      (fun (envlab,chain) slatacc -> 
+	(*try *)join (scope_write envlab chain) slatacc
+	(*with Not_found -> (*Printf.printf "Unknown environment label\n";*)
+	                  slatacc*)) slat.env bot
 
 (*  write_dyn_prop : SL -> VL -> VL -> VL -> SL *)
 let write_dyn_prop slat vlat0 vlat1 vlat =

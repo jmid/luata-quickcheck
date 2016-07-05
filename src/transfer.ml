@@ -19,7 +19,7 @@ module AL  = Analysislattice
 
 (* a record type of commonly passed arguments *)
 type info = { fun_map        : L.label -> L.lit;
-	      break_label    : L.label;
+	      break_labels   : L.label * L.label;
 	      ret_label      : L.label }
 
 (** {3 A helper function} *)
@@ -103,7 +103,7 @@ let alloc_resstore ret_label vlats = (* Hack: write 'ret_label.ret_label.res1' i
 		   | _  -> vlats in
       let _,res_table = List.fold_left
 	(fun (i,tbl) vlat -> let entry = "res" ^ (string_of_int i) in
-			     (i+1,PL.add entry vlat tbl)) (1,PL.bot) vlats in
+			     (i+1,PL.add entry vlat tbl)) (1,PL.mt) vlats in
       (alat,slat,ST.add_label slat.SL.store ret_label res_table)
 
 let getbinhandler op1 op2 event =
@@ -136,14 +136,14 @@ let branch_and_join env thenbr elsebr =
 	      (AL.join alat1 alat2, (if ST.leq joined_store ST.bot then SL.bot
 	                             else {SL.env = env; SL.store = joined_store}), ()))
 
-let rec loop env test body =
+let rec loop test body =
   (fun (alat_prev,slat_prev) ->
     let (alat',slat',_vlat') = test (alat_prev,slat_prev) in
     let (alat'',slat'',())   = body (alat',slat') in
-    if AL.leq alat'' alat' && ST.leq slat''.SL.store slat'.SL.store  (* Fixpoint upto scoping of local variables *)
+    if AL.leq alat'' alat' && ST.leq slat''.SL.store slat'.SL.store (* Fixpoint upto scoping of local variables *)
     then (alat',slat',())
     else loop (* Otherwise:iterate *)
-      env test body ((*AL.join alat'*) alat'', {SL.env = env; SL.store = ST.join slat'.SL.store slat''.SL.store}))
+      test body ((*AL.join alat'*) alat'', {slat'' with SL.store = ST.join slat'.SL.store slat''.SL.store}))
 
 
 (** {3 Transfer functions } *)
@@ -191,7 +191,7 @@ let transfer_call clab tgtlabel vlats info (alat,slat) =
 	  (* join store and environment into receiver's state *)
 	  let entry_state' = SL.join entry_state
 			       { SL.store   =
-				   ST.add_label slat.SL.store clab (PL.add_all_params xs vlats PL.bot);
+				   ST.add_label slat.SL.store clab (PL.add_all_params xs vlats PL.mt);
 				 SL.env     = ext_env } in
 	  let alat'        = AL.add alat body_label entry_state' in
 
@@ -269,13 +269,16 @@ let rec transfer_lit l info =
     (* add unamed entries *)
     transfer_exp_list uns info >>= fun unvlats ->
      let joined_unsvlats = List.fold_left (fun acc vlat -> VL.join acc vlat) VL.bot unvlats in
-     let plat            = PL.add_default VL.number joined_unsvlats PL.bot in(*unnamed/numeric all go in default*)
+     let plat            =
+       (match unvlats with
+	 | [] -> PL.mt
+	 | _  -> PL.add_nonstr_default VL.number joined_unsvlats PL.mt) in(*unnamed/numeric all go in default*)
      (* add named entries *)
      let (props, exps)   = List.split ns in
       transfer_exp_list exps info >>= fun vlats ->
        let plat'  = List.fold_left2 (fun plat prop vlat -> PL.add prop vlat plat) plat props vlats in
-        get_curr_state >>= fun slat'' ->
-         restore_state { slat'' with SL.store = ST.add_label slat''.SL.store l plat' } >>= fun () ->
+        get_curr_state >>= fun slat' ->
+         restore_state { slat' with SL.store = ST.add_label slat'.SL.store l plat' } >>= fun () ->
           return (VL.table l)
   | L.Fun (l,_,body,ret_label) -> 
     (match body with
@@ -359,12 +362,6 @@ and transfer_lvalue_write_list lvals exps info =
  	   (match vlats with
 	     | [] ->	      mfailwith ("missing rhs in name assignment: " ^ n)
 	     | vlat::vlats -> write_name n vlat >>= fun () -> return vlats)
-(*	| Last.Index (e,x) ->
-	  transfer_exp e info >>= adjust_to_single >>= fun vlat ->
- 	   inner_write_list lvs exps info >>= fun vlats ->
-	    (match vlats with
-	      | [] ->		mfailwith "missing rhs in indexed assignment"
-	      | vlat'::vlats -> write_prop vlat x vlat' >>= fun () -> return vlats) *)
 	| Last.DynIndex (clab,e0,e1) ->
 	  transfer_exp e0 info >>= adjust_to_single >>= fun vlat0 ->
 	   red_return (VL.only_tables vlat0) >>= fun vlat0 -> (* slight hack to reduce to bot on index error *)
@@ -469,8 +466,10 @@ and transfer_stmts ss info =
     set_state lab >>= fun () ->    (* and read off joined result *)
     (match s.L.stmt with
     | L.Break ->
-      record_state info.break_label >>= fun () -> (*join state into outer break label *)
-       restore_state SL.bot >>= fun () ->  (* i.e., unreachable *)
+      lookup_state (fst info.break_labels) >>= fun slat_entry -> (* lookup old env and restore it *)
+       restore_scope_chain (slat_entry.SL.env) >>= fun () ->
+        record_state (snd info.break_labels) >>= fun () -> (*join state into outer break label *)
+         restore_state SL.bot >>= fun () ->  (* i.e., unreachable *)
         return ()
     | L.If (e,bl1,bl2) ->
       curr_scope_chain >>= fun env ->
@@ -480,13 +479,12 @@ and transfer_stmts ss info =
 	branch_and_join env thenbranch elsebranch >>= fun () ->
  	 transfer_stmts ss info
     | L.WhileDo (e,bl,endlab) ->
-      let loop_info = { info with break_label = endlab } in
+      let loop_info = { info with break_labels = (lab,endlab) } in
       curr_scope_chain >>= fun env ->
        let test = transfer_exp e info >>= adjust_to_single in
-       let body = transfer_block bl loop_info in
-       loop env test body >>= fun () ->
-        restore_scope_chain env >>= fun () ->
-         (* joined breaked state with post condition *)
+       let body = transfer_block bl loop_info >>= fun () -> restore_scope_chain env in
+       loop test body >>= fun () ->
+         (* joined "breaked state" with post condition *)
          record_state endlab >>= fun () ->
           set_state endlab >>= fun () ->
            transfer_stmts ss info
@@ -535,7 +533,7 @@ and transfer_block bl info = match bl with
 let transfer_prog p =
   let init = (AL.init, SL.init) in
   let info = { fun_map        = p.L.fun_map;
-	       break_label    = p.L.ret_label;
+	       break_labels   = (p.L.ret_label,p.L.ret_label);
 	       ret_label      = p.L.ret_label } in
   let stmts = match p.L.last with
     | None    -> []

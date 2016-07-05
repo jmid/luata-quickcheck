@@ -67,7 +67,6 @@ and label_lvalue info lv = match lv with
   | A.Index (e,f) -> 
     let clab = make_label () in
     let e' = label_exp info e in
-    (* L.Index (e',f) *)
     let e'' = label_exp info (A.Lit (A.String (A.Normal f))) in
     L.DynIndex(clab,e',e'')
   | A.DynIndex (e0,e1) ->

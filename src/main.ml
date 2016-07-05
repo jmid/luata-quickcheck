@@ -1,7 +1,7 @@
 (** The main driver for the analysis tool *)
 
 let _ =
-  let version   = "v0.015" in
+  let version   = "v0.016" in
   let filenames = ref [] in
   let pp_ast    = ref false in
   let pp_last   = ref false in

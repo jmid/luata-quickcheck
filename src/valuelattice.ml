@@ -207,6 +207,10 @@ let exclude_nil lat =
   let tags = TagSet.remove Nil lat.tags in
   { lat with tags = tags }
 
+(*  exclude_strings : VL -> VL *)
+let exclude_strings lat =
+  { lat with strings = Str.bot }
+    
 (*  exclude_proc : VL -> VL *)
 let exclude_proc lat =
   { lat with funs = mtprocset }
@@ -237,6 +241,7 @@ let coerce_tostring lat =
 
 (*  or_join : VL -> VL -> VL *)
 let or_join vlat0 vlat1 =
+  if is_bot vlat0 || is_bot vlat1 then bot else (*FIXED*)
   join (if may_be_non_nil vlat0 then (exclude_nil vlat0) else bot)
        (if may_be_nil vlat0 then vlat1 else bot)
 

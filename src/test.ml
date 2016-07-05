@@ -162,103 +162,107 @@ let test_for = "for loop tests" >:::
 			   let vlat_s     = SL.read_name slat "s" in
 			   let vlat_keys  = ST.lookup_all_keys slat.SL.store vlat_s in
 			   let vlat_props = ST.lookup_all_props slat.SL.store vlat_s in
-			   let vlat_def   = ST.lookup_default_prop slat.SL.store vlat_s VL.anystring in
+			   let vlat_str   = ST.lookup_all_str_props slat.SL.store vlat_s in
 			   assert_bool "for06" (VL.may_be_table vlat_s && vlat_keys = VL.anystring &&
-				                vlcmp vlat_props vlat_def &&
-						VL.leq (VL.string "str") vlat_def &&
-						VL.may_be_number vlat_def &&
-						VL.may_be_bool vlat_def &&
-						VL.leq (VL.builtin VL.Print) vlat_def &&
-						VL.may_be_proc vlat_def &&
-						VL.may_be_table vlat_def));
+				                vlcmp vlat_props vlat_str &&
+						VL.leq (VL.string "str") vlat_str &&
+						VL.may_be_number vlat_str &&
+						VL.may_be_bool vlat_str &&
+						VL.leq (VL.builtin VL.Print) vlat_str &&
+						VL.may_be_proc vlat_str &&
+						VL.may_be_table vlat_str));
     "for07" >:: (fun () -> let _,_,slat = parse_analyze_lookup "examples/for07.lua" in
-			   let vlat_s     = SL.read_name slat "s" in
-			   let vlat_keys  = ST.lookup_all_keys slat.SL.store vlat_s in
-			   let vlat_props = ST.lookup_all_props slat.SL.store vlat_s in
-			   let vlat_def   = ST.lookup_default_prop slat.SL.store vlat_s VL.anystring in
+			   let vlat_s      = SL.read_name slat "s" in
+			   let vlat_keys   = ST.lookup_all_keys slat.SL.store vlat_s in
+			   let vlat_str    = ST.lookup_all_str_props slat.SL.store vlat_s in
+			   let vlat_nonstr = ST.lookup_all_nonstr_props slat.SL.store vlat_s in
 			   assert_bool "for07" (VL.may_be_table vlat_s &&
-				                  vlcmp vlat_props vlat_def &&
 						  VL.leq (VL.string "str") vlat_keys &&
 						  VL.may_be_number vlat_keys &&
 						  VL.may_be_bool vlat_keys &&
 						  VL.leq (VL.builtin VL.Print) vlat_keys &&
 						  VL.may_be_proc vlat_keys &&
 						  VL.may_be_table vlat_keys &&
-						  VL.leq (VL.string "a") vlat_props && 
-						  VL.leq (VL.string "b") vlat_props && 
-						  VL.leq (VL.string "c") vlat_props &&
-						  VL.leq (VL.string "d") vlat_props &&
-						  VL.leq (VL.string "e") vlat_props && 
-						  VL.leq (VL.string "f") vlat_props ));
+						  VL.leq (VL.string "a") vlat_str && 
+						  VL.leq (VL.string "b") vlat_nonstr && 
+						  VL.leq (VL.string "c") vlat_nonstr &&
+						  VL.leq (VL.string "d") vlat_nonstr &&
+						  VL.leq (VL.string "e") vlat_nonstr && 
+						  VL.leq (VL.string "f") vlat_nonstr ));
     "for08" >:: (fun () -> let _,_,slat = parse_analyze_lookup "examples/for08.lua" in
 			   let vlat_s     = SL.read_name slat "s" in
 			   let vlat_keys  = ST.lookup_all_keys slat.SL.store vlat_s in
 			   let vlat_props = ST.lookup_all_props slat.SL.store vlat_s in
-			   let vlat_def   = ST.lookup_default_prop slat.SL.store vlat_s VL.anystring in
-			   assert_bool "for08" (VL.may_be_table vlat_s && vlat_keys = VL.anystring &&
-				                vlcmp vlat_props vlat_def &&
-						VL.leq (VL.string "str") vlat_def &&
-						VL.may_be_number vlat_def &&
-						VL.may_be_bool vlat_def &&
-						VL.leq (VL.builtin VL.Print) vlat_def &&
-						VL.may_be_proc vlat_def &&
-						VL.may_be_table vlat_def));
+			   let vlat_str   = ST.lookup_all_str_props slat.SL.store vlat_s in
+			   assert_bool "for08" (VL.may_be_table vlat_s && VL.eq vlat_keys VL.anystring &&
+				                vlcmp vlat_props vlat_str &&
+						VL.leq (VL.string "str") vlat_str &&
+						VL.may_be_number vlat_str &&
+						VL.may_be_bool vlat_str &&
+						VL.leq (VL.builtin VL.Print) vlat_str &&
+						VL.may_be_proc vlat_str &&
+						VL.may_be_table vlat_str));
     "for09" >:: (fun () -> let _,_,slat = parse_analyze_lookup "examples/for09.lua" in
-			   let vlat_s     = SL.read_name slat "s" in
-			   let vlat_keys  = ST.lookup_all_keys slat.SL.store vlat_s in
-			   let vlat_props = ST.lookup_all_props slat.SL.store vlat_s in
-			   let vlat_def   = ST.lookup_default_prop slat.SL.store vlat_s VL.anystring in
+			   let vlat_s      = SL.read_name slat "s" in
+			   let vlat_keys   = ST.lookup_all_keys slat.SL.store vlat_s in
+			   let vlat_str    = ST.lookup_all_str_props slat.SL.store vlat_s in
+			   let vlat_nonstr = ST.lookup_all_nonstr_props slat.SL.store vlat_s in
 			   assert_bool "for09" (VL.may_be_table vlat_s &&
-				                  vlcmp vlat_props vlat_def &&
 						  VL.leq (VL.string "str") vlat_keys &&
 						  VL.may_be_number vlat_keys &&
 						  VL.may_be_bool vlat_keys &&
 						  VL.leq (VL.builtin VL.Print) vlat_keys &&
 						  VL.may_be_proc vlat_keys &&
 						  VL.may_be_table vlat_keys &&
-						  VL.leq (VL.string "a") vlat_props && 
-						  VL.leq (VL.string "b") vlat_props && 
-						  VL.leq (VL.string "c") vlat_props &&
-						  VL.leq (VL.string "d") vlat_props &&
-						  VL.leq (VL.string "e") vlat_props && 
-						  VL.leq (VL.string "f") vlat_props ));
+						  VL.leq (VL.string "a") vlat_str && 
+						  VL.leq (VL.string "b") vlat_nonstr && 
+						  VL.leq (VL.string "c") vlat_nonstr &&
+						  VL.leq (VL.string "d") vlat_nonstr &&
+						  VL.leq (VL.string "e") vlat_nonstr && 
+						  VL.leq (VL.string "f") vlat_nonstr ));
     "for10" >:: (fun () -> let _,_,slat = parse_analyze_lookup "examples/for10.lua" in
-			   let vlat_s     = SL.read_name slat "s" in
-			   let vlat_keys  = ST.lookup_all_keys slat.SL.store vlat_s in
-			   let vlat_props = ST.lookup_all_props slat.SL.store vlat_s in
-			   let vlat_def   = ST.lookup_default_prop slat.SL.store vlat_s VL.number in
+			   let vlat_s      = SL.read_name slat "s" in
+			   let vlat_keys   = ST.lookup_all_keys slat.SL.store vlat_s in
+			   let vlat_props  = ST.lookup_all_props slat.SL.store vlat_s in
+			   let vlat_str    = ST.lookup_all_str_props slat.SL.store vlat_s in
+			   let vlat_nonstr = ST.lookup_all_nonstr_props slat.SL.store vlat_s in
 			   assert_bool "for10" (VL.may_be_table vlat_s &&
 						  vlcmp vlat_keys VL.number &&
-				                  vlcmp vlat_props vlat_def &&
-						  VL.leq (VL.string "str") vlat_props &&
-						  VL.may_be_number vlat_props &&
-						  VL.may_be_bool vlat_props &&
-						  VL.leq (VL.builtin VL.Print) vlat_props &&
-						  VL.may_be_proc vlat_props &&
-						  VL.may_be_table vlat_props ));
+				                  vlcmp vlat_props vlat_nonstr &&
+				                  vlcmp vlat_str VL.bot &&
+						  VL.leq (VL.string "str") vlat_nonstr &&
+						  VL.may_be_number vlat_nonstr &&
+						  VL.may_be_bool vlat_nonstr &&
+						  VL.leq (VL.builtin VL.Print) vlat_nonstr &&
+						  VL.may_be_proc vlat_nonstr &&
+						  VL.may_be_table vlat_nonstr ));
     "for11" >:: (fun () -> let _,_,slat = parse_analyze_lookup "examples/for11.lua" in
-			   let vlat_s     = SL.read_name slat "s" in
-			   let vlat_keys  = ST.lookup_all_keys slat.SL.store vlat_s in
-			   let vlat_props = ST.lookup_all_props slat.SL.store vlat_s in
-			   let vlat_def   = ST.lookup_default_prop slat.SL.store vlat_s VL.number in
+			   let vlat_s      = SL.read_name slat "s" in
+			   let vlat_keys   = ST.lookup_all_keys slat.SL.store vlat_s in
+			   let vlat_props  = ST.lookup_all_props slat.SL.store vlat_s in
+			   let vlat_str    = ST.lookup_all_str_props slat.SL.store vlat_s in
+			   let vlat_nonstr = ST.lookup_all_nonstr_props slat.SL.store vlat_s in
 			   assert_bool "for11" (VL.may_be_table vlat_s &&
 						  vlcmp vlat_keys VL.number &&
-				                  vlcmp vlat_props vlat_def &&
-						  VL.leq (VL.string "str") vlat_props &&
-						  VL.may_be_number vlat_props &&
-						  VL.may_be_bool vlat_props &&
-						  VL.leq (VL.builtin VL.Print) vlat_props &&
-						  VL.may_be_proc vlat_props &&
-						  VL.may_be_table vlat_props ));
+				                  vlcmp vlat_props vlat_nonstr &&
+				                  vlcmp vlat_str VL.bot &&
+						  VL.leq (VL.string "str") vlat_nonstr &&
+						  VL.may_be_number vlat_nonstr &&
+						  VL.may_be_bool vlat_nonstr &&
+						  VL.leq (VL.builtin VL.Print) vlat_nonstr &&
+						  VL.may_be_proc vlat_nonstr &&
+						  VL.may_be_table vlat_nonstr ));
     "for12" >:: (fun () -> let _,_,slat = parse_analyze_lookup "examples/for12.lua" in
-			   let vlat_s     = SL.read_name slat "s" in
-			   let vlat_keys  = ST.lookup_all_keys slat.SL.store vlat_s in
-			   let vlat_props = ST.lookup_all_props slat.SL.store vlat_s in
-			   let vlat_def   = ST.lookup_default_prop slat.SL.store vlat_s VL.number in
+			   let vlat_s      = SL.read_name slat "s" in
+			   let vlat_keys   = ST.lookup_all_keys slat.SL.store vlat_s in
+			   let vlat_props  = ST.lookup_all_props slat.SL.store vlat_s in
+			   let vlat_str    = ST.lookup_all_str_props slat.SL.store vlat_s in
+			   let vlat_nonstr = ST.lookup_all_nonstr_props slat.SL.store vlat_s in
 			   assert_bool "for12" (VL.may_be_table vlat_s &&
 						  vlcmp vlat_keys VL.bot &&
 				                  vlcmp vlat_props VL.bot &&
-						  vlcmp vlat_def VL.nil));
+						  vlcmp vlat_str VL.bot &&
+						  vlcmp vlat_nonstr VL.bot));
   ]
 
 let test_unop = "unary operation tests" >:::
@@ -451,25 +455,25 @@ let test_return = "return tests" >:::
 			      assert_bool "return05" (vlat_r3 = VL.nil && vlat_r4 = VL.nil && vlat_r5 = VL.nil));
     "return06" >:: (fun () -> let _,_,slat = parse_analyze_lookup "examples/return06.lua" in
 			      let vlat_t   = SL.read_name slat "t" in
-			      let vlat_r1  = ST.lookup_prop slat.SL.store vlat_t "r1" in
+			      let vlat_r1  = ST.lookup_str_prop slat.SL.store vlat_t "r1" in
 			      let vlat_l   = SL.read_name slat "l" in
-			      let vlat_r2  = ST.lookup_prop slat.SL.store vlat_t "r2" in
-			      let vlat_r3  = ST.lookup_prop slat.SL.store vlat_t "r3" in
+			      let vlat_r2  = ST.lookup_str_prop slat.SL.store vlat_t "r2" in
+			      let vlat_r3  = ST.lookup_str_prop slat.SL.store vlat_t "r3" in
 			      let vlat_r4  = SL.read_name slat "r4" in
 			      assert_bool "return06" (VL.may_be_table vlat_t &&
 							VL.leq (VL.string "foo") vlat_r1 &&
-							(vlcmp vlat_l (VL.string "jens")) &&
+							VL.leq (VL.string "jens") vlat_l &&
 							vlat_r2 = VL.nil &&
 				                        vlat_r3 = VL.nil && vlat_r4 = VL.nil));
     "return07" >:: (fun () -> let _,_,slat = parse_analyze_lookup "examples/return07.lua" in
 			      let vlat_t   = SL.read_name slat "t" in
-			      let vlat_r1  = ST.lookup_prop slat.SL.store vlat_t "r1" in
+			      let vlat_r1  = ST.lookup_str_prop slat.SL.store vlat_t "r1" in
 			      let vlat_l   = SL.read_name slat "l" in
-			      let vlat_r2  = ST.lookup_prop slat.SL.store vlat_t "r2" in
+			      let vlat_r2  = ST.lookup_str_prop slat.SL.store vlat_t "r2" in
 			      let vlat_r3  = SL.read_name slat "r3" in
 			      assert_bool "return07" (VL.may_be_table vlat_t &&
 							VL.leq (VL.string "foo") vlat_r1 &&
-							vlat_l = (VL.string "jens") &&
+							VL.leq (VL.string "jens") vlat_l &&
 				                        VL.leq (VL.string "foo") vlat_r2 &&
 				                        vlat_r3 = (VL.string "hest") ));
     "return08" >:: (fun () -> let _,_,slat = parse_analyze_lookup "examples/return08.lua" in
@@ -523,7 +527,7 @@ let test_table = "table tests" >:::
 			     assert_bool "table01" (VL.may_be_table vlat_x));
     "table02" >:: (fun () -> let _,_,slat = parse_analyze_lookup "examples/table02.lua" in
 			     let vlat_x   = SL.read_name slat "x" in
-			     let vlat     = ST.lookup_prop slat.SL.store vlat_x "height" in
+			     let vlat     = ST.lookup_str_prop slat.SL.store vlat_x "height" in
 			     assert_equal ~cmp:vlcmp VL.number vlat);
     "table03" >:: (fun () -> let _,_,slat = parse_analyze_lookup "examples/table03.lua" in
 			     let vlat_y   = SL.read_name slat "y" in
@@ -544,8 +548,8 @@ let test_table = "table tests" >:::
 			     assert_bool "table07" (VL.may_be_table vlat_t));
     "table08" >:: (fun () -> let _,_,slat = parse_analyze_lookup "examples/table08.lua" in
 			     let vlat_t   = SL.read_name slat "t" in
-			     let vlat_y   = ST.lookup_prop slat.SL.store vlat_t "y" in
-			     let vlat_1   = ST.lookup_prop slat.SL.store vlat_t "1" in
+			     let vlat_y   = ST.lookup_str_prop slat.SL.store vlat_t "y" in
+			     let vlat_1   = ST.lookup_str_prop slat.SL.store vlat_t "1" in
 			     assert_bool "table08" (VL.number = vlat_y && VL.may_be_strings vlat_1));
     "table09" >:: (fun () -> let _,_,slat = parse_analyze_lookup "examples/table09.lua" in
 			     let vlat_x   = SL.read_name slat "x" in
@@ -553,7 +557,7 @@ let test_table = "table tests" >:::
 						    VL.leq (VL.string "z") vlat_x));
     "table10" >:: (fun () -> let _,_,slat = parse_analyze_lookup "examples/table10.lua" in
 			     let vlat_t   = SL.read_name slat "t" in
-			     let vlat_def = ST.lookup_default_prop slat.SL.store vlat_t VL.number in
+			     let vlat_def = ST.lookup_dyn_prop slat.SL.store vlat_t VL.number in
 			     assert_bool "table10" (VL.may_be_bool vlat_def));
     "table11" >:: (fun () -> let _,_,slat = parse_analyze_lookup "examples/table11.lua" in
 			     let vlat_r   = SL.read_name slat "r" in
@@ -608,34 +612,35 @@ let test_table = "table tests" >:::
 			     let vlat_s     = SL.read_name slat "s" in
 			     let vlat_keys  = ST.lookup_all_keys slat.SL.store vlat_s in
 			     let vlat_props = ST.lookup_all_props slat.SL.store vlat_s in
-			     let vlat_def   = ST.lookup_default_prop slat.SL.store vlat_s VL.anystring in
-			     assert_bool "table21" (VL.may_be_table vlat_s && vlat_keys = VL.anystring &&
-				                    vlcmp vlat_props vlat_def &&
-						    VL.leq (VL.string "str") vlat_def &&
-						    VL.may_be_number vlat_def &&
-						    VL.may_be_bool vlat_def &&
-						    VL.leq (VL.builtin VL.Print) vlat_def &&
-						    VL.may_be_proc vlat_def &&
-						    VL.may_be_table vlat_def));
+			     let vlat_str   = ST.lookup_all_str_props slat.SL.store vlat_s in
+			     assert_bool "table21" (VL.may_be_table vlat_s && VL.eq vlat_keys VL.anystring &&
+				                    vlcmp vlat_props vlat_str &&
+						    VL.leq (VL.string "str") vlat_str &&
+						    VL.may_be_number vlat_str &&
+						    VL.may_be_bool vlat_str &&
+						    VL.leq (VL.builtin VL.Print) vlat_str &&
+						    VL.may_be_proc vlat_str &&
+						    VL.may_be_table vlat_str));
     "table22" >:: (fun () -> let _,_,slat = parse_analyze_lookup "examples/table22.lua" in
-			     let vlat_s     = SL.read_name slat "s" in
-			     let vlat_keys  = ST.lookup_all_keys slat.SL.store vlat_s in
-			     let vlat_props = ST.lookup_all_props slat.SL.store vlat_s in
-			     let vlat_def   = ST.lookup_default_prop slat.SL.store vlat_s VL.anystring in
+			     let vlat_s      = SL.read_name slat "s" in
+			     let vlat_keys   = ST.lookup_all_keys slat.SL.store vlat_s in
+(*			     let vlat_props  = ST.lookup_all_props slat.SL.store vlat_s in *)
+			     let vlat_str    = ST.lookup_all_str_props slat.SL.store vlat_s in
+			     let vlat_nonstr = ST.lookup_all_nonstr_props slat.SL.store vlat_s in
 			     assert_bool "table22" (VL.may_be_table vlat_s &&
-				                    vlcmp vlat_props vlat_def &&
+				  (*                  vlcmp vlat_props vlat_def && *)
 						    VL.leq (VL.string "str") vlat_keys &&
 						    VL.may_be_number vlat_keys &&
 						    VL.may_be_bool vlat_keys &&
 						    VL.leq (VL.builtin VL.Print) vlat_keys &&
 						    VL.may_be_proc vlat_keys &&
 						    VL.may_be_table vlat_keys &&
-						    VL.leq (VL.string "a") vlat_props && 
-						    VL.leq (VL.string "b") vlat_props && 
-						    VL.leq (VL.string "c") vlat_props &&
-						    VL.leq (VL.string "d") vlat_props &&
-						    VL.leq (VL.string "e") vlat_props && 
-						    VL.leq (VL.string "f") vlat_props ));
+						    VL.leq (VL.string "a") vlat_str && 
+						    VL.leq (VL.string "b") vlat_nonstr && 
+						    VL.leq (VL.string "c") vlat_nonstr &&
+						    VL.leq (VL.string "d") vlat_nonstr &&
+						    VL.leq (VL.string "e") vlat_nonstr && 
+						    VL.leq (VL.string "f") vlat_nonstr ));
     (* table 23 missing *)
     "table24" >:: (fun () -> let _,_,slat = parse_analyze_lookup "examples/table24.lua" in
 			     let vlat_r = SL.read_name slat "r" in

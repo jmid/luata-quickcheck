@@ -29,7 +29,7 @@ texts['fold000061'] = '<a href="javascript:fold(\'fold000061\');"><img border="0
 states['fold000061'] = false;
 texts['fold000071'] = '<a href="javascript:fold(\'fold000071\');"><img border="0" height="10" width="10" src="plus.png" title="unfold code"/></a><i>&nbsp;&nbsp;code folded from line 71 to line 72</i>';
 states['fold000071'] = false;
-texts['fold000075'] = '<a href="javascript:fold(\'fold000075\');"><img border="0" height="10" width="10" src="plus.png" title="unfold code"/></a><i>&nbsp;&nbsp;code folded from line 75 to line 79</i>';
+texts['fold000075'] = '<a href="javascript:fold(\'fold000075\');"><img border="0" height="10" width="10" src="plus.png" title="unfold code"/></a><i>&nbsp;&nbsp;code folded from line 75 to line 75</i>';
 states['fold000075'] = false;
 
 function fold(id) {

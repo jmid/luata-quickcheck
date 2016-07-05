@@ -4,11 +4,19 @@ open LCheck
 module Label =
 struct
   type elem = int
-  let arb_elem = Arbitrary.int 1000000 (*max_int 4611686018427387903*)
+  let arb_elem = Arbitrary.(choose [int 8; small_int]) (*was:Arbitrary.int 1000000*) (*max_int 4611686018427387903*)
   let to_string = string_of_int
 end
 module Labellist = MkArbListArg(Label)
 
+module Str_arg =
+struct
+  type elem = string
+  let to_string s = s
+  let arb_elem = Arbitrary.(choose [among ["a";"b";"c";"d";"e"]; string]) (* was: Arbitrary.string *)
+end
+module Strlist = MkArbListArg(Str_arg)
+  
 (** Generic operations for building arbitrary sets *)
 
 (*  build_set : 'a Set.t -> ('a -> 'a Set.t) -> ('a Set.t -> 'a Set.t -> 'a Set.t)
@@ -22,13 +30,10 @@ let rec build_set mt sglton union ls = match ls with
 			(build_set mt sglton union ls)
 			(build_set mt sglton union rs) )
 
-(*  build_map : ('b Map.t) -> ('a -> 'b -> 'b Map.t -> 'b Map.t) -> 'a * 'b list -> 'b Map.t  *)
+(*  build_map : ('b Map.t) -> ('a -> 'b -> 'b Map.t -> 'b Map.t) -> 'a * 'b list -> 'b Map.t *)
 let build_map mt add ls =
-  let rec build ls = match ls with
-    | [] ->        Arbitrary.return mt
-    | (k,v)::ls -> Arbitrary.(build ls >>= fun tbl -> return (add k v tbl)) in
-  build ls
-
+  List.fold_right (fun (k,v) acctbl -> add k v acctbl) ls mt
+    
 (*  permute : 'a list -> 'a list Arbitrary.t *)
 let rec permute es = match es with
   | []  -> Arbitrary.return []
@@ -58,6 +63,14 @@ let le_entries arb_elem_le es =
 			      return ((k,v')::es')) in
   build es
 
+(*  lift5 : ('a -> 'b -> 'c -> 'd -> 'e -> 'f) -> 'a t -> 'b t -> 'c t -> 'd t -> 'e t -> 'f t *)
+let lift5 f gen_a gen_b gen_c gen_d gen_e =
+  Arbitrary.(gen_a >>= fun a ->
+	      gen_b >>= fun b ->
+	       gen_c >>= fun c ->
+		gen_d >>= fun d ->
+		 gen_e >>= fun e -> return (f a b c d e))
+    
 (** Absence lattice extended with generators *)
 module Abs = struct 
   let name = "absence lattice"
@@ -80,7 +93,7 @@ end
 module Str = struct
   let name = "string lattice"
   include Stringlattice
-  let arb_elem = Arbitrary.(choose [return bot; lift const string; return top])
+  let arb_elem = Arbitrary.(choose [return bot; lift const Str_arg.arb_elem; return top])
   let equiv_pair = Arbitrary.(lift (fun sv -> match sv with
                                                | Const s -> (sv,Const (String.copy s))
 					       | _       -> (sv,sv))  arb_elem)
@@ -113,8 +126,8 @@ module VL  = struct
 					 Getmetatable;Setmetatable]))
   let arb_funtag  = Arbitrary.(lift (fun i -> Funtag i) Label.arb_elem)
   let arb_proc    = Arbitrary.(choose [arb_funtag; arb_builtin])
-  let arb_procs   = Arbitrary.(fix ~base:(return ProcSet.empty) (lift2 ProcSet.add arb_proc))
-  let arb_labels  = Arbitrary.(fix ~base:(return LabelSet.empty) (lift2 LabelSet.add Label.arb_elem))
+  let arb_procs   = Arbitrary.(fix ~max:5 ~base:(return ProcSet.empty) (lift2 ProcSet.add arb_proc))
+  let arb_labels  = Arbitrary.(fix ~max:5 ~base:(return LabelSet.empty) (lift2 LabelSet.add Label.arb_elem))
 
   let arb_label_list = Labellist.arb_elem
   let arb_tag_list   = Arbitrary.(list ~len:(int 4) (among [Nil; Bool; Userdata]))
@@ -123,14 +136,6 @@ module VL  = struct
   let build_labelset = build_set LabelSet.empty LabelSet.singleton LabelSet.union
   let build_tagset   = build_set TagSet.empty   TagSet.singleton   TagSet.union  
   let build_procset  = build_set ProcSet.empty  ProcSet.singleton  ProcSet.union 
-
-  (*  lift5 : ('a -> 'b -> 'c -> 'd -> 'e -> 'f) -> 'a t -> 'b t -> 'c t -> 'd t -> 'e t -> 'f t *)
-  let lift5 f gen_a gen_b gen_c gen_d gen_e =
-    Arbitrary.(gen_a >>= fun a ->
-	        gen_b >>= fun b ->
-	         gen_c >>= fun c ->
-		  gen_d >>= fun d ->
-		   gen_e >>= fun e -> return (f a b c d e))
 
   (*  arb_elem : elem Arbitrary.t  *)
   let arb_elem =  (* generate arbitrary tagset, number elem, string elem, fun set, table set *)
@@ -179,11 +184,11 @@ end
 (** Property lattice extended with generators *)
 module PL = struct
   let name = "property lattice"
-  let abs_arb_elem    = Abs.arb_elem
-  let abs_arb_elem_le = Abs.arb_elem_le
-  let vl_arb_elem     = VL.arb_elem
-  let vl_equiv_pair   = VL.equiv_pair
-  let vl_arb_elem_le  = VL.arb_elem_le
+  let abs_arb_elem     = Abs.arb_elem
+  let abs_arb_elem_le  = Abs.arb_elem_le
+  let vl_arb_elem      = Arbitrary.map VL.arb_elem VL.exclude_nil
+  let vl_equiv_pair    = VL.equiv_pair
+  let vl_arb_elem_le e = Arbitrary.map (VL.arb_elem_le e) VL.exclude_nil
   include Proplattice
   let build_sc_set = build_set ScopeChainSet.empty ScopeChainSet.singleton ScopeChainSet.union
   let build_tblmap = build_map TableMap.empty TableMap.add
@@ -191,38 +196,117 @@ module PL = struct
   let arb_key = Arbitrary.(small_int >>= fun i ->
                                            if i > 90
                                            then return TableKey.Metatable
-					   else lift (fun s -> TableKey.String s) string)
+					   else lift (fun s -> TableKey.String s) Str_arg.arb_elem)
   let arb_entries  = Arbitrary.(list ~len:(int 20) (pair arb_key
 							 (pair vl_arb_elem abs_arb_elem)))
+  let coll_defs es =
+    List.fold_left (fun (kacc,vacc) (k,(v,_abs)) -> match k with
+      | TableKey.String k  -> (VL.join (VL.string k) kacc, VL.join v vacc)
+      | TableKey.Metatable -> (kacc,vacc)) (VL.bot,VL.bot) es
+
   let arb_elem =
     let sc_gen    = Arbitrary.(arb_sc_list >>= build_sc_set) in
-    let table_gen = Arbitrary.(arb_entries >>= build_tblmap) in
-    Arbitrary.lift4
-      (fun t dk df sc -> { table = t; default_key = dk; default = df; scopechain = sc })
-      table_gen vl_arb_elem vl_arb_elem sc_gen
+    let table_gen = Arbitrary.map arb_entries build_tblmap in
+    let vl_arb_key = Arbitrary.map vl_arb_elem VL.exclude_strings in
+    
+    Arbitrary.(small_int >>= fun i ->
+                 if i > 90
+                 then return bot
+		 else
+		   lift5
+		     (fun t ds dk df sc ->
+		       table { table = t;
+			       default_str = ds;
+			       default_key = dk;
+			       default = df;
+			       scopechain = sc })
+		     table_gen vl_arb_elem vl_arb_key vl_arb_elem sc_gen)
 
   let equiv_pair =
-    let equiv_tables      = Arbitrary.(arb_entries >>= build_tblmap >>= fun map ->
- 				       permute (TableMap.bindings map) >>= fun perm_entries ->
-				       pair (return map) (build_tblmap perm_entries)) in
+    let vl_equiv_pair_nonnil = Arbitrary.(vl_equiv_pair >>= fun (v,v') -> return (VL.exclude_nil v,
+			 							  VL.exclude_nil v')) in
+    let equiv_keys           = Arbitrary.(vl_equiv_pair >>= fun (v,v') -> return (VL.exclude_strings v,
+		  								  VL.exclude_strings v')) in
+    let equiv_tables         = Arbitrary.(map arb_entries build_tblmap >>= fun map ->
+ 					  permute (TableMap.bindings map) >>= fun perm_entries ->
+					  return (map, build_tblmap perm_entries)) in
     let equiv_scopechains = Arbitrary.(arb_sc_list >>= fun sc -> pair (build_sc_set sc)
 				                                      (build_sc_set sc)) in
-    Arbitrary.lift4
-      (fun (t,t') (dk,dk') (df,df') (sc,sc') ->
-	({ table = t;  default_key = dk;  default = df;  scopechain = sc },
-	 { table = t'; default_key = dk'; default = df'; scopechain = sc' }))
-      equiv_tables vl_equiv_pair vl_equiv_pair equiv_scopechains
+    Arbitrary.(small_int >>= fun i ->
+                 if i > 90
+                 then return (bot,bot)
+		 else
+		   lift5
+		     (fun (t,t') (ds,ds') (dk,dk') (df,df') (sc,sc') ->
+		       (Table { table = t;  default_str = ds;  default_key = dk;  default = df;  scopechain = sc },
+			Table { table = t'; default_str = ds'; default_key = dk'; default = df'; scopechain = sc' }))
+		     equiv_tables vl_equiv_pair_nonnil equiv_keys vl_equiv_pair_nonnil equiv_scopechains)
 
-  let arb_elem_le { table; default_key; default; scopechain } =
-    let entry_le (v,a) = Arbitrary.pair (vl_arb_elem_le v) (abs_arb_elem_le a) in
-    let table'      = le_gen (TableMap.bindings table)
-                             Arbitrary.(fun es -> le_entries entry_le es >>= build_tblmap) in
-    let def_key'    = vl_arb_elem_le default_key in
-    let default'    = vl_arb_elem_le default in
+(*  prop_le_gen : 'a list -> ('a list -> 'b) -> 'b  *)
+let prop_le_gen es build blddefkey blddef =
+  let es_gen = permute es in
+  Arbitrary.(es_gen >>= fun es ->
+	     int (1 + List.length es) >>= fun i -> 
+	     let smaller_es,rest_es = split i es in
+	     let collk,collv =
+	       List.fold_left (fun (kacc,vacc) (k,(v,_abs)) -> match k with
+		 | TableKey.String k  -> (VL.join (VL.string k) kacc, VL.join v vacc)
+		 | TableKey.Metatable -> (kacc,vacc)) (VL.bot,VL.bot) rest_es in
+	     Arbitrary.triple (build smaller_es) (blddefkey collk) (blddef collv)
+  )
+
+(*  pl_le_gen : 'a list -> ('a list -> 'b) -> 'b  *)
+let pl_le_gen es build =
+  let es_gen = permute es in
+  Arbitrary.(es_gen >>= fun es ->
+	     let uncert,cert = List.partition (fun (k,(v,a)) -> a = Abs.maybe_absent) es in
+	     int (1 + List.length uncert) >>= fun i -> 
+	     let smaller_uc,_ = split i uncert in
+	     build (smaller_uc@cert))
+    
+let arb_elem_le t = match t with
+  | Bot -> Arbitrary.return bot
+  | Table { table = tbl; default_str; default_key; default; scopechain } ->
+    let entry_le (v,a) =
+      Arbitrary.(pair (vl_arb_elem_le v) (abs_arb_elem_le a) >>= (fun (v',a') ->
+	if VL.is_bot v' && a' = Abs.is_present
+	then return (v,a') (* don't generate bottom, certain entries *)
+	else return (v',a'))) in
+    let table' = pl_le_gen (TableMap.bindings tbl)
+                   Arbitrary.(fun es -> map (le_entries entry_le es) build_tblmap) in
+    let vl_arb_key_le e = vl_arb_elem_le e in
+    let def_str' = vl_arb_key_le default_str in
+    let def_key' = vl_arb_key_le default_key in
+    let default' = vl_arb_elem_le default in
     let scopechain' = le_gen (ScopeChainSet.elements scopechain) build_sc_set in
-    Arbitrary.lift4
-      (fun t dk df sc -> {table = t; default_key = dk; default = df; scopechain = sc})
-      table' def_key' default' scopechain'
+
+    (* definite bindings in arg. *cannot* be deleted in generated smaller table *)
+    (* uncertain bindings in arg. *can* be deleted in generated smaller table *)
+    (* bindings can be added to the generated smaller table
+           -- if the bigger table default accounts for them *)
+  let coll_removed_entries es candtab canddefstr = (* collects smaller defs *)
+    List.fold_left (fun acc (k,(v,_abs)) -> match k with
+      | TableKey.String k'  ->
+	if TableMap.mem k candtab (* entry present, and smaller value generated *)
+	then acc
+	else VL.meet v acc (* entry not present, so default should be less *)
+      | TableKey.Metatable -> acc) canddefstr es in
+
+    Arbitrary.(small_int >>= fun i ->
+                 if i > 90
+                 then return bot
+		 else
+		   let bindings = TableMap.bindings tbl in
+		   lift5
+		     (fun t ds dk df sc ->
+		       (* ensure that collective default does not increase above removed entries *)
+		       let new_defstr = coll_removed_entries bindings t ds in
+			 table {table       = t;
+				default_str = new_defstr;
+				default_key = dk;
+				default     = df;
+				scopechain  = sc})
+		     table' def_str' def_key' default' scopechain')
 end
 
 (** Store lattice extended with generators *)
@@ -233,12 +317,12 @@ module ST = struct
   include Storelattice
   let build_storemap = build_map StoreMap.empty StoreMap.add
   let arb_entries    = Arbitrary.(list ~len:(int 20) (pair Label.arb_elem pl_arb_elem))
-  let arb_elem       = Arbitrary.(arb_entries >>= build_storemap)
-  let equiv_pair     = Arbitrary.(arb_entries >>= build_storemap >>= fun map ->
- 				   permute (StoreMap.bindings map) >>= fun perm_entries ->
-				    pair (return map) (build_storemap perm_entries))
+  let arb_elem       = Arbitrary.map arb_entries build_storemap
+  let equiv_pair     = Arbitrary.(map arb_entries build_storemap >>= fun map ->
+ 				  permute (StoreMap.bindings map) >>= fun perm_entries ->
+				    return (map, build_storemap perm_entries))
   let arb_elem_le st = le_gen (StoreMap.bindings st) 
-                              Arbitrary.(fun es -> le_entries pl_arb_elem_le es >>= build_storemap)
+                         Arbitrary.(fun es -> map (le_entries pl_arb_elem_le es) build_storemap)
 end
 
 (** State lattice extended with generators *)
@@ -267,12 +351,12 @@ module AL = struct
   include Analysislattice
   let build_labelmap = build_map LabelMap.empty LabelMap.add
   let arb_entries    = Arbitrary.(list ~len:(int 20) (pair Label.arb_elem sl_arb_elem))
-  let arb_elem = Arbitrary.(arb_entries >>= build_labelmap)
-  let equiv_pair     = Arbitrary.(arb_entries >>= build_labelmap >>= fun map ->
+  let arb_elem       = Arbitrary.map arb_entries build_labelmap
+  let equiv_pair     = Arbitrary.(map arb_entries build_labelmap >>= fun map ->
  				   permute (LabelMap.bindings map) >>= fun perm_entries ->
-				    pair (return map) (build_labelmap perm_entries))
+				    return (map, build_labelmap perm_entries))
   let arb_elem_le st = le_gen (LabelMap.bindings st) 
-                              Arbitrary.(fun es -> le_entries sl_arb_elem_le es >>= build_labelmap)
+                         Arbitrary.(fun es -> map (le_entries sl_arb_elem_le es) build_labelmap)
 end
 
 module GenAbsTests  = GenericTests(Abs)
@@ -292,14 +376,9 @@ module GenStrTopTests = GenericTopTests(Str)
 
 (** Tests for specific operations *)
 
-module Str_arg =
-struct
-  type elem = string
-  let to_string s = s
-  let arb_elem = Arbitrary.string
-end
-module Strlist = MkArbListArg(Str_arg)
-
+module VLAbsPair = MkPairLattice(VL)(Abs)
+module GenVLAbspairTests = GenericTests(VLAbsPair)
+  
 module VLVLpair = MkPairLattice(VL)(VL)
 module GenVLVLpairTests = GenericTests(VLVLpair)
 
@@ -409,9 +488,10 @@ let binop_is_strict_monotone_invariant name op =
 let spec_vl_operations =
   flatten
     [ (* unary op tests *)
-      unary_is_strict_monotone_invariant "VL.exclude_nil"    VL.exclude_nil;
-      unary_is_strict_monotone_invariant "VL.exclude_proc"   VL.exclude_proc;
-      unary_is_strict_monotone_invariant "VL.exclude_tables" VL.exclude_tables;
+      unary_is_strict_monotone_invariant "VL.exclude_nil"     VL.exclude_nil;
+      unary_is_strict_monotone_invariant "VL.exclude_strings" VL.exclude_strings;
+      unary_is_strict_monotone_invariant "VL.exclude_proc"    VL.exclude_proc;
+      unary_is_strict_monotone_invariant "VL.exclude_tables"  VL.exclude_tables;
       unary_is_strict_monotone_invariant "VL.only_tables"  VL.only_tables;
       unary_is_strict_monotone_invariant "VL.coerce_tonum" VL.coerce_tonum;
       unary_is_strict_monotone_invariant "VL.coerce_tostring" VL.coerce_tostring;
@@ -423,6 +503,7 @@ let spec_vl_operations =
       unary_is_strict_monotone_invariant "VL.unop Ast.Length" (VL.unop Ast.Length);
       unary_is_strict_monotone_invariant "VL.unop Ast.Not"    (VL.unop Ast.Not);
       (* binop tests *)
+      binop_is_strict_monotone_invariant "VL.or_join" VL.or_join;
       binop_is_strict_monotone_invariant "VL.binop Ast.Eq" (VL.binop Ast.Eq);
       binop_is_strict_monotone_invariant "VL.binop Ast.Lt" (VL.binop Ast.Lt);
       binop_is_strict_monotone_invariant "VL.binop Ast.Gt" (VL.binop Ast.Gt);
@@ -479,9 +560,16 @@ let spec_env_operations =
 
 (** Property lattice *)
 
-module VLAbsPair = MkPairLattice(VL)(Abs)
+(* Note: the following predicate depends on the Boolean lattice  *)
+(*       {true,false} under reverse implication ordering.        *)
+let is_bot_tests =
+  let pl_is_bot = ("PL.is_bot",PL.is_bot) in
+  [ testsig (module PL) -$-> (module Bool) =: pl_is_bot;
+    testsig (module PL) -<-> (module Bool) =: pl_is_bot;
+    testsig (module PL) -~-> (module Bool) =: pl_is_bot; ]
+    
 let find_exn_tests = (* find_exn : string -> PL -> VL + Not_found *)
-  let find_exn' str map = try PL.find_exn str map with Not_found -> (VL.bot,Abs.bot) in (* wrap 'find_exn' (which may raise exception) *)
+  let find_exn' str map = try PL.find_exn str map with Not_found -> VLAbsPair.bot in (* wrap 'find_exn' (which may raise exception) *)
   let pl_find_exn = ("PL.find_exn",find_exn') in
   [ pw_left (module Str_arg) op_strict    (module PL) (module VLAbsPair) =:: pl_find_exn;
     pw_left (module Str_arg) op_monotone  (module PL) (module VLAbsPair) =:: pl_find_exn;
@@ -489,20 +577,20 @@ let find_exn_tests = (* find_exn : string -> PL -> VL + Not_found *)
 
 let find_fail = (* forall s. find s bot = VL.nil *)
   mk_test ~n:1000 ~pp:PP.string ~limit:1 ~name:("find fail in " ^ PL.name) ~size:(fun s -> String.length (PP.string s))
-    Arbitrary.string (fun s -> VL.eq (PL.find s PL.bot) VL.nil)
+    Arbitrary.string (fun s -> VL.eq (PL.find s PL.mt) VL.nil)
 
 let find_tests = (* find : string -> PL -> VL *)
   let pl_find = ("PL.find",PL.find) in
   [ find_fail;
-  (*pw_left (module Str_arg) op_strict    (module PL) (module VL) =:: pl_find;*) (* not strict b/c default *)
-  (*pw_left (module Str_arg) op_monotone  (module PL) (module VL) =:: pl_find;*) (* not monotone b/c default *)
+    pw_left (module Str_arg) op_strict    (module PL) (module VL) =:: pl_find; (* not strict b/c default *)
+    pw_left (module Str_arg) op_monotone  (module PL) (module VL) =:: pl_find; (* not monotone b/c default *)
     pw_left (module Str_arg) op_invariant (module PL) (module VL) =:: pl_find; ]
 
-let find_default_tests =
-  let pl_find_default = ("PL.find_default",PL.find_default) in
-  [ testsig (module PL) -$-> (module VLVLpair) =: pl_find_default;
-    testsig (module PL) -<-> (module VLVLpair) =: pl_find_default;
-    testsig (module PL) -~-> (module VLVLpair) =: pl_find_default; ]
+let find_nonstr_defaults_tests =
+  let pl_find_nonstr_defaults = ("PL.find_nonstr_defaults",PL.find_nonstr_defaults) in
+  [ testsig (module PL) -$-> (module VLVLpair) =: pl_find_nonstr_defaults;
+    testsig (module PL) -<-> (module VLVLpair) =: pl_find_nonstr_defaults;
+    testsig (module PL) -~-> (module VLVLpair) =: pl_find_nonstr_defaults; ]
 
 let find_all_keys_tests =
   let pl_find_all_keys = ("PL.find_all_keys",PL.find_all_keys) in
@@ -518,8 +606,8 @@ let find_all_tests =
 
 let get_metatable_tests =
   let pl_get_metatable = ("PL.get_metatable",PL.get_metatable) in
-  [ (*testsig (module PL) -$-> (module VL) =: pl_get_metatable;*) (* by adding the field definitely result will not *)
-    (*testsig (module PL) -<-> (module VL) =: pl_get_metatable;*) (* include nil, hence not strict and monotone *)
+  [ testsig (module PL) -$-> (module VL) =: pl_get_metatable;
+    testsig (module PL) -<-> (module VL) =: pl_get_metatable; (* include nil, hence not strict and monotone *)
     testsig (module PL) -~-> (module VL) =: pl_get_metatable; ]
 
 let set_metatable_tests =
@@ -527,7 +615,7 @@ let set_metatable_tests =
   [ testsig (module VL) -$-> (module PL) ---> (module PL) =: pl_set_metatable;
     testsig (module VL) -<-> (module PL) ---> (module PL) =: pl_set_metatable;
     testsig (module VL) -~-> (module PL) ---> (module PL) =: pl_set_metatable;
-    (*testsig (module VL) ---> (module PL) -$-> (module PL) =: pl_set_metatable;*) (* adding field to bot is not bot *)
+    testsig (module VL) ---> (module PL) -$-> (module PL) =: pl_set_metatable;
     testsig (module VL) ---> (module PL) -<-> (module PL) =: pl_set_metatable;
     testsig (module VL) ---> (module PL) -~-> (module PL) =: pl_set_metatable; ]
 
@@ -542,55 +630,68 @@ let get_metatable_set_metatable_extensive = (* forall v,p. v <= get_metatable (s
   mk_test ~n:1000 ~pp:pp_pair ~limit:1 ~name:("PL.get_meta_table-PL.set_meta_table extensive")
           ~size:(fun p -> String.length (pp_pair p))
     Arbitrary.(pair VL.arb_elem PL.arb_elem)
-    (fun (v,p) -> VL.leq v (PL.get_metatable (PL.set_metatable v p)))
+    (fun (v,p) -> PL.leq p PL.bot (* Not true for bottom p and non-bottom v *)
+               || VL.leq v (PL.get_metatable (PL.set_metatable v p)))
 
 let add_tests = (* add : string -> VL -> PL -> PL *)
-  let pl_add = ("PL.add",PL.add) in (* current 'add' not strict in val arg; adding field to bot is not bot  *)
-  [(*pw_left (module Str_arg) (pw_right (module PL) op_strict)    (module VL) (module PL) =:: pl_add;*) 
+  let pl_add = ("PL.add",PL.add) in
+    [pw_left (module Str_arg) (pw_right (module PL) op_strict)    (module VL) (module PL) =:: pl_add;
      pw_left (module Str_arg) (pw_right (module PL) op_monotone)  (module VL) (module PL) =:: pl_add;
      pw_left (module Str_arg) (pw_right (module PL) op_invariant) (module VL) (module PL) =:: pl_add;
-   (*pw_left (module Str_arg) (pw_left (module VL) op_strict)    (module PL) (module PL) =:: pl_add;*)
+     pw_left (module Str_arg) (pw_left (module VL) op_strict)    (module PL) (module PL) =:: pl_add;
      pw_left (module Str_arg) (pw_left (module VL) op_monotone)  (module PL) (module PL) =:: pl_add;
      pw_left (module Str_arg) (pw_left (module VL) op_invariant) (module PL) (module PL) =:: pl_add; ]
 
-let add_default_tests =
-  let pl_add_default = ("PL.add_default",PL.add_default) in
-  [ testsig (module VL) -<-> (module VL) ---> (module PL) ---> (module PL) =: pl_add_default;
-    testsig (module VL) -~-> (module VL) ---> (module PL) ---> (module PL) =: pl_add_default;
-    testsig (module VL) ---> (module VL) -<-> (module PL) ---> (module PL) =: pl_add_default;
-    testsig (module VL) ---> (module VL) -~-> (module PL) ---> (module PL) =: pl_add_default;
-    testsig (module VL) ---> (module VL) ---> (module PL) -<-> (module PL) =: pl_add_default;
-    testsig (module VL) ---> (module VL) ---> (module PL) -~-> (module PL) =: pl_add_default; ]
-(* Current 'add_default' not strict in first/second args *)
+let add_local_tests = (* add_local : string -> VL -> PL -> PL *)
+  let pl_add_local = ("PL.add_local",PL.add_local) in
+    [pw_left (module Str_arg) (pw_right (module PL) op_strict)    (module VL) (module PL) =:: pl_add_local;
+     pw_left (module Str_arg) (pw_right (module PL) op_monotone)  (module VL) (module PL) =:: pl_add_local;
+     pw_left (module Str_arg) (pw_right (module PL) op_invariant) (module VL) (module PL) =:: pl_add_local;
+     pw_left (module Str_arg) (pw_left (module VL) op_strict)    (module PL) (module PL) =:: pl_add_local;
+     pw_left (module Str_arg) (pw_left (module VL) op_monotone)  (module PL) (module PL) =:: pl_add_local;
+     pw_left (module Str_arg) (pw_left (module VL) op_invariant) (module PL) (module PL) =:: pl_add_local; ]
+      
+let add_nonstr_default_tests =
+  let pl_add_nonstr_default = ("PL.add_nonstr_default",PL.add_nonstr_default) in
+  [ testsig (module VL) -$-> (module VL) ---> (module PL) ---> (module PL) =: pl_add_nonstr_default;
+    testsig (module VL) -<-> (module VL) ---> (module PL) ---> (module PL) =: pl_add_nonstr_default;
+    testsig (module VL) -~-> (module VL) ---> (module PL) ---> (module PL) =: pl_add_nonstr_default;
+    testsig (module VL) ---> (module VL) -$-> (module PL) ---> (module PL) =: pl_add_nonstr_default;
+    testsig (module VL) ---> (module VL) -<-> (module PL) ---> (module PL) =: pl_add_nonstr_default;
+    testsig (module VL) ---> (module VL) -~-> (module PL) ---> (module PL) =: pl_add_nonstr_default;
+    testsig (module VL) ---> (module VL) ---> (module PL) -$-> (module PL) =: pl_add_nonstr_default;
+    testsig (module VL) ---> (module VL) ---> (module PL) -<-> (module PL) =: pl_add_nonstr_default;
+    testsig (module VL) ---> (module VL) ---> (module PL) -~-> (module PL) =: pl_add_nonstr_default; ]
 
 let add_scopechain_tests = (* add_scopechain : PL -> label list -> PL *)
   let pl_add_scopechain = ("PL.add_scopechain",PL.add_scopechain) in
-  [(*pw_right (module Labellist) op_strict    (module PL) (module PL) =:: pl_add_scopechain;*)
-     pw_right (module Labellist) op_monotone  (module PL) (module PL) =:: pl_add_scopechain;
-     pw_right (module Labellist) op_invariant (module PL) (module PL) =:: pl_add_scopechain; ]
-(* Current 'add_scopechain' not strict in first arg *)
+  [ pw_right (module Labellist) op_strict    (module PL) (module PL) =:: pl_add_scopechain;
+    pw_right (module Labellist) op_monotone  (module PL) (module PL) =:: pl_add_scopechain;
+    pw_right (module Labellist) op_invariant (module PL) (module PL) =:: pl_add_scopechain; ]
 
-let add_all_tests =
-  let pl_add_all = ("PL.add_all", PL.add_all) in
-  [ testsig (module VL) -<-> (module VL) ---> (module PL) ---> (module PL) =: pl_add_all;
-    testsig (module VL) -~-> (module VL) ---> (module PL) ---> (module PL) =: pl_add_all;
-    testsig (module VL) ---> (module VL) -<-> (module PL) ---> (module PL) =: pl_add_all;
-    testsig (module VL) ---> (module VL) -~-> (module PL) ---> (module PL) =: pl_add_all;
-    testsig (module VL) ---> (module VL) ---> (module PL) -<-> (module PL) =: pl_add_all;
-    testsig (module VL) ---> (module VL) ---> (module PL) -~-> (module PL) =: pl_add_all; ]
-(* Current 'add_all' not strict in first/second args *)
+let add_all_str_tests =
+  let pl_add_all_str = ("PL.add_all_str", PL.add_all_str) in
+  [ testsig (module VL) -$-> (module PL) ---> (module PL) =: pl_add_all_str;
+    testsig (module VL) -<-> (module PL) ---> (module PL) =: pl_add_all_str;
+    testsig (module VL) -~-> (module PL) ---> (module PL) =: pl_add_all_str;
+    testsig (module VL) ---> (module PL) -$-> (module PL) =: pl_add_all_str;
+    testsig (module VL) ---> (module PL) -<-> (module PL) =: pl_add_all_str;
+    testsig (module VL) ---> (module PL) -~-> (module PL) =: pl_add_all_str; ]
 
+(* Current 'add_all_params' not strict in first/second args *)
 let add_all_params_tests = (* add_all_params : string list -> VL list -> PL -> PL *)
   let pl_add_all_params = ("PL.add_all_params",PL.add_all_params) in
-  [ pw_left (module Strlist) (pw_left (module VLlist) op_monotone)  (module PL) (module PL) =:: pl_add_all_params;
+  [ pw_left (module Strlist) (pw_left (module VLlist) op_strict)    (module PL) (module PL) =:: pl_add_all_params;
+    pw_left (module Strlist) (pw_left (module VLlist) op_monotone)  (module PL) (module PL) =:: pl_add_all_params;
     pw_left (module Strlist) (pw_left (module VLlist) op_invariant) (module PL) (module PL) =:: pl_add_all_params; ]
-      
+
 let find_add_extensive = (* forall s,v,p. v <= find s (add s v p) *)
   let pp_triple = PP.triple PP.string VL.to_string PL.to_string in
   mk_test ~n:1000 ~pp:pp_triple ~limit:1 ~name:("find-add extensive in " ^ PL.name)
           ~size:(fun t -> String.length (pp_triple t))
     Arbitrary.(triple string VL.arb_elem PL.arb_elem)
-    (fun (s,v,p) -> VL.leq v (PL.find s (PL.add s v p)))
+    (fun (s,v,p) -> PL.leq p PL.bot (* does not hold for bottom p and non-bottom s, v *)
+                 || VL.leq v (PL.find s (PL.add s v p)))
 
 let find_add_monotone = (* forall s,v,v',p. v <= v'  ==>  find s (add s v p) <= find s (add s v' p)*)
   let pp_triple = PP.triple PP.string GenValTests.pp_pair PL.to_string in
@@ -600,28 +701,33 @@ let find_add_monotone = (* forall s,v,v',p. v <= v'  ==>  find s (add s v p) <= 
     (fun (s,(v,v'),p) -> Prop.assume (VL.leq v v');
 		         VL.leq (PL.find s (PL.add s v p)) (PL.find s (PL.add s v' p)))
 
-let find_exn_add_extensive = (* forall s,v,p. v <= find_exn s (add s v p) *)
+let find_exn_add_local_extensive = (* forall s,v,p. v <= find_exn s (add s v p) *)
   let pp_triple = PP.triple PP.string VL.to_string PL.to_string in
-  mk_test ~n:1000 ~pp:pp_triple ~limit:1 ~name:("find_exn-add extensive in " ^ PL.name)
+  mk_test ~n:1000 ~pp:pp_triple ~limit:1 ~name:("find_exn-add_local extensive in " ^ PL.name)
           ~size:(fun t -> String.length (pp_triple t))
     Arbitrary.(triple string VL.arb_elem PL.arb_elem)
-    (fun (s,v,p) -> VLAbsPair.leq (v,Abs.bot) (PL.find_exn s (PL.add s v p)))
+    (fun (s,v,p) -> PL.leq p PL.bot (* does not hold for bottom p and non-bottom s,v *)
+                 || VLAbsPair.leq (v,Abs.bot) (try PL.find_exn s (PL.add_local s v p)
+                                               with Not_found -> VLAbsPair.bot))
 
-let find_exn_add_monotone = (* forall s,v,v',p. v <= v'
+let find_exn_add_local_monotone = (* forall s,v,v',p. v <= v'
                                             ==> find_exn s (add s v p) <= find_exn s (add s v' p) *)
+  let my_pl_find_exn s t = try PL.find_exn s t
+                           with Not_found -> VLAbsPair.bot in
   let pp_triple = PP.triple PP.string GenValTests.pp_pair PL.to_string in
-  mk_test ~n:1000 ~pp:pp_triple ~limit:1 ~name:("find_exn-add monotone in " ^ PL.name)
+  mk_test ~n:1000 ~pp:pp_triple ~limit:1 ~name:("find_exn-add_local monotone in " ^ PL.name)
           ~size:(fun t -> String.length (pp_triple t))
     Arbitrary.(triple string GenValTests.ord_pair PL.arb_elem)
     (fun (s,(v,v'),p) -> Prop.assume (VL.leq v v');
-		         VLAbsPair.leq (PL.find_exn s (PL.add s v p)) (PL.find_exn s (PL.add s v' p)))
+		         VLAbsPair.leq (my_pl_find_exn s (PL.add_local s v p)) (my_pl_find_exn s (PL.add_local s v' p)))
 
 (* test suite for specific property operations *)
 let spec_prop_operations =
   flatten [
+    is_bot_tests;
     find_exn_tests;
     find_tests;
-    find_default_tests;
+    find_nonstr_defaults_tests;
     find_all_keys_tests;
     find_all_tests;
     get_metatable_tests;
@@ -629,12 +735,13 @@ let spec_prop_operations =
     [get_metatable_set_metatable_extensive];
     set_metatable_absent_tests;
     add_tests;
-    add_default_tests;
+    add_local_tests;
+    add_nonstr_default_tests;
     add_scopechain_tests;
-    add_all_tests;
+    add_all_str_tests;
     add_all_params_tests;
     [ find_add_extensive; find_add_monotone;
-      find_exn_add_extensive; find_exn_add_monotone; ] ]
+      find_exn_add_local_extensive; find_exn_add_local_monotone; ] ]
 
 
 (** Store lattice *)
@@ -649,12 +756,12 @@ let is_bot_tests =
 
 let add_label_tests = (* add_label : ST -> label -> PL -> ST *)
   let st_add_label = ("ST.add_label",ST.add_label) in (* adding entry to bot, or empty table should not give bot *)
-  [(*pw_right (module Label) (pw_right (module PL) op_strict)    (module ST) (module ST) =:: st_add_label;*)
-     pw_right (module Label) (pw_right (module PL) op_monotone)  (module ST) (module ST) =:: st_add_label;
-     pw_right (module Label) (pw_right (module PL) op_invariant) (module ST) (module ST) =:: st_add_label;
-   (*pw_left (module ST) (pw_left (module Label) op_strict)    (module PL) (module ST) =:: st_add_label;*)
-     pw_left (module ST) (pw_left (module Label) op_monotone)  (module PL) (module ST) =:: st_add_label;
-     pw_left (module ST) (pw_left (module Label) op_invariant) (module PL) (module ST) =:: st_add_label; ]
+  [ (*pw_right (module Label) (pw_right (module PL) op_strict)    (module ST) (module ST) =:: st_add_label;*)
+    pw_right (module Label) (pw_right (module PL) op_monotone)  (module ST) (module ST) =:: st_add_label;
+    pw_right (module Label) (pw_right (module PL) op_invariant) (module ST) (module ST) =:: st_add_label;
+    (*pw_left (module ST) (pw_left (module Label) op_strict)    (module PL) (module ST) =:: st_add_label;*)
+    pw_left (module ST) (pw_left (module Label) op_monotone)  (module PL) (module ST) =:: st_add_label;
+    pw_left (module ST) (pw_left (module Label) op_invariant) (module PL) (module ST) =:: st_add_label; ]
       
 let find_label_tests = (* find_label : ST -> label -> PL *)
   let st_find_label = ("ST.find_label",ST.find_label) in
@@ -669,14 +776,14 @@ let find_label_add_label_id = (* forall s,l,p. find_label (add_label s l p) l = 
     Arbitrary.(triple ST.arb_elem Label.arb_elem PL.arb_elem)
     (fun (s,l,p) -> PL.eq (ST.find_label (ST.add_label s l p) l) p)
 
-let lookup_prop_tests = (* lookup_prop : ST -> VL -> string -> VL *)
-  let st_lookup_prop = ("ST.lookup_prop",ST.lookup_prop) in
-  [ pw_right (module VL) (pw_right (module Str_arg) op_strict)    (module ST) (module VL) =:: st_lookup_prop;
-    pw_right (module VL) (pw_right (module Str_arg) op_monotone)  (module ST) (module VL) =:: st_lookup_prop;
-    pw_right (module VL) (pw_right (module Str_arg) op_invariant) (module ST) (module VL) =:: st_lookup_prop;
-    pw_left  (module ST) (pw_right (module Str_arg) op_strict)    (module VL) (module VL) =:: st_lookup_prop;
-    pw_left  (module ST) (pw_right (module Str_arg) op_monotone)  (module VL) (module VL) =:: st_lookup_prop;
-    pw_left  (module ST) (pw_right (module Str_arg) op_invariant) (module VL) (module VL) =:: st_lookup_prop; ]
+let lookup_str_prop_tests = (* lookup_str_prop : ST -> VL -> string -> VL *)
+  let st_lookup_str_prop = ("ST.lookup_str_prop",ST.lookup_str_prop) in
+  [ pw_right (module VL) (pw_right (module Str_arg) op_strict)    (module ST) (module VL) =:: st_lookup_str_prop;
+    pw_right (module VL) (pw_right (module Str_arg) op_monotone)  (module ST) (module VL) =:: st_lookup_str_prop;
+    pw_right (module VL) (pw_right (module Str_arg) op_invariant) (module ST) (module VL) =:: st_lookup_str_prop;
+    pw_left  (module ST) (pw_right (module Str_arg) op_strict)    (module VL) (module VL) =:: st_lookup_str_prop;
+    pw_left  (module ST) (pw_right (module Str_arg) op_monotone)  (module VL) (module VL) =:: st_lookup_str_prop;
+    pw_left  (module ST) (pw_right (module Str_arg) op_invariant) (module VL) (module VL) =:: st_lookup_str_prop; ]
 
 let lookup_all_keys_tests =
   let st_lookup_all_keys = ("ST.lookup_all_keys",ST.lookup_all_keys) in
@@ -687,6 +794,24 @@ let lookup_all_keys_tests =
     testsig (module ST) ---> (module VL) -<-> (module VL) =: st_lookup_all_keys;
     testsig (module ST) ---> (module VL) -~-> (module VL) =: st_lookup_all_keys; ]
 
+let lookup_all_str_props_tests =
+  let st_lookup_all_str_props = ("ST.lookup_all_str_props",ST.lookup_all_str_props) in
+  [ testsig (module ST) -$-> (module VL) ---> (module VL) =: st_lookup_all_str_props;
+    testsig (module ST) -<-> (module VL) ---> (module VL) =: st_lookup_all_str_props;
+    testsig (module ST) -~-> (module VL) ---> (module VL) =: st_lookup_all_str_props;
+    testsig (module ST) ---> (module VL) -$-> (module VL) =: st_lookup_all_str_props;
+    testsig (module ST) ---> (module VL) -<-> (module VL) =: st_lookup_all_str_props;
+    testsig (module ST) ---> (module VL) -~-> (module VL) =: st_lookup_all_str_props; ]
+
+let lookup_all_nonstr_props_tests =
+  let st_lookup_all_nonstr_props = ("ST.lookup_all_nonstr_props",ST.lookup_all_nonstr_props) in
+  [ testsig (module ST) -$-> (module VL) ---> (module VL) =: st_lookup_all_nonstr_props;
+    testsig (module ST) -<-> (module VL) ---> (module VL) =: st_lookup_all_nonstr_props;
+    testsig (module ST) -~-> (module VL) ---> (module VL) =: st_lookup_all_nonstr_props;
+    testsig (module ST) ---> (module VL) -$-> (module VL) =: st_lookup_all_nonstr_props;
+    testsig (module ST) ---> (module VL) -<-> (module VL) =: st_lookup_all_nonstr_props;
+    testsig (module ST) ---> (module VL) -~-> (module VL) =: st_lookup_all_nonstr_props; ]
+
 let lookup_all_props_tests =
   let st_lookup_all_props = ("ST.lookup_all_props",ST.lookup_all_props) in
   [ testsig (module ST) -$-> (module VL) ---> (module VL) =: st_lookup_all_props;
@@ -695,18 +820,18 @@ let lookup_all_props_tests =
     testsig (module ST) ---> (module VL) -$-> (module VL) =: st_lookup_all_props;
     testsig (module ST) ---> (module VL) -<-> (module VL) =: st_lookup_all_props;
     testsig (module ST) ---> (module VL) -~-> (module VL) =: st_lookup_all_props; ]
-
-let lookup_default_prop_tests =
-  let st_lookup_default_prop = ("ST.lookup_default_prop",ST.lookup_default_prop) in
-  [ testsig (module ST) -$-> (module VL) ---> (module VL) ---> (module VL) =: st_lookup_default_prop;
-    testsig (module ST) -<-> (module VL) ---> (module VL) ---> (module VL) =: st_lookup_default_prop;
-    testsig (module ST) -~-> (module VL) ---> (module VL) ---> (module VL) =: st_lookup_default_prop;
-    testsig (module ST) ---> (module VL) -$-> (module VL) ---> (module VL) =: st_lookup_default_prop;
-    testsig (module ST) ---> (module VL) -<-> (module VL) ---> (module VL) =: st_lookup_default_prop;
-    testsig (module ST) ---> (module VL) -~-> (module VL) ---> (module VL) =: st_lookup_default_prop;
-    testsig (module ST) ---> (module VL) ---> (module VL) -$-> (module VL) =: st_lookup_default_prop;
-    testsig (module ST) ---> (module VL) ---> (module VL) -<-> (module VL) =: st_lookup_default_prop;
-    testsig (module ST) ---> (module VL) ---> (module VL) -~-> (module VL) =: st_lookup_default_prop; ]
+    
+let lookup_nonstr_default_prop_tests =
+  let st_lookup_nonstr_default_prop = ("ST.lookup_nonstr_default_prop",ST.lookup_nonstr_default_prop) in
+  [ testsig (module ST) -$-> (module VL) ---> (module VL) ---> (module VL) =: st_lookup_nonstr_default_prop;
+    testsig (module ST) -<-> (module VL) ---> (module VL) ---> (module VL) =: st_lookup_nonstr_default_prop;
+    testsig (module ST) -~-> (module VL) ---> (module VL) ---> (module VL) =: st_lookup_nonstr_default_prop;
+    testsig (module ST) ---> (module VL) -$-> (module VL) ---> (module VL) =: st_lookup_nonstr_default_prop;
+    testsig (module ST) ---> (module VL) -<-> (module VL) ---> (module VL) =: st_lookup_nonstr_default_prop;
+    testsig (module ST) ---> (module VL) -~-> (module VL) ---> (module VL) =: st_lookup_nonstr_default_prop;
+    testsig (module ST) ---> (module VL) ---> (module VL) -$-> (module VL) =: st_lookup_nonstr_default_prop;
+    testsig (module ST) ---> (module VL) ---> (module VL) -<-> (module VL) =: st_lookup_nonstr_default_prop;
+    testsig (module ST) ---> (module VL) ---> (module VL) -~-> (module VL) =: st_lookup_nonstr_default_prop; ]
 
 let lookup_dyn_prop_tests =
   let st_lookup_dyn_prop = ("ST.lookup_dyn_prop",ST.lookup_dyn_prop) in
@@ -720,8 +845,8 @@ let lookup_dyn_prop_tests =
     testsig (module ST) ---> (module VL) ---> (module VL) -<-> (module VL) =: st_lookup_dyn_prop;
     testsig (module ST) ---> (module VL) ---> (module VL) -~-> (module VL) =: st_lookup_dyn_prop; ]
 
-let write_prop_tests = (* write_prop : ST -> VL -> string -> VL -> ST *)
-  let wp = ("ST.write_prop",ST.write_prop) in (* result of writing to empty table should be non bot *)
+let write_str_prop_tests = (* write_str_prop : ST -> VL -> string -> VL -> ST *)
+  let wp = ("ST.write_str_prop",ST.write_str_prop) in (* result of writing to empty table should be non bot *)
   [ pw_right (module VL) (pw_right (module Str_arg) (pw_right (module VL) op_strict))    (module ST) (module ST) =:: wp;
     pw_right (module VL) (pw_right (module Str_arg) (pw_right (module VL) op_monotone))  (module ST) (module ST) =:: wp;
     pw_right (module VL) (pw_right (module Str_arg) (pw_right (module VL) op_invariant)) (module ST) (module ST) =:: wp;
@@ -731,39 +856,36 @@ let write_prop_tests = (* write_prop : ST -> VL -> string -> VL -> ST *)
  (* pw_left (module ST) (pw_left (module VL) (pw_left (module Str_arg) op_strict))    (module VL) (module ST) =:: wp;*)
     pw_left (module ST) (pw_left (module VL) (pw_left (module Str_arg) op_monotone))  (module VL) (module ST) =:: wp;
     pw_left (module ST) (pw_left (module VL) (pw_left (module Str_arg) op_invariant)) (module VL) (module ST) =:: wp; ]
- (* Current 'write_prop' not strict in 2nd and 4th arg *)
+ (* Current 'write_str_prop' not strict in 2nd and 4th arg *)
     
-let write_all_props_tests = (* result of writing to no table should be bot *)
-  let st_write_all_props = ("ST.write_all_props",ST.write_all_props) in
-  [(*testsig (module ST) -$-> (module VL) ---> (module VL) ---> (module VL) ---> (module ST) =: st_write_all_props;*)
-     testsig (module ST) -<-> (module VL) ---> (module VL) ---> (module VL) ---> (module ST) =: st_write_all_props;
-     testsig (module ST) -~-> (module VL) ---> (module VL) ---> (module VL) ---> (module ST) =: st_write_all_props;
-     testsig (module ST) ---> (module VL) -$-> (module VL) ---> (module VL) ---> (module ST) =: st_write_all_props;
-     testsig (module ST) ---> (module VL) -<-> (module VL) ---> (module VL) ---> (module ST) =: st_write_all_props;
-     testsig (module ST) ---> (module VL) -~-> (module VL) ---> (module VL) ---> (module ST) =: st_write_all_props;
-   (*testsig (module ST) ---> (module VL) ---> (module VL) -$-> (module VL) ---> (module ST) =: st_write_all_props;*)
-     testsig (module ST) ---> (module VL) ---> (module VL) -<-> (module VL) ---> (module ST) =: st_write_all_props;
-     testsig (module ST) ---> (module VL) ---> (module VL) -~-> (module VL) ---> (module ST) =: st_write_all_props;
-   (*testsig (module ST) ---> (module VL) ---> (module VL) ---> (module VL) -$-> (module ST) =: st_write_all_props;*)
-     testsig (module ST) ---> (module VL) ---> (module VL) ---> (module VL) -<-> (module ST) =: st_write_all_props;
-     testsig (module ST) ---> (module VL) ---> (module VL) ---> (module VL) -~-> (module ST) =: st_write_all_props; ]
- (* Current 'write_all_props' not strict in 1st, 3rd and 4th arg *)
+let write_all_str_props_tests = (* result of writing to no table should be bot *)
+  let st_write_all_str_props = ("ST.write_all_str_props",ST.write_all_str_props) in
+  [(*testsig (module ST) -$-> (module VL) ---> (module VL) ---> (module ST) =: st_write_all_str_props;*)
+     testsig (module ST) -<-> (module VL) ---> (module VL) ---> (module ST) =: st_write_all_str_props;
+     testsig (module ST) -~-> (module VL) ---> (module VL) ---> (module ST) =: st_write_all_str_props;
+     testsig (module ST) ---> (module VL) -$-> (module VL) ---> (module ST) =: st_write_all_str_props;
+     testsig (module ST) ---> (module VL) -<-> (module VL) ---> (module ST) =: st_write_all_str_props;
+     testsig (module ST) ---> (module VL) -~-> (module VL) ---> (module ST) =: st_write_all_str_props;
+   (*testsig (module ST) ---> (module VL) ---> (module VL) -$-> (module ST) =: st_write_all_str_props;*)
+     testsig (module ST) ---> (module VL) ---> (module VL) -<-> (module ST) =: st_write_all_str_props;
+     testsig (module ST) ---> (module VL) ---> (module VL) -~-> (module ST) =: st_write_all_str_props; ]
+ (* Current 'write_all_str_props' not strict in 1st and 3rd args? *)
 
-let write_default_prop_tests = (* result of writing to empty table should not be bot *)
-  let st_write_default_prop = ("ST.write_default_prop",ST.write_default_prop) in
-  [(*testsig (module ST) -$-> (module VL) ---> (module VL) ---> (module VL) ---> (module ST) =: st_write_default_prop;*)
-     testsig (module ST) -<-> (module VL) ---> (module VL) ---> (module VL) ---> (module ST) =: st_write_default_prop;
-     testsig (module ST) -~-> (module VL) ---> (module VL) ---> (module VL) ---> (module ST) =: st_write_default_prop;
-   (*testsig (module ST) ---> (module VL) -$-> (module VL) ---> (module VL) ---> (module ST) =: st_write_default_prop;*)
-     testsig (module ST) ---> (module VL) -<-> (module VL) ---> (module VL) ---> (module ST) =: st_write_default_prop;
-     testsig (module ST) ---> (module VL) -~-> (module VL) ---> (module VL) ---> (module ST) =: st_write_default_prop;
-   (*testsig (module ST) ---> (module VL) ---> (module VL) -$-> (module VL) ---> (module ST) =: st_write_default_prop;*)
-     testsig (module ST) ---> (module VL) ---> (module VL) -<-> (module VL) ---> (module ST) =: st_write_default_prop;
-     testsig (module ST) ---> (module VL) ---> (module VL) -~-> (module VL) ---> (module ST) =: st_write_default_prop;
-   (*testsig (module ST) ---> (module VL) ---> (module VL) ---> (module VL) -$-> (module ST) =: st_write_default_prop;*)
-     testsig (module ST) ---> (module VL) ---> (module VL) ---> (module VL) -<-> (module ST) =: st_write_default_prop;
-     testsig (module ST) ---> (module VL) ---> (module VL) ---> (module VL) -~-> (module ST) =: st_write_default_prop; ]
- (* Current 'write_default_prop' not strict in 1st, 3rd and 4th args *)
+let write_default_nonstr_prop_tests = (* result of writing to empty table should not be bot *)
+  let st_write_default_nonstr_prop = ("ST.write_default_nonstr_prop",ST.write_default_nonstr_prop) in
+  [(*testsig (module ST) -$-> (module VL) ---> (module VL) ---> (module VL) ---> (module ST) =: st_write_default_nonstr_prop;*)
+     testsig (module ST) -<-> (module VL) ---> (module VL) ---> (module VL) ---> (module ST) =: st_write_default_nonstr_prop;
+     testsig (module ST) -~-> (module VL) ---> (module VL) ---> (module VL) ---> (module ST) =: st_write_default_nonstr_prop;
+   (*testsig (module ST) ---> (module VL) -$-> (module VL) ---> (module VL) ---> (module ST) =: st_write_default_nonstr_prop;*)
+     testsig (module ST) ---> (module VL) -<-> (module VL) ---> (module VL) ---> (module ST) =: st_write_default_nonstr_prop;
+     testsig (module ST) ---> (module VL) -~-> (module VL) ---> (module VL) ---> (module ST) =: st_write_default_nonstr_prop;
+   (*testsig (module ST) ---> (module VL) ---> (module VL) -$-> (module VL) ---> (module ST) =: st_write_default_nonstr_prop;*)
+     testsig (module ST) ---> (module VL) ---> (module VL) -<-> (module VL) ---> (module ST) =: st_write_default_nonstr_prop;
+     testsig (module ST) ---> (module VL) ---> (module VL) -~-> (module VL) ---> (module ST) =: st_write_default_nonstr_prop;
+   (*testsig (module ST) ---> (module VL) ---> (module VL) ---> (module VL) -$-> (module ST) =: st_write_default_nonstr_prop;*)
+     testsig (module ST) ---> (module VL) ---> (module VL) ---> (module VL) -<-> (module ST) =: st_write_default_nonstr_prop;
+     testsig (module ST) ---> (module VL) ---> (module VL) ---> (module VL) -~-> (module ST) =: st_write_default_nonstr_prop; ]
+ (* Current 'write_default_nonstr_prop' not strict in 1st, 3rd and 4th args *)
 
 let write_dyn_prop_tests = (* result of writing to empty table should not be bot *)
   let st_write_dyn_prop = ("ST.write_dyn_prop",ST.write_dyn_prop) in
@@ -849,14 +971,16 @@ let spec_store_operations =
     add_label_tests;
     find_label_tests;
     [ find_label_add_label_id; ];
-    lookup_prop_tests;
+    lookup_str_prop_tests;
     lookup_all_keys_tests;
+    lookup_all_str_props_tests;
+    lookup_all_nonstr_props_tests;
     lookup_all_props_tests;
-    lookup_default_prop_tests;
+    lookup_nonstr_default_prop_tests;
     lookup_dyn_prop_tests;
-    write_prop_tests;
-    write_all_props_tests;
-    write_default_prop_tests;
+    write_str_prop_tests;
+    write_all_str_props_tests;
+    write_default_nonstr_prop_tests;
     write_dyn_prop_tests;
     get_metatable_tests;
     set_metatable_tests;
@@ -1022,7 +1146,7 @@ let spec_state_operations =
       add_local_list_tests;
       enter_scope_tests;
       build_prop_chain_tests;
-      read_name_tests;
+      read_name_tests; 
       write_name_tests;
       write_dyn_prop_tests;
       getbinhandler_tests; ]
@@ -1054,7 +1178,7 @@ let spec_analysis_operations =
 (** Test suite code *)
 
 let _ =
-  run_tests
+  run_tests (*~rand:(Random.State.make_self_init ())*)
     (flatten
        [(* generic lattice tests *)
 	GenAbsTests.suite;
@@ -1075,11 +1199,12 @@ let _ =
 	GenBoolTopTests.suite;
 	GenDBoolTests.suite;
 	GenDBoolTopTests.suite;
+	GenVLAbspairTests.suite;
 	GenVLVLpairTests.suite;
 	GenVLlistTests.suite;
 	GenSLVLlistpairTests.suite;
 	(* specific lattice operation tests *)
-	spec_str_operations; 
+	spec_str_operations;
 	spec_vl_operations;
 	spec_env_operations;
 	spec_prop_operations;

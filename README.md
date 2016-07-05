@@ -13,6 +13,9 @@ which focuses on testing properties related to static analyses
 (lattice properties, and monotonicity, strictness, and invariance of
 operations) using the increasingly popular QuickCheck methodology.
 
+Note: the present analysis has been updated since the publication of
+the above paper.
+
 
 The full source code of the analysis is available from this
 very URL https://github.com/jmid/luata-quickcheck
@@ -30,10 +33,6 @@ The coverage reports mentioned in the paper are available in the sub-directories
 
  - [cov-report-combined](http://jmid.github.io/luata-quickcheck/cov-report-combined/)
    is the combination of the two above.
-
-Please note that the analysis and the coverage reports have been
-revised since the above paper was published. The original source code
-and the reports can be downloaded [here](http://janmidtgaard.dk/luata0.012-icst15.tar.gz).
 
 
 Requirements:
@@ -122,7 +121,7 @@ instructions.
       $ make -B runedslcheckcov
       $ make -B checkreport
 
-  (Warning: the last step takes a full lunchbreak)
+  (Warning: the second step takes a full lunchbreak)
   The resulting report is now available in HTML format in `cov-report-qcheck/index.html`
 
 

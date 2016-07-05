@@ -47,14 +47,15 @@ models scope chains.
 
 The storelattice associates to each table declaration a proplattice,
 describing the shape of tables originating from this declaration
-point. Concretely proplattice associates to every (string) entry a set
-of type tags, a string lattice value, a set of function labels (user
-declared and builtin functions), and a set of table (declaration site) labels.
-Moreover, each entry of proplattice is marked with an absencelattice
-bit to indicate whether we are certain of an entry's
-presence. Non-string entries (k,v) are approximated in proplattice
-using two additional valuelattices: one accounting for all keys and
-one accounting for all values.
+point. Concretely proplattice associates to statically-known every
+(string) entry a set of type tags, a string lattice value, a set of
+function labels (user declared and builtin functions), and a set of
+table (declaration site) labels. Moreover, each entry of proplattice
+is marked with an absencelattice bit to indicate whether we are
+certain of an entry's presence. A separate valuelattice is used to
+account for entries with unknown string keys. Non-string entries (k,v) are
+approximated in proplattice using two additional valuelattices: one
+accounting for all keys and one accounting for all values.
 
 Overall this lattice composition is quite reminiscent of TAJS, the
 Type Analysis for JavaScript.
@@ -68,7 +69,8 @@ Type Analysis for JavaScript.
     
        storelattice : tablelabel -> proplattice
     
-        proplattice : (string -> absencelattice x valuelattice) x valuelattice x valuelattice
+        proplattice : (string -> absencelattice x valuelattice)
+ 	                                   x valuelattice x valuelattice x valuelattice
     
        valuelattice : 2^tag x stringlattice x numberlattice x 2^funlabel x 2^tablelabel
     
@@ -106,45 +108,44 @@ Before execution of the first line, labelled 1, the inferred memory
 looks as follows (either scroll up in the command line output or hover
 over line 0, labelled 1, in the right hand side of the page): 
 
-    1: { store:   { -7       -> { concat       -> ! { funs:     { [builtin:tblconcat] } } }
-                    -6       -> { byte         -> ! { funs:     { [builtin:strbyte] } }
-                                  char         -> ! { funs:     { [builtin:strchar] } }
-                                  format       -> ! { funs:     { [builtin:format] } }
-                                  len          -> ! { funs:     { [builtin:strlen] } }
-                                  lower        -> ! { funs:     { [builtin:strlower] } }
-                                  sub          -> ! { funs:     { [builtin:strsub] } }
-                                  upper        -> ! { funs:     { [builtin:strupper] } } }
-                    -5       -> {  }
-                    -4       -> { abs          -> ! { funs:     { [builtin:abs] } }
-                                  ceil         -> ! { funs:     { [builtin:ceil] } }
-                                  floor        -> ! { funs:     { [builtin:floor] } }
-                                  huge         -> ! { number:   Top }
-                                  random       -> ! { funs:     { [builtin:random] } }
-                                  sqrt         -> ! { funs:     { [builtin:sqrt] } } }
-                    -3       -> { exit         -> ! { funs:     { [builtin:exit] } }
-                                  write        -> ! { funs:     { [builtin:write] } } }
+    1: { store:   { -7       -> { "concat"     -> ! { funs:     { [builtin:tblconcat] } } }
+                    -6       -> { "byte"       -> ! { funs:     { [builtin:strbyte] } }
+                                  "char"       -> ! { funs:     { [builtin:strchar] } }
+                                  "format"     -> ! { funs:     { [builtin:format] } }
+                                  "len"        -> ! { funs:     { [builtin:strlen] } }
+                                  "lower"      -> ! { funs:     { [builtin:strlower] } }
+                                  "sub"        -> ! { funs:     { [builtin:strsub] } }
+                                  "upper"      -> ! { funs:     { [builtin:strupper] } } }
+                    -5       -> { "exit"       -> ! { funs:     { [builtin:exit] } } }
+                    -4       -> { "abs"        -> ! { funs:     { [builtin:abs] } }
+                                  "ceil"       -> ! { funs:     { [builtin:ceil] } }
+                                  "floor"      -> ! { funs:     { [builtin:floor] } }
+                                  "huge"       -> ! { number:   Top }
+                                  "random"     -> ! { funs:     { [builtin:random] } }
+                                  "sqrt"       -> ! { funs:     { [builtin:sqrt] } } }
+                    -3       -> { "write"      -> ! { funs:     { [builtin:write] } } }
                     -2       -> { default key  ->   { number:   Top }
                                   default      ->   { strings:  Top } }
-                    -1       -> { _G           -> ! { tables:   { -1 } }
-                                  _VERSION     -> ! { strings:  Top }
-                                  arg          -> ! { tables:   { -2 } }
-                                  error        -> ! { funs:     { [builtin:error] } }
-                                  getmetatable -> ! { funs:     { [builtin:getmetatable] } }
-                                  io           -> ! { tables:   { -3 } }
-                                  ipairs       -> ! { funs:     { [builtin:ipairs] } }
-                                  math         -> ! { tables:   { -4 } }
-                                  next         -> ! { funs:     { [builtin:next] } }
-                                  os           -> ! { tables:   { -5 } }
-                                  pairs        -> ! { funs:     { [builtin:pairs] } }
-                                  print        -> ! { funs:     { [builtin:print] } }
-                                  rawget       -> ! { funs:     { [builtin:rawget] } }
-                                  rawset       -> ! { funs:     { [builtin:rawset] } }
-                                  setmetatable -> ! { funs:     { [builtin:setmetatable] } }
-                                  string       -> ! { tables:   { -6 } }
-                                  table        -> ! { tables:   { -7 } }
-                                  tonumber     -> ! { funs:     { [builtin:tonumber] } }
-                                  tostring     -> ! { funs:     { [builtin:tostring] } }
-                                  type         -> ! { funs:     { [builtin:type] } } }
+                    -1       -> { "_G"         -> ! { tables:   { -1 } }
+                                  "_VERSION"   -> ! { strings:  Top }
+                                  "arg"        -> ! { tables:   { -2 } }
+                                  "error"      -> ! { funs:     { [builtin:error] } }
+                                  "getmetatable" -> ! { funs:     { [builtin:getmetatable] } }
+                                  "io"         -> ! { tables:   { -3 } }
+                                  "ipairs"     -> ! { funs:     { [builtin:ipairs] } }
+                                  "math"       -> ! { tables:   { -4 } }
+                                  "next"       -> ! { funs:     { [builtin:next] } }
+                                  "os"         -> ! { tables:   { -5 } }
+                                  "pairs"      -> ! { funs:     { [builtin:pairs] } }
+                                  "print"      -> ! { funs:     { [builtin:print] } }
+                                  "rawget"     -> ! { funs:     { [builtin:rawget] } }
+                                  "rawset"     -> ! { funs:     { [builtin:rawset] } }
+                                  "setmetatable" -> ! { funs:     { [builtin:setmetatable] } }
+                                  "string"     -> ! { tables:   { -6 } }
+                                  "table"      -> ! { tables:   { -7 } }
+                                  "tonumber"   -> ! { funs:     { [builtin:tonumber] } }
+                                  "tostring"   -> ! { funs:     { [builtin:tostring] } }
+                                  "type"       -> ! { funs:     { [builtin:type] } } }
                     0        -> {  }}
          env:     { (0,[-1]) } }
 
@@ -153,59 +154,59 @@ More interestingly, the inferred abstract state after the program is
 available at label 12 (again either scroll the command line output or
 hover over line 7, labelled 12):
 
-    12: { store:   { -7       -> { concat       -> ! { funs:     { [builtin:tblconcat] } } }
-                     -6       -> { byte         -> ! { funs:     { [builtin:strbyte] } }
-                                   char         -> ! { funs:     { [builtin:strchar] } }
-                                   format       -> ! { funs:     { [builtin:format] } }
-                                   len          -> ! { funs:     { [builtin:strlen] } }
-                                   lower        -> ! { funs:     { [builtin:strlower] } }
-                                   sub          -> ! { funs:     { [builtin:strsub] } }
-                                   upper        -> ! { funs:     { [builtin:strupper] } } }
-                     -5       -> {  }
-                     -4       -> { abs          -> ! { funs:     { [builtin:abs] } }
-                                   ceil         -> ! { funs:     { [builtin:ceil] } }
-                                   floor        -> ! { funs:     { [builtin:floor] } }
-                                   huge         -> ! { number:   Top }
-                                   random       -> ! { funs:     { [builtin:random] } }
-                                   sqrt         -> ! { funs:     { [builtin:sqrt] } } }
-                     -3       -> { exit         -> ! { funs:     { [builtin:exit] } }
-                                   write        -> ! { funs:     { [builtin:write] } } }
+    12: { store:   { -7       -> { "concat"     -> ! { funs:     { [builtin:tblconcat] } } }
+                     -6       -> { "byte"       -> ! { funs:     { [builtin:strbyte] } }
+                                   "char"       -> ! { funs:     { [builtin:strchar] } }
+                                   "format"     -> ! { funs:     { [builtin:format] } }
+                                   "len"        -> ! { funs:     { [builtin:strlen] } }
+                                   "lower"      -> ! { funs:     { [builtin:strlower] } }
+                                   "sub"        -> ! { funs:     { [builtin:strsub] } }
+                                   "upper"      -> ! { funs:     { [builtin:strupper] } } }
+                     -5       -> { "exit"       -> ! { funs:     { [builtin:exit] } } }
+                     -4       -> { "abs"        -> ! { funs:     { [builtin:abs] } }
+                                   "ceil"       -> ! { funs:     { [builtin:ceil] } }
+                                   "floor"      -> ! { funs:     { [builtin:floor] } }
+                                   "huge"       -> ! { number:   Top }
+                                   "random"     -> ! { funs:     { [builtin:random] } }
+                                   "sqrt"       -> ! { funs:     { [builtin:sqrt] } } }
+                     -3       -> { "write"      -> ! { funs:     { [builtin:write] } } }
                      -2       -> { default key  ->   { number:   Top }
                                    default      ->   { strings:  Top } }
-                     -1       -> { _G           -> ! { tables:   { -1 } }
-                                   _VERSION     -> ! { strings:  Top }
-                                   arg          -> ! { tables:   { -2 } }
-                                   error        -> ! { funs:     { [builtin:error] } }
-                                   getmetatable -> ! { funs:     { [builtin:getmetatable] } }
-                                   io           -> ! { tables:   { -3 } }
-                                   ipairs       -> ! { funs:     { [builtin:ipairs] } }
-                                   math         -> ! { tables:   { -4 } }
-                                   next         -> ! { funs:     { [builtin:next] } }
-                                   os           -> ! { tables:   { -5 } }
-                                   pairs        -> ! { funs:     { [builtin:pairs] } }
-                                   print        -> ! { funs:     { [builtin:print] } }
-                                   rawget       -> ! { funs:     { [builtin:rawget] } }
-                                   rawset       -> ! { funs:     { [builtin:rawset] } }
-                                   setmetatable -> ! { funs:     { [builtin:setmetatable] } }
-                                   string       -> ! { tables:   { -6 } }
-                                   table        -> ! { tables:   { -7 } }
-                                   tonumber     -> ! { funs:     { [builtin:tonumber] } }
-                                   tostring     -> ! { funs:     { [builtin:tostring] } }
-                                   type         -> ! { funs:     { [builtin:type] } }
-                                   x            -> ? { tags:     { Nil, Bool }
+                     -1       -> { "_G"         -> ! { tables:   { -1 } }
+                                   "_VERSION"   -> ! { strings:  Top }
+                                   "arg"        -> ! { tables:   { -2 } }
+                                   "error"      -> ! { funs:     { [builtin:error] } }
+                                   "getmetatable" -> ! { funs:     { [builtin:getmetatable] } }
+                                   "io"         -> ! { tables:   { -3 } }
+                                   "ipairs"     -> ! { funs:     { [builtin:ipairs] } }
+                                   "math"       -> ! { tables:   { -4 } }
+                                   "next"       -> ! { funs:     { [builtin:next] } }
+                                   "os"         -> ! { tables:   { -5 } }
+                                   "pairs"      -> ! { funs:     { [builtin:pairs] } }
+                                   "print"      -> ! { funs:     { [builtin:print] } }
+                                   "rawget"     -> ! { funs:     { [builtin:rawget] } }
+                                   "rawset"     -> ! { funs:     { [builtin:rawset] } }
+                                   "setmetatable" -> ! { funs:     { [builtin:setmetatable] } }
+                                   "string"     -> ! { tables:   { -6 } }
+                                   "table"      -> ! { tables:   { -7 } }
+                                   "tonumber"   -> ! { funs:     { [builtin:tonumber] } }
+                                   "tostring"   -> ! { funs:     { [builtin:tostring] } }
+                                   "type"       -> ! { funs:     { [builtin:type] } }
+                                   "x"          -> ? { tags:     { Bool }
                                                        number:   Top
                                                        strings:  Const "hello"
                                                        funs:     { 3 } } }
                      0        -> {  }
-                     1        -> { t            -> ! { tables:   { 2 } } }
+                     1        -> { "t"          -> ! { tables:   { 2 } } }
                      2        -> { default key  ->   { number:   Top }
                                    default      ->   { tags:     { Bool }
                                                        number:   Top
                                                        strings:  Const "hello"
                                                        funs:     { 3 } } }
                      3        -> { scopechain   ->   { [ 0, -1 ] } }
-                     6        -> { i            -> ! { number:   Top } }}
+                     6        -> { "i"          -> ! { number:   Top } }}
           env:     { (6,[1, 0, -1]) } }
+
 
 For example, 
 
@@ -228,7 +229,7 @@ For example,
   - since x is the result of reading an entry from t, the type of the
     global variable x may also be one of the above.
 
-  - the analysis conservatively assumes that the loop main run zero or
+  - the analysis conservatively assumes that the loop may run zero or
     more iterations, and hence concludes that 'x' is not guaranteed to
     be present (the 'x' entry in the global environment '-1' is marked
     '?', meaning "maybe absent").
