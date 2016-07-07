@@ -1,0 +1,1191 @@
+<html>
+  <head>
+    <title>Bisect report</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script type="text/javascript">
+      <!--
+        function jump(id) {
+          document.body.scrollTop = document.getElementById(id).offsetTop;
+        }
+      -->
+    </script>
+    <script language="javascript" src="file0008.js"></script>
+  </head>
+  <body>
+    <div class="section">File: src/transfer.ml (<a href="index.html">return to index</a>)</div>
+    <br/>
+    <hr class="codeSep"/>
+    <br/>
+    <table>
+      <tr>
+        <td valign="top" class="section">Statistics:&nbsp;&nbsp;</td>
+        <td valign="top">
+          <table class="simple">
+            <tr><th>kind</th><th width="16px">&nbsp;</th><th>coverage</th></tr>
+            <tr><td>binding</td><td width="16px">&nbsp;</td><td>58 / 58 (100%)</td></tr>
+            <tr><td>sequence</td><td width="16px">&nbsp;</td><td>0 / 0 (-%)</td></tr>
+            <tr><td>for</td><td width="16px">&nbsp;</td><td>0 / 0 (-%)</td></tr>
+            <tr><td>if/then</td><td width="16px">&nbsp;</td><td>44 / 45 (97%)</td></tr>
+            <tr><td>try</td><td width="16px">&nbsp;</td><td>1 / 1 (100%)</td></tr>
+            <tr><td>while</td><td width="16px">&nbsp;</td><td>0 / 0 (-%)</td></tr>
+            <tr><td>match/function</td><td width="16px">&nbsp;</td><td>187 / 197 (94%)</td></tr>
+          </table>
+        </td>
+        <td valign="top">
+          <table class="simple">
+            <tr><th>kind</th><th width="16px">&nbsp;</th><th>coverage</th></tr>
+            <tr><td>class expression</td><td width="16px">&nbsp;</td><td>0 / 0 (-%)</td></tr>
+            <tr><td>class initializer</td><td width="16px">&nbsp;</td><td>0 / 0 (-%)</td></tr>
+            <tr><td>class method</td><td width="16px">&nbsp;</td><td>0 / 0 (-%)</td></tr>
+            <tr><td>class value</td><td width="16px">&nbsp;</td><td>0 / 0 (-%)</td></tr>
+            <tr><td>toplevel expression</td><td width="16px">&nbsp;</td><td>0 / 0 (-%)</td></tr>
+            <tr><td>lazy operator</td><td width="16px">&nbsp;</td><td>15 / 15 (100%)</td></tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <br/>
+    <hr class="codeSep"/>
+    <br/>
+    <div class="section">Source:</div>
+    <br/>
+<div style="font-size: smaller;"><a href="javascript:foldAll();">fold all</a> <a href="javascript:unfoldAll();">unfold all</a></div>
+    <code>
+      <div id="fold000001">
+      <div id="line000001" class="lineNone"><a href="javascript:fold('fold000001');"><img border="0" height="10" width="10" src="minus.png" title="fold code"/></a>000001| (**&nbsp;Transfer&nbsp;functions&nbsp;over&nbsp;the&nbsp;analysis&nbsp;lattice&nbsp;*)</div>
+      <div id="line000002" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000002| &nbsp;</div>
+      <div id="line000003" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000003| (**&nbsp;Following&nbsp;classical&nbsp;compositional&nbsp;abstract&nbsp;interpretation,</div>
+      <div id="line000004" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000004| &nbsp;&nbsp;&nbsp;&nbsp;the&nbsp;analysis&nbsp;is&nbsp;implemented&nbsp;as&nbsp;a&nbsp;structural&nbsp;decent&nbsp;over&nbsp;the&nbsp;AST.</div>
+      <div id="line000005" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000005| &nbsp;</div>
+      <div id="line000006" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000006| &nbsp;&nbsp;&nbsp;&nbsp;This&nbsp;avoids&nbsp;any&nbsp;risk&nbsp;of&nbsp;divergence,&nbsp;as&nbsp;a&nbsp;monotone&nbsp;analyse&nbsp;will&nbsp;take</div>
+      <div id="line000007" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000007| &nbsp;&nbsp;&nbsp;&nbsp;at&nbsp;most&nbsp;|lattice&nbsp;height|&nbsp;traversals&nbsp;over&nbsp;the&nbsp;AST&nbsp;before&nbsp;converging.</div>
+      <div id="line000008" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000008| &nbsp;*)</div>
+      <div id="line000009" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000009| &nbsp;</div>
+      <div id="line000010" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000010| module&nbsp;L&nbsp;&nbsp;&nbsp;=&nbsp;Last</div>
+      <div id="line000011" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000011| module&nbsp;Abs&nbsp;=&nbsp;Absencelattice</div>
+      <div id="line000012" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000012| module&nbsp;Str&nbsp;=&nbsp;Stringlattice</div>
+      <div id="line000013" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000013| module&nbsp;VL&nbsp;&nbsp;=&nbsp;Valuelattice</div>
+      <div id="line000014" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000014| module&nbsp;EL&nbsp;&nbsp;=&nbsp;Envlattice</div>
+      <div id="line000015" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000015| module&nbsp;PL&nbsp;&nbsp;=&nbsp;Proplattice</div>
+      <div id="line000016" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000016| module&nbsp;ST&nbsp;&nbsp;=&nbsp;Storelattice</div>
+      <div id="line000017" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000017| module&nbsp;SL&nbsp;&nbsp;=&nbsp;Statelattice</div>
+      <div id="line000018" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000018| module&nbsp;AL&nbsp;&nbsp;=&nbsp;Analysislattice</div>
+      <div id="line000019" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000019| &nbsp;</div>
+      <div id="line000020" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000020| (*&nbsp;a&nbsp;record&nbsp;type&nbsp;of&nbsp;commonly&nbsp;passed&nbsp;arguments&nbsp;*)</div>
+      <div id="line000021" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000021| type&nbsp;info&nbsp;=&nbsp;{&nbsp;fun_map&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;L.label&nbsp;-&gt;&nbsp;L.lit;</div>
+      <div id="line000022" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000022| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break_labels&nbsp;&nbsp;&nbsp;:&nbsp;L.label&nbsp;*&nbsp;L.label;</div>
+      <div id="line000023" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000023| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ret_label&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;L.label&nbsp;}</div>
+      <div id="line000024" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000024| &nbsp;</div>
+      <div id="line000025" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000025| (**&nbsp;{3&nbsp;A&nbsp;helper&nbsp;function}&nbsp;*)</div>
+      <div id="line000026" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000026| &nbsp;</div>
+      <div id="line000027" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000027| (*&nbsp;&nbsp;join_rlat_lists&nbsp;:&nbsp;VL&nbsp;list&nbsp;-&gt;&nbsp;VL&nbsp;list&nbsp;-&gt;&nbsp;VL&nbsp;list&nbsp;*)</div>
+      <div id="line000028" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000028| let&nbsp;rec&nbsp;join_rlat_lists&nbsp;vs&nbsp;ws&nbsp;=&nbsp;match&nbsp;vs,ws&nbsp;with</div>
+      <div id="line000029" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000029| &nbsp;&nbsp;|&nbsp;[],&nbsp;[]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&gt;&nbsp;(*[51]*)[]</div>
+      <div id="line000030" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000030| &nbsp;&nbsp;|&nbsp;[],&nbsp;ws&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&gt;&nbsp;(*[1057]*)ws</div>
+      </div>
+      <div id="line000031" class="lineAllUnvisited"><img border="0" height="10" width="10"src="blank.png"/>000031| &nbsp;&nbsp;|&nbsp;vs,&nbsp;[]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&gt;&nbsp;(*[0]*)vs</div>
+      <div id="fold000032">
+      <div id="line000032" class="lineAllVisited"><a href="javascript:fold('fold000032');"><img border="0" height="10" width="10" src="minus.png" title="fold code"/></a>000032| &nbsp;&nbsp;|&nbsp;v::vs,w::ws&nbsp;-&gt;&nbsp;(*[30]*)(VL.join&nbsp;v&nbsp;w)::(join_rlat_lists&nbsp;vs&nbsp;ws)</div>
+      <div id="line000033" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000033| &nbsp;</div>
+      <div id="line000034" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000034| (**&nbsp;{2&nbsp;Monad&nbsp;}&nbsp;*)</div>
+      <div id="line000035" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000035| &nbsp;</div>
+      <div id="line000036" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000036| (**&nbsp;The&nbsp;following&nbsp;'return'&nbsp;and&nbsp;'bind'&nbsp;implements&nbsp;a&nbsp;(syntactic)&nbsp;monad</div>
+      <div id="line000037" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000037| &nbsp;&nbsp;&nbsp;&nbsp;which&nbsp;is&nbsp;handy&nbsp;to&nbsp;avoid&nbsp;a&nbsp;lot&nbsp;of&nbsp;let&nbsp;bindings.&nbsp;*)</div>
+      <div id="line000038" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000038| &nbsp;</div>
+      <div id="line000039" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000039| let&nbsp;return&nbsp;vlat&nbsp;=&nbsp;fun&nbsp;(alat,slat)&nbsp;-&gt;&nbsp;((*[14796]*)alat,slat,vlat)</div>
+      <div id="line000040" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000040| let&nbsp;red_return&nbsp;vlat&nbsp;=&nbsp;</div>
+      <div id="line000041" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000041| &nbsp;&nbsp;fun&nbsp;(alat,slat)&nbsp;-&gt;&nbsp;(*[7490]*)if&nbsp;(*[7490]*)VL.is_bot&nbsp;vlat&nbsp;||&nbsp;(*[6789]*)SL.is_bot&nbsp;slat&nbsp;||</div>
+      <div id="line000042" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000042| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[6417]*)ST.is_bot&nbsp;slat.SL.store&nbsp;||&nbsp;(*[6417]*)EL.is_bot&nbsp;slat.SL.env</div>
+      <div id="line000043" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000043| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;then&nbsp;((*[1073]*)alat,SL.bot,VL.bot)&nbsp;else&nbsp;((*[6417]*)alat,slat,vlat)</div>
+      <div id="line000044" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000044| let&nbsp;list_return&nbsp;vlat&nbsp;=&nbsp;fun&nbsp;(alat,slat)&nbsp;-&gt;&nbsp;((*[8891]*)alat,slat,[vlat])</div>
+      <div id="line000045" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000045| let&nbsp;red_list_return&nbsp;vlats&nbsp;=&nbsp;</div>
+      <div id="line000046" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000046| &nbsp;&nbsp;fun&nbsp;(alat,slat)&nbsp;-&gt;&nbsp;(*[1078]*)if&nbsp;(*[1078]*)vlats&nbsp;=&nbsp;[]&nbsp;||&nbsp;(*[1057]*)vlats&nbsp;=&nbsp;[VL.bot]&nbsp;||</div>
+      <div id="line000047" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000047| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[940]*)SL.is_bot&nbsp;slat&nbsp;||&nbsp;(*[940]*)ST.is_bot&nbsp;slat.SL.store&nbsp;||&nbsp;(*[938]*)EL.is_bot&nbsp;slat.SL.env</div>
+      <div id="line000048" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000048| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;then&nbsp;((*[140]*)alat,SL.bot,[VL.bot])&nbsp;else&nbsp;((*[938]*)alat,slat,vlats)</div>
+      <div id="line000049" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000049| &nbsp;</div>
+      <div id="line000050" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000050| let&nbsp;bind&nbsp;v&nbsp;f&nbsp;=&nbsp;fun&nbsp;(alat,slat)&nbsp;-&gt;&nbsp;match&nbsp;v&nbsp;(alat,slat)&nbsp;with</div>
+      <div id="line000051" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000051| &nbsp;&nbsp;|&nbsp;(alat',slat',vlat)&nbsp;-&gt;&nbsp;(*[60110]*)f&nbsp;vlat&nbsp;(alat',slat')</div>
+      <div id="line000052" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000052| let&nbsp;(&nbsp;&gt;&gt;=&nbsp;)&nbsp;=&nbsp;(*[1]*)bind</div>
+      <div id="line000053" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000053| &nbsp;</div>
+      <div id="line000054" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000054| &nbsp;</div>
+      <div id="line000055" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000055| (**&nbsp;{3&nbsp;Monadic&nbsp;operations&nbsp;}&nbsp;*)</div>
+      <div id="line000056" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000056| &nbsp;</div>
+      <div id="line000057" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000057| let&nbsp;adjust_to_single&nbsp;vlats&nbsp;=&nbsp;match&nbsp;vlats&nbsp;with</div>
+      </div>
+      <div id="line000058" class="lineAllUnvisited"><img border="0" height="10" width="10"src="blank.png"/>000058| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;[]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&gt;&nbsp;(*[0]*)return&nbsp;VL.nil</div>
+      <div id="fold000059">
+      <div id="line000059" class="lineAllVisited"><a href="javascript:fold('fold000059');"><img border="0" height="10" width="10" src="minus.png" title="fold code"/></a>000059| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;vlat::_&nbsp;-&gt;&nbsp;(*[5719]*)return&nbsp;vlat</div>
+      <div id="line000060" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000060| &nbsp;</div>
+      <div id="line000061" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000061| let&nbsp;merror&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;fun&nbsp;(alat,slat)&nbsp;-&gt;&nbsp;((*[2273]*)alat,SL.bot,VL.bot)</div>
+      <div id="line000062" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000062| &nbsp;</div>
+      <div id="line000063" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000063| let&nbsp;curr_scope_chain&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;fun&nbsp;(alat,slat)&nbsp;-&gt;&nbsp;((*[681]*)alat,slat,slat.SL.env)</div>
+      <div id="line000064" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000064| let&nbsp;restore_scope_chain&nbsp;env&nbsp;=&nbsp;fun&nbsp;(alat,slat)&nbsp;-&gt;&nbsp;((*[298]*)alat,{slat&nbsp;with&nbsp;SL.env&nbsp;=&nbsp;env},())</div>
+      <div id="line000065" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000065| &nbsp;</div>
+      <div id="line000066" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000066| let&nbsp;get_curr_state&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;fun&nbsp;(alat,slat)&nbsp;-&gt;&nbsp;((*[9175]*)alat,slat,slat)</div>
+      <div id="line000067" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000067| let&nbsp;restore_state&nbsp;slat&nbsp;=&nbsp;fun&nbsp;(alat,_)&nbsp;&nbsp;&nbsp;&nbsp;-&gt;&nbsp;((*[6907]*)alat,slat,())</div>
+      <div id="line000068" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000068| &nbsp;</div>
+      <div id="line000069" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000069| let&nbsp;lookup_state&nbsp;label&nbsp;=&nbsp;fun&nbsp;(alat,slat)&nbsp;-&gt;&nbsp;((*[3880]*)alat,slat,AL.lookup&nbsp;alat&nbsp;label)</div>
+      <div id="line000070" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000070| let&nbsp;set_state&nbsp;label&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;((*[3827]*)lookup_state&nbsp;label&nbsp;&gt;&gt;=&nbsp;fun&nbsp;slat&nbsp;-&gt;&nbsp;(*[3827]*)restore_state&nbsp;slat)</div>
+      <div id="line000071" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000071| let&nbsp;record_state&nbsp;label&nbsp;=</div>
+      <div id="line000072" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000072| &nbsp;&nbsp;fun&nbsp;(alat,slat)&nbsp;-&gt;&nbsp;((*[3947]*)AL.add&nbsp;alat&nbsp;label&nbsp;(SL.join&nbsp;slat&nbsp;(AL.lookup&nbsp;alat&nbsp;label)),&nbsp;slat,&nbsp;())</div>
+      <div id="line000073" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000073| &nbsp;</div>
+      </div>
+      <div id="line000074" class="lineAllUnvisited"><img border="0" height="10" width="10"src="blank.png"/>000074| let&nbsp;mfailwith&nbsp;msg&nbsp;&nbsp;&nbsp;=&nbsp;fun&nbsp;(_alat,_slat)&nbsp;-&gt;&nbsp;(*[0]*)failwith&nbsp;msg</div>
+      <div id="fold000075">
+      <div id="line000075" class="lineNone"><a href="javascript:fold('fold000075');"><img border="0" height="10" width="10" src="minus.png" title="fold code"/></a>000075| &nbsp;</div>
+      <div id="line000076" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000076| let&nbsp;enter_scope&nbsp;label&nbsp;&nbsp;&nbsp;=&nbsp;fun&nbsp;(alat,slat)&nbsp;-&gt;&nbsp;((*[778]*)alat,&nbsp;SL.enter_scope&nbsp;slat&nbsp;label,&nbsp;())&nbsp;</div>
+      <div id="line000077" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000077| let&nbsp;add_locals&nbsp;xs&nbsp;vlats&nbsp;=&nbsp;fun&nbsp;(alat,slat)&nbsp;-&gt;&nbsp;((*[778]*)alat,&nbsp;SL.add_local_list&nbsp;slat&nbsp;vlats&nbsp;xs,&nbsp;())&nbsp;</div>
+      <div id="line000078" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000078| &nbsp;</div>
+      <div id="line000079" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000079| &nbsp;</div>
+      <div id="line000080" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000080| (**&nbsp;{4&nbsp;lvalue&nbsp;read/write&nbsp;operations&nbsp;}&nbsp;*)</div>
+      <div id="line000081" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000081| &nbsp;</div>
+      <div id="line000082" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000082| let&nbsp;read_name&nbsp;x&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;(*[4183]*)get_curr_state&nbsp;&gt;&gt;=&nbsp;fun&nbsp;slat&nbsp;-&gt;&nbsp;(*[4240]*)red_return&nbsp;(SL.read_name&nbsp;slat&nbsp;x)</div>
+      <div id="line000083" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000083| let&nbsp;lookup_event&nbsp;tabv&nbsp;strev&nbsp;=&nbsp;(*[975]*)get_curr_state&nbsp;&gt;&gt;=&nbsp;fun&nbsp;slat&nbsp;-&gt;&nbsp;(*[975]*)return&nbsp;(ST.lookup_event&nbsp;slat.SL.store&nbsp;tabv&nbsp;strev)</div>
+      <div id="line000084" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000084| let&nbsp;raw_get&nbsp;tabv&nbsp;idxv&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;(*[975]*)get_curr_state&nbsp;&gt;&gt;=&nbsp;fun&nbsp;slat&nbsp;-&gt;&nbsp;(*[975]*)return&nbsp;(ST.raw_get&nbsp;slat.SL.store&nbsp;tabv&nbsp;idxv)</div>
+      <div id="line000085" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000085| &nbsp;</div>
+      <div id="line000086" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000086| let&nbsp;write_name&nbsp;n&nbsp;vlat&nbsp;=&nbsp;(*[822]*)get_curr_state&nbsp;&gt;&gt;=&nbsp;fun&nbsp;slat&nbsp;-&gt;</div>
+      <div id="line000087" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000087| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[822]*)let&nbsp;slat'&nbsp;=&nbsp;SL.write_name&nbsp;slat&nbsp;n&nbsp;vlat&nbsp;in</div>
+      <div id="line000088" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000088| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[822]*)restore_state&nbsp;slat'</div>
+      <div id="line000089" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000089| &nbsp;</div>
+      <div id="line000090" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000090| let&nbsp;write_dyn_prop&nbsp;vlat0&nbsp;vlat1&nbsp;vlat&nbsp;=&nbsp;(*[349]*)get_curr_state&nbsp;&gt;&gt;=&nbsp;fun&nbsp;slat&nbsp;-&gt;</div>
+      <div id="line000091" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000091| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[349]*)let&nbsp;slat'&nbsp;=&nbsp;SL.write_dyn_prop&nbsp;slat&nbsp;vlat0&nbsp;vlat1&nbsp;vlat&nbsp;in</div>
+      <div id="line000092" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000092| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[349]*)restore_state&nbsp;slat'</div>
+      <div id="line000093" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000093| &nbsp;</div>
+      <div id="line000094" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000094| let&nbsp;alloc_closure&nbsp;l&nbsp;prop_chain&nbsp;=</div>
+      <div id="line000095" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000095| &nbsp;&nbsp;fun&nbsp;(alat,slat)&nbsp;-&gt;&nbsp;((*[394]*)alat,{slat&nbsp;with&nbsp;SL.store&nbsp;=&nbsp;ST.add_label&nbsp;slat.SL.store&nbsp;l&nbsp;prop_chain},())</div>
+      <div id="line000096" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000096| &nbsp;</div>
+      <div id="line000097" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000097| let&nbsp;alloc_resstore&nbsp;ret_label&nbsp;vlats&nbsp;=&nbsp;(*&nbsp;Hack:&nbsp;write&nbsp;'ret_label.ret_label.res1'&nbsp;in&nbsp;heap&nbsp;*)</div>
+      <div id="line000098" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000098| &nbsp;&nbsp;fun&nbsp;(alat,slat)&nbsp;-&gt;</div>
+      <div id="line000099" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000099| &nbsp;&nbsp;&nbsp;&nbsp;(*[461]*)if&nbsp;SL.is_bot&nbsp;slat&nbsp;then&nbsp;((*[226]*)alat,SL.bot,ST.bot)</div>
+      <div id="line000100" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000100| &nbsp;&nbsp;&nbsp;&nbsp;else</div>
+      <div id="line000101" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000101| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[235]*)let&nbsp;vlats&nbsp;=&nbsp;match&nbsp;vlats&nbsp;with</div>
+      <div id="line000102" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000102| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;[]&nbsp;-&gt;&nbsp;[(*[2]*)VL.nil]&nbsp;(*&nbsp;if&nbsp;return&nbsp;is&nbsp;empty,&nbsp;return&nbsp;nil&nbsp;value&nbsp;*)</div>
+      <div id="line000103" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000103| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;_&nbsp;&nbsp;-&gt;&nbsp;(*[233]*)vlats&nbsp;in</div>
+      <div id="line000104" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000104| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[235]*)let&nbsp;_,res_table&nbsp;=&nbsp;List.fold_left</div>
+      <div id="line000105" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000105| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(fun&nbsp;(i,tbl)&nbsp;vlat&nbsp;-&gt;&nbsp;(*[263]*)let&nbsp;entry&nbsp;=&nbsp;&quot;res&quot;&nbsp;^&nbsp;(string_of_int&nbsp;i)&nbsp;in</div>
+      <div id="line000106" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000106| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;((*[263]*)i+1,PL.add&nbsp;entry&nbsp;vlat&nbsp;tbl))&nbsp;(1,PL.mt)&nbsp;vlats&nbsp;in</div>
+      <div id="line000107" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000107| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;((*[235]*)alat,slat,ST.add_label&nbsp;slat.SL.store&nbsp;ret_label&nbsp;res_table)</div>
+      <div id="line000108" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000108| &nbsp;</div>
+      <div id="line000109" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000109| let&nbsp;getbinhandler&nbsp;op1&nbsp;op2&nbsp;event&nbsp;=</div>
+      <div id="line000110" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000110| &nbsp;&nbsp;fun&nbsp;(alat,slat)&nbsp;-&gt;&nbsp;((*[299]*)alat,slat,SL.getbinhandler&nbsp;slat&nbsp;op1&nbsp;op2&nbsp;event)</div>
+      <div id="line000111" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000111| &nbsp;</div>
+      <div id="line000112" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000112| (**&nbsp;{4&nbsp;control&nbsp;flow&nbsp;operations&nbsp;}&nbsp;*)</div>
+      <div id="line000113" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000113| &nbsp;</div>
+      <div id="line000114" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000114| let&nbsp;and_join&nbsp;slat0&nbsp;vlat0&nbsp;slat1&nbsp;vlat1&nbsp;=</div>
+      <div id="line000115" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000115| &nbsp;&nbsp;(fun&nbsp;(alat,slat)&nbsp;-&gt;&nbsp;(*&nbsp;potentially&nbsp;false&nbsp;if&nbsp;overapprox.&nbsp;has&nbsp;nil&nbsp;*)</div>
+      <div id="line000116" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000116| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[40]*)let&nbsp;slat,vlat&nbsp;&nbsp;&nbsp;=&nbsp;if&nbsp;VL.may_be_nil&nbsp;vlat0&nbsp;then&nbsp;((*[2]*)slat0,vlat0)&nbsp;else&nbsp;((*[38]*)SL.bot,VL.bot)&nbsp;in</div>
+      <div id="line000117" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000117| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[40]*)let&nbsp;slat',vlat'&nbsp;=&nbsp;if&nbsp;VL.may_be_non_nil&nbsp;vlat0&nbsp;then&nbsp;((*[38]*)slat1,vlat1)&nbsp;else&nbsp;((*[2]*)SL.bot,VL.bot)&nbsp;in</div>
+      <div id="line000118" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000118| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;((*[40]*)alat,&nbsp;SL.join&nbsp;slat&nbsp;slat',&nbsp;VL.join&nbsp;vlat&nbsp;vlat'))&nbsp;(*&nbsp;potentially&nbsp;true&nbsp;if&nbsp;overapprox.&nbsp;has&nbsp;non&nbsp;nil&nbsp;*)</div>
+      <div id="line000119" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000119| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*&nbsp;potentially&nbsp;reduce&nbsp;*)</div>
+      <div id="line000120" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000120| &nbsp;</div>
+      <div id="line000121" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000121| let&nbsp;or_join&nbsp;slat0&nbsp;vlat0&nbsp;slat1&nbsp;vlat1&nbsp;=</div>
+      <div id="line000122" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000122| &nbsp;&nbsp;(fun&nbsp;(alat,slat)&nbsp;-&gt;&nbsp;(*&nbsp;potentially&nbsp;true&nbsp;if&nbsp;overapprox.&nbsp;has&nbsp;non&nbsp;nil&nbsp;*)</div>
+      <div id="line000123" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000123| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[14]*)let&nbsp;slat,vlat&nbsp;&nbsp;&nbsp;=&nbsp;if&nbsp;VL.may_be_non_nil&nbsp;vlat0&nbsp;then&nbsp;((*[12]*)slat0,VL.exclude_nil&nbsp;vlat0)&nbsp;else&nbsp;((*[2]*)SL.bot,VL.bot)&nbsp;in</div>
+      <div id="line000124" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000124| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[14]*)let&nbsp;slat',vlat'&nbsp;=&nbsp;if&nbsp;VL.may_be_nil&nbsp;vlat0&nbsp;then&nbsp;((*[2]*)slat1,vlat1)&nbsp;else&nbsp;((*[12]*)SL.bot,VL.bot)&nbsp;in</div>
+      <div id="line000125" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000125| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;((*[14]*)alat,&nbsp;SL.join&nbsp;slat&nbsp;slat',&nbsp;VL.join&nbsp;vlat&nbsp;vlat'))&nbsp;(*&nbsp;potentially&nbsp;false&nbsp;if&nbsp;overapprox.&nbsp;has&nbsp;nil&nbsp;*)</div>
+      <div id="line000126" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000126| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*&nbsp;potentially&nbsp;reduce&nbsp;*)</div>
+      <div id="line000127" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000127| &nbsp;</div>
+      <div id="line000128" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000128| let&nbsp;mvl_join&nbsp;branch1&nbsp;branch2&nbsp;=&nbsp;(fun&nbsp;(alat,slat)&nbsp;-&gt;</div>
+      <div id="line000129" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000129| &nbsp;&nbsp;(*[2249]*)let&nbsp;(alat1,slat1,vlat1)&nbsp;=&nbsp;branch1&nbsp;(alat,slat)&nbsp;in</div>
+      <div id="line000130" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000130| &nbsp;&nbsp;(*[2249]*)let&nbsp;(alat2,slat2,vlat2)&nbsp;=&nbsp;branch2&nbsp;(alat,slat)&nbsp;in</div>
+      <div id="line000131" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000131| &nbsp;&nbsp;((*[2249]*)AL.join&nbsp;alat1&nbsp;alat2,&nbsp;SL.join&nbsp;slat1&nbsp;slat2,&nbsp;VL.join&nbsp;vlat1&nbsp;vlat2))</div>
+      <div id="line000132" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000132| &nbsp;</div>
+      <div id="line000133" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000133| let&nbsp;branch_and_join&nbsp;env&nbsp;thenbr&nbsp;elsebr&nbsp;=</div>
+      <div id="line000134" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000134| &nbsp;&nbsp;(fun&nbsp;lat&nbsp;-&gt;&nbsp;(*[145]*)let&nbsp;(alat1,slat1,()),(alat2,slat2,())&nbsp;=&nbsp;thenbr&nbsp;lat,&nbsp;elsebr&nbsp;lat&nbsp;in</div>
+      <div id="line000135" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000135| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[145]*)let&nbsp;joined_store&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ST.join&nbsp;slat1.SL.store&nbsp;slat2.SL.store&nbsp;in</div>
+      <div id="line000136" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000136| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;((*[145]*)AL.join&nbsp;alat1&nbsp;alat2,&nbsp;(if&nbsp;ST.leq&nbsp;joined_store&nbsp;ST.bot&nbsp;then&nbsp;(*[47]*)SL.bot</div>
+      <div id="line000137" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000137| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else&nbsp;(*[98]*){SL.env&nbsp;=&nbsp;env;&nbsp;SL.store&nbsp;=&nbsp;joined_store}),&nbsp;()))</div>
+      <div id="line000138" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000138| &nbsp;</div>
+      <div id="line000139" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000139| let&nbsp;rec&nbsp;loop&nbsp;test&nbsp;body&nbsp;=</div>
+      <div id="line000140" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000140| &nbsp;&nbsp;(fun&nbsp;(alat_prev,slat_prev)&nbsp;-&gt;</div>
+      <div id="line000141" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000141| &nbsp;&nbsp;&nbsp;&nbsp;(*[207]*)let&nbsp;(alat',slat',_vlat')&nbsp;=&nbsp;test&nbsp;(alat_prev,slat_prev)&nbsp;in</div>
+      <div id="line000142" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000142| &nbsp;&nbsp;&nbsp;&nbsp;(*[207]*)let&nbsp;(alat'',slat'',())&nbsp;&nbsp;&nbsp;=&nbsp;body&nbsp;(alat',slat')&nbsp;in</div>
+      <div id="line000143" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000143| &nbsp;&nbsp;&nbsp;&nbsp;(*[207]*)if&nbsp;(*[207]*)AL.leq&nbsp;alat''&nbsp;alat'&nbsp;&amp;&amp;&nbsp;(*[129]*)ST.leq&nbsp;slat''.SL.store&nbsp;slat'.SL.store&nbsp;(*&nbsp;Fixpoint&nbsp;upto&nbsp;scoping&nbsp;of&nbsp;local&nbsp;variables&nbsp;*)</div>
+      <div id="line000144" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000144| &nbsp;&nbsp;&nbsp;&nbsp;then&nbsp;((*[104]*)alat',slat',())</div>
+      <div id="line000145" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000145| &nbsp;&nbsp;&nbsp;&nbsp;else&nbsp;(*[103]*)loop&nbsp;(*&nbsp;Otherwise:iterate&nbsp;*)</div>
+      <div id="line000146" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000146| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;test&nbsp;body&nbsp;((*AL.join&nbsp;alat'*)&nbsp;alat'',&nbsp;{slat''&nbsp;with&nbsp;SL.store&nbsp;=&nbsp;ST.join&nbsp;slat'.SL.store&nbsp;slat''.SL.store}))</div>
+      <div id="line000147" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000147| &nbsp;</div>
+      <div id="line000148" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000148| &nbsp;</div>
+      <div id="line000149" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000149| (**&nbsp;{3&nbsp;Transfer&nbsp;functions&nbsp;}&nbsp;*)</div>
+      <div id="line000150" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000150| &nbsp;</div>
+      <div id="line000151" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000151| (*&nbsp;&nbsp;transfer_call&nbsp;:&nbsp;label&nbsp;-&gt;&nbsp;label&nbsp;-&gt;&nbsp;VL&nbsp;list&nbsp;-&gt;&nbsp;info&nbsp;-&gt;&nbsp;(AL&nbsp;*&nbsp;SL)&nbsp;-&gt;&nbsp;(AL&nbsp;*&nbsp;SL&nbsp;*&nbsp;VL&nbsp;list)&nbsp;*)</div>
+      <div id="line000152" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000152| let&nbsp;transfer_call&nbsp;clab&nbsp;tgtlabel&nbsp;vlats&nbsp;info&nbsp;(alat,slat)&nbsp;=</div>
+      <div id="line000153" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000153| &nbsp;&nbsp;(*[470]*)let&nbsp;f&nbsp;=&nbsp;info.fun_map&nbsp;tgtlabel&nbsp;in</div>
+      <div id="line000154" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000154| &nbsp;&nbsp;match&nbsp;f&nbsp;with</div>
+      <div id="line000155" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000155| &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;L.Fun&nbsp;(label',xs,bl,ret_label)&nbsp;-&gt;</div>
+      <div id="line000156" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000156| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[470]*)if&nbsp;(tgtlabel&nbsp;!=&nbsp;label')</div>
+      </div>
+      <div id="line000157" class="lineAllUnvisited"><img border="0" height="10" width="10"src="blank.png"/>000157| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;then&nbsp;(*[0]*)failwith&nbsp;(&quot;Mismatch&nbsp;in&nbsp;fun_map&nbsp;between&nbsp;labels&nbsp;&quot;</div>
+      <div id="fold000158">
+      <div id="line000158" class="lineNone"><a href="javascript:fold('fold000158');"><img border="0" height="10" width="10" src="minus.png" title="fold code"/></a>000158| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^&nbsp;(string_of_int&nbsp;tgtlabel)&nbsp;^&nbsp;&quot;&nbsp;and&nbsp;&quot;&nbsp;^&nbsp;(string_of_int&nbsp;label'))</div>
+      <div id="line000159" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000159| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else&nbsp;(match&nbsp;bl&nbsp;with</div>
+      </div>
+      <div id="line000160" class="lineAllUnvisited"><img border="0" height="10" width="10"src="blank.png"/>000160| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;None&nbsp;&nbsp;&nbsp;&nbsp;-&gt;&nbsp;(*[0]*)failwith&nbsp;&quot;encountered&nbsp;bodyless&nbsp;function&quot;</div>
+      <div id="fold000161">
+      <div id="line000161" class="lineNone"><a href="javascript:fold('fold000161');"><img border="0" height="10" width="10" src="minus.png" title="fold code"/></a>000161| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Some&nbsp;bl&nbsp;-&gt;</div>
+      <div id="line000162" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000162| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[470]*)let&nbsp;body_label&nbsp;&nbsp;&nbsp;=&nbsp;bl.L.label&nbsp;in</div>
+      <div id="line000163" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000163| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[470]*)let&nbsp;entry_state&nbsp;&nbsp;=&nbsp;AL.lookup&nbsp;alat&nbsp;body_label&nbsp;in</div>
+      <div id="line000164" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000164| (*</div>
+      <div id="line000165" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000165| &nbsp;Caller&nbsp;invariant:&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;pass&nbsp;arguments&nbsp;and&nbsp;clabel</div>
+      <div id="line000166" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000166| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;receive&nbsp;results&nbsp;through&nbsp;ret_label&nbsp;entry</div>
+      <div id="line000167" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000167| &nbsp;</div>
+      <div id="line000168" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000168| &nbsp;Receiver&nbsp;invariant:&nbsp;&nbsp;-&nbsp;pair&nbsp;formals&nbsp;and&nbsp;actuals&nbsp;and&nbsp;store&nbsp;in&nbsp;clabel,</div>
+      <div id="line000169" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000169| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;add&nbsp;an&nbsp;extended&nbsp;scope&nbsp;chain,</div>
+      <div id="line000170" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000170| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;store&nbsp;result(s)&nbsp;in&nbsp;AL[ret_label][ret_label][res1]</div>
+      <div id="line000171" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000171| &nbsp;</div>
+      <div id="line000172" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000172| &nbsp;Needs&nbsp;two&nbsp;allocation&nbsp;sites</div>
+      <div id="line000173" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000173| &nbsp;&nbsp;-&nbsp;caller-entry&nbsp;-&nbsp;for&nbsp;scope-chain&nbsp;allocation</div>
+      <div id="line000174" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000174| &nbsp;&nbsp;-&nbsp;caller-exit&nbsp;&nbsp;-&nbsp;for&nbsp;?</div>
+      <div id="line000175" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000175| &nbsp;</div>
+      <div id="line000176" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000176| &nbsp;propagate&nbsp;call:&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;vlats&nbsp;into&nbsp;localenv&nbsp;of&nbsp;function&nbsp;label</div>
+      <div id="line000177" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000177| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;slat.store&nbsp;into&nbsp;store&nbsp;of&nbsp;function&nbsp;label</div>
+      <div id="line000178" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000178| &nbsp;propagate&nbsp;return:&nbsp;&nbsp;-&nbsp;vlat&nbsp;results&nbsp;from&nbsp;return&nbsp;label&nbsp;to&nbsp;caller</div>
+      <div id="line000179" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000179| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;slat.store&nbsp;from&nbsp;return&nbsp;label&nbsp;into&nbsp;store&nbsp;of&nbsp;caller</div>
+      <div id="line000180" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000180| &nbsp;*)</div>
+      <div id="line000181" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000181| (*&nbsp;caller:&nbsp;clab&nbsp;&nbsp;&nbsp;&nbsp;callee:&nbsp;tgtlabel&nbsp;body_label&nbsp;ret_label&nbsp;*)</div>
+      <div id="line000182" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000182| &nbsp;</div>
+      <div id="line000183" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000183| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*&nbsp;extend&nbsp;stored&nbsp;env&nbsp;with&nbsp;new&nbsp;level&nbsp;*)</div>
+      <div id="line000184" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000184| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[470]*)let&nbsp;ext_env&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ST.fold_labels_scopechain</div>
+      <div id="line000185" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000185| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(fun&nbsp;is&nbsp;accpairset&nbsp;-&gt;&nbsp;(*[468]*)EL.PairSet.add&nbsp;(clab,is)&nbsp;accpairset)</div>
+      <div id="line000186" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000186| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;slat.SL.store&nbsp;tgtlabel&nbsp;EL.PairSet.empty&nbsp;in</div>
+      <div id="line000187" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000187| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[470]*)if&nbsp;EL.is_bot&nbsp;ext_env&nbsp;(*&nbsp;scopechain&nbsp;potentially&nbsp;deleted&nbsp;because&nbsp;of&nbsp;domain&nbsp;reduction&nbsp;*)</div>
+      <div id="line000188" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000188| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;then&nbsp;((*[2]*)alat,slat,[VL.bot])</div>
+      <div id="line000189" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000189| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else</div>
+      <div id="line000190" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000190| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*&nbsp;add&nbsp;bindings&nbsp;from&nbsp;formals&nbsp;to&nbsp;actuals&nbsp;*)</div>
+      <div id="line000191" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000191| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*&nbsp;join&nbsp;store&nbsp;and&nbsp;environment&nbsp;into&nbsp;receiver's&nbsp;state&nbsp;*)</div>
+      <div id="line000192" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000192| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[468]*)let&nbsp;entry_state'&nbsp;=&nbsp;SL.join&nbsp;entry_state</div>
+      <div id="line000193" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000193| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{&nbsp;SL.store&nbsp;&nbsp;&nbsp;=</div>
+      <div id="line000194" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000194| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ST.add_label&nbsp;slat.SL.store&nbsp;clab&nbsp;(PL.add_all_params&nbsp;xs&nbsp;vlats&nbsp;PL.mt);</div>
+      <div id="line000195" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000195| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SL.env&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ext_env&nbsp;}&nbsp;in</div>
+      <div id="line000196" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000196| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[468]*)let&nbsp;alat'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;AL.add&nbsp;alat&nbsp;body_label&nbsp;entry_state'&nbsp;in</div>
+      <div id="line000197" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000197| &nbsp;</div>
+      <div id="line000198" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000198| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*&nbsp;lookup&nbsp;exit&nbsp;state&nbsp;and&nbsp;results&nbsp;*)</div>
+      <div id="line000199" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000199| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[468]*)let&nbsp;exit_state&nbsp;&nbsp;&nbsp;=&nbsp;AL.lookup&nbsp;alat'&nbsp;ret_label&nbsp;in</div>
+      <div id="line000200" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000200| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*&nbsp;if&nbsp;body&nbsp;reachable&nbsp;but&nbsp;exit&nbsp;is&nbsp;bot,</div>
+      <div id="line000201" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000201| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;either&nbsp;func&nbsp;completes&nbsp;abnormally</div>
+      <div id="line000202" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000202| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;or:&nbsp;flow&nbsp;has&nbsp;not&nbsp;propagated&nbsp;through&nbsp;function&nbsp;yet&nbsp;*)</div>
+      <div id="line000203" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000203| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[468]*)if&nbsp;(*[468]*)not&nbsp;(SL.is_bot&nbsp;entry_state)&nbsp;&amp;&amp;&nbsp;(*[383]*)SL.is_bot&nbsp;exit_state&nbsp;</div>
+      <div id="line000204" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000204| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;then&nbsp;((*[34]*)alat',SL.bot,[VL.bot])&nbsp;(*&nbsp;unreachable:&nbsp;no&nbsp;return&nbsp;state&nbsp;injected&nbsp;*)</div>
+      <div id="line000205" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000205| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else</div>
+      <div id="line000206" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000206| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[434]*)let&nbsp;exit_prop&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ST.find_label&nbsp;exit_state.SL.store&nbsp;ret_label&nbsp;in</div>
+      <div id="line000207" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000207| &nbsp;</div>
+      <div id="line000208" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000208| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[434]*)let&nbsp;rec&nbsp;build_res_lat&nbsp;i&nbsp;=</div>
+      <div id="line000209" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000209| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;((*[817]*)try</div>
+      <div id="line000210" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000210| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[817]*)let&nbsp;entry&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&quot;res&quot;&nbsp;^&nbsp;(string_of_int&nbsp;i)&nbsp;in</div>
+      <div id="line000211" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000211| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[817]*)let&nbsp;vlat,abs&nbsp;=&nbsp;PL.find_exn&nbsp;entry&nbsp;exit_prop&nbsp;in</div>
+      <div id="line000212" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000212| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[383]*)let&nbsp;vlats&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;build_res_lat&nbsp;(i+1)&nbsp;in</div>
+      <div id="line000213" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000213| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[383]*)if&nbsp;abs&nbsp;=&nbsp;Abs.is_present&nbsp;(*&nbsp;result&nbsp;arity&nbsp;may&nbsp;vary:&nbsp;if&nbsp;so,&nbsp;include&nbsp;nil&nbsp;*)</div>
+      <div id="line000214" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000214| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;then&nbsp;(*[275]*)vlat::vlats</div>
+      <div id="line000215" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000215| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else&nbsp;(*[108]*)(VL.join&nbsp;vlat&nbsp;VL.nil)::vlats</div>
+      <div id="line000216" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000216| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;with&nbsp;Not_found&nbsp;-&gt;</div>
+      <div id="line000217" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000217| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[434]*)if&nbsp;i=1</div>
+      <div id="line000218" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000218| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;then&nbsp;[(*[85]*)VL.bot]&nbsp;(*&nbsp;no&nbsp;result&nbsp;yet:&nbsp;head&nbsp;is&nbsp;bot&nbsp;*)</div>
+      <div id="line000219" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000219| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else&nbsp;(*[349]*)[])&nbsp;in&nbsp;&nbsp;(*&nbsp;Hack:&nbsp;read&nbsp;'result'&nbsp;local&nbsp;*)</div>
+      <div id="line000220" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000220| &nbsp;</div>
+      <div id="line000221" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000221| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[434]*)let&nbsp;res_lats&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;build_res_lat&nbsp;1&nbsp;in</div>
+      <div id="line000222" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000222| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*&nbsp;Note:&nbsp;L.Return&nbsp;is&nbsp;responsible&nbsp;for&nbsp;propagating&nbsp;to&nbsp;ret_label</div>
+      <div id="line000223" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000223| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Here&nbsp;we&nbsp;only&nbsp;read&nbsp;off&nbsp;the&nbsp;propagated&nbsp;input&nbsp;&nbsp;*)</div>
+      <div id="line000224" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000224| &nbsp;</div>
+      <div id="line000225" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000225| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*&nbsp;return&nbsp;store/heap&nbsp;effects&nbsp;to&nbsp;caller's&nbsp;state&nbsp;(joined&nbsp;by&nbsp;transfer_calls)&nbsp;*)</div>
+      <div id="line000226" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000226| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*&nbsp;and&nbsp;restore&nbsp;environment*)</div>
+      <div id="line000227" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000227| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[434]*)let&nbsp;slat'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;(*SL.join&nbsp;slat*)</div>
+      <div id="line000228" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000228| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{&nbsp;SL.store&nbsp;&nbsp;&nbsp;=&nbsp;exit_state.SL.store;</div>
+      <div id="line000229" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000229| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SL.env&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;slat.SL.env&nbsp;(*&nbsp;EL.bot;*)&nbsp;}&nbsp;in</div>
+      <div id="line000230" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000230| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;((*[434]*)alat',slat',res_lats)</div>
+      <div id="line000231" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000231| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)</div>
+      <div id="line000232" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000232| &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;_&nbsp;-&gt;</div>
+      </div>
+      <div id="line000233" class="lineAllUnvisited"><img border="0" height="10" width="10"src="blank.png"/>000233| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[0]*)failwith&nbsp;&quot;Got&nbsp;non-function&nbsp;literal&nbsp;from&nbsp;function&nbsp;map&quot;</div>
+      <div id="fold000234">
+      <div id="line000234" class="lineNone"><a href="javascript:fold('fold000234');"><img border="0" height="10" width="10" src="minus.png" title="fold code"/></a>000234| &nbsp;</div>
+      <div id="line000235" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000235| (*&nbsp;&nbsp;transfer_calls&nbsp;:&nbsp;label&nbsp;-&gt;&nbsp;VL&nbsp;-&gt;&nbsp;VL&nbsp;list&nbsp;-&gt;&nbsp;info&nbsp;-&gt;&nbsp;(AL&nbsp;*&nbsp;SL)&nbsp;-&gt;&nbsp;(AL&nbsp;*&nbsp;SL&nbsp;*&nbsp;VL&nbsp;list)&nbsp;*)</div>
+      <div id="line000236" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000236| let&nbsp;transfer_calls&nbsp;clab&nbsp;vlat&nbsp;vlats&nbsp;info&nbsp;=</div>
+      <div id="line000237" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000237| &nbsp;&nbsp;(*[1281]*)if&nbsp;not&nbsp;(VL.may_be_proc&nbsp;vlat)&nbsp;&nbsp;(*&nbsp;type&nbsp;error:&nbsp;receiver&nbsp;is&nbsp;definitely&nbsp;not&nbsp;a&nbsp;function&nbsp;*)</div>
+      <div id="line000238" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000238| &nbsp;&nbsp;then&nbsp;(*[203]*)restore_state&nbsp;SL.bot&nbsp;&gt;&gt;=&nbsp;fun&nbsp;()&nbsp;-&gt;&nbsp;(*[203]*)list_return&nbsp;VL.bot</div>
+      <div id="line000239" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000239| &nbsp;&nbsp;else</div>
+      <div id="line000240" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000240| &nbsp;&nbsp;&nbsp;&nbsp;(*[1078]*)(fun&nbsp;(alat,slat)&nbsp;-&gt;</div>
+      <div id="line000241" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000241| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[1078]*)let&nbsp;funs&nbsp;=&nbsp;vlat.VL.funs&nbsp;in</div>
+      <div id="line000242" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000242| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[1078]*)VL.ProcSet.fold&nbsp;</div>
+      <div id="line000243" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000243| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(fun&nbsp;proc&nbsp;(alatacc,slatacc,rlatacc)&nbsp;-&gt;&nbsp;match&nbsp;proc&nbsp;with</div>
+      <div id="line000244" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000244| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;VL.Funtag&nbsp;f&nbsp;&nbsp;&nbsp;-&gt;&nbsp;</div>
+      <div id="line000245" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000245| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[470]*)let&nbsp;(alatacc',slat',rlats)&nbsp;=&nbsp;transfer_call&nbsp;clab&nbsp;f&nbsp;vlats&nbsp;info&nbsp;(alatacc,slat)&nbsp;in</div>
+      <div id="line000246" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000246| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;((*[470]*)alatacc',SL.join&nbsp;slatacc&nbsp;slat',join_rlat_lists&nbsp;rlatacc&nbsp;rlats)</div>
+      <div id="line000247" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000247| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;VL.Builtin&nbsp;bi&nbsp;-&gt;&nbsp;</div>
+      <div id="line000248" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000248| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[638]*)let&nbsp;slat',rlats&nbsp;=&nbsp;SL.apply_builtin&nbsp;bi&nbsp;slat&nbsp;vlats&nbsp;in</div>
+      <div id="line000249" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000249| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;((*[638]*)alatacc,SL.join&nbsp;slatacc&nbsp;slat',join_rlat_lists&nbsp;rlatacc&nbsp;rlats))</div>
+      <div id="line000250" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000250| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;funs&nbsp;(alat,&nbsp;{&nbsp;SL.store&nbsp;=&nbsp;ST.bot;</div>
+      <div id="line000251" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000251| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SL.env&nbsp;&nbsp;&nbsp;=&nbsp;EL.bot&nbsp;}&nbsp;,[]))</div>
+      <div id="line000252" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000252| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&gt;&gt;=&nbsp;red_list_return&nbsp;(*&nbsp;slight&nbsp;hack&nbsp;to&nbsp;reduce&nbsp;to&nbsp;bot&nbsp;on&nbsp;callee&nbsp;error&nbsp;*)</div>
+      <div id="line000253" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000253| &nbsp;</div>
+      <div id="line000254" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000254| (*&nbsp;&nbsp;transfer_str&nbsp;:&nbsp;str&nbsp;-&gt;&nbsp;info&nbsp;-&gt;&nbsp;(AL&nbsp;*&nbsp;SL)&nbsp;-&gt;&nbsp;(AL&nbsp;*&nbsp;SL&nbsp;*&nbsp;VL)&nbsp;*)</div>
+      <div id="line000255" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000255| let&nbsp;rec&nbsp;transfer_str&nbsp;s&nbsp;info&nbsp;=</div>
+      <div id="line000256" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000256| &nbsp;&nbsp;match&nbsp;s&nbsp;with</div>
+      <div id="line000257" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000257| &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Ast.Normal&nbsp;ns&nbsp;-&gt;&nbsp;(*[856]*)red_return&nbsp;(VL.string&nbsp;ns)</div>
+      <div id="line000258" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000258| &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Ast.Char&nbsp;cs&nbsp;&nbsp;&nbsp;-&gt;&nbsp;(*[161]*)red_return&nbsp;(VL.string&nbsp;cs)</div>
+      <div id="line000259" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000259| &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Ast.Long&nbsp;ls&nbsp;&nbsp;&nbsp;-&gt;&nbsp;(*[10]*)red_return&nbsp;(VL.string&nbsp;ls)</div>
+      <div id="line000260" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000260| &nbsp;</div>
+      <div id="line000261" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000261| (*&nbsp;&nbsp;transfer_lit&nbsp;:&nbsp;lit&nbsp;-&gt;&nbsp;info&nbsp;-&gt;&nbsp;(AL&nbsp;*&nbsp;SL)&nbsp;-&gt;&nbsp;(AL&nbsp;*&nbsp;SL&nbsp;*&nbsp;VL)&nbsp;*)</div>
+      <div id="line000262" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000262| let&nbsp;rec&nbsp;transfer_lit&nbsp;l&nbsp;info&nbsp;=</div>
+      <div id="line000263" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000263| &nbsp;&nbsp;match&nbsp;l&nbsp;with</div>
+      <div id="line000264" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000264| &nbsp;&nbsp;|&nbsp;L.Nil&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&gt;&nbsp;(*[303]*)red_return&nbsp;VL.nil</div>
+      <div id="line000265" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000265| &nbsp;&nbsp;|&nbsp;L.Bool&nbsp;_&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&gt;&nbsp;(*[127]*)red_return&nbsp;VL.bool</div>
+      <div id="line000266" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000266| &nbsp;&nbsp;|&nbsp;L.String&nbsp;s&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&gt;&nbsp;(*[1027]*)transfer_str&nbsp;s&nbsp;info</div>
+      <div id="line000267" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000267| &nbsp;&nbsp;|&nbsp;L.Number&nbsp;_&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&gt;&nbsp;(*[870]*)red_return&nbsp;VL.number</div>
+      <div id="line000268" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000268| &nbsp;&nbsp;|&nbsp;L.Table&nbsp;(l,uns,ns)&nbsp;-&gt;&nbsp;</div>
+      <div id="line000269" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000269| &nbsp;&nbsp;&nbsp;&nbsp;(*&nbsp;add&nbsp;unamed&nbsp;entries&nbsp;*)</div>
+      <div id="line000270" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000270| &nbsp;&nbsp;&nbsp;&nbsp;(*[337]*)transfer_exp_list&nbsp;uns&nbsp;info&nbsp;&gt;&gt;=&nbsp;fun&nbsp;unvlats&nbsp;-&gt;</div>
+      <div id="line000271" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000271| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[337]*)let&nbsp;joined_unsvlats&nbsp;=&nbsp;List.fold_left&nbsp;(fun&nbsp;acc&nbsp;vlat&nbsp;-&gt;&nbsp;(*[60]*)VL.join&nbsp;acc&nbsp;vlat)&nbsp;VL.bot&nbsp;unvlats&nbsp;in</div>
+      <div id="line000272" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000272| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[337]*)let&nbsp;plat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=</div>
+      <div id="line000273" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000273| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(match&nbsp;unvlats&nbsp;with</div>
+      <div id="line000274" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000274| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;[]&nbsp;-&gt;&nbsp;(*[319]*)PL.mt</div>
+      <div id="line000275" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000275| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;_&nbsp;&nbsp;-&gt;&nbsp;(*[18]*)PL.add_nonstr_default&nbsp;VL.number&nbsp;joined_unsvlats&nbsp;PL.mt)&nbsp;in(*unnamed/numeric&nbsp;all&nbsp;go&nbsp;in&nbsp;default*)</div>
+      <div id="line000276" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000276| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*&nbsp;add&nbsp;named&nbsp;entries&nbsp;*)</div>
+      <div id="line000277" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000277| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[337]*)let&nbsp;(props,&nbsp;exps)&nbsp;&nbsp;&nbsp;=&nbsp;List.split&nbsp;ns&nbsp;in</div>
+      <div id="line000278" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000278| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[337]*)transfer_exp_list&nbsp;exps&nbsp;info&nbsp;&gt;&gt;=&nbsp;fun&nbsp;vlats&nbsp;-&gt;</div>
+      <div id="line000279" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000279| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[337]*)let&nbsp;plat'&nbsp;&nbsp;=&nbsp;List.fold_left2&nbsp;(fun&nbsp;plat&nbsp;prop&nbsp;vlat&nbsp;-&gt;&nbsp;(*[313]*)PL.add&nbsp;prop&nbsp;vlat&nbsp;plat)&nbsp;plat&nbsp;props&nbsp;vlats&nbsp;in</div>
+      <div id="line000280" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000280| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[337]*)get_curr_state&nbsp;&gt;&gt;=&nbsp;fun&nbsp;slat'&nbsp;-&gt;</div>
+      <div id="line000281" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000281| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[337]*)restore_state&nbsp;{&nbsp;slat'&nbsp;with&nbsp;SL.store&nbsp;=&nbsp;ST.add_label&nbsp;slat'.SL.store&nbsp;l&nbsp;plat'&nbsp;}&nbsp;&gt;&gt;=&nbsp;fun&nbsp;()&nbsp;-&gt;</div>
+      <div id="line000282" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000282| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[337]*)return&nbsp;(VL.table&nbsp;l)</div>
+      <div id="line000283" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000283| &nbsp;&nbsp;|&nbsp;L.Fun&nbsp;(l,_,body,ret_label)&nbsp;-&gt;&nbsp;</div>
+      <div id="line000284" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000284| &nbsp;&nbsp;&nbsp;&nbsp;(match&nbsp;body&nbsp;with</div>
+      </div>
+      <div id="line000285" class="lineAllUnvisited"><img border="0" height="10" width="10"src="blank.png"/>000285| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;None&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&gt;&nbsp;(*[0]*)mfailwith&nbsp;&quot;encountered&nbsp;bodyless&nbsp;function&quot;</div>
+      <div id="fold000286">
+      <div id="line000286" class="lineNone"><a href="javascript:fold('fold000286');"><img border="0" height="10" width="10" src="minus.png" title="fold code"/></a>000286| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Some&nbsp;body&nbsp;-&gt;</div>
+      <div id="line000287" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000287| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[394]*)get_curr_state&nbsp;&gt;&gt;=&nbsp;fun&nbsp;slat&nbsp;-&gt;</div>
+      <div id="line000288" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000288| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[394]*)curr_scope_chain&nbsp;&gt;&gt;=&nbsp;fun&nbsp;scopechain&nbsp;-&gt;</div>
+      <div id="line000289" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000289| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[394]*)let&nbsp;prop_chain&nbsp;=&nbsp;SL.build_prop_chain&nbsp;scopechain&nbsp;in</div>
+      <div id="line000290" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000290| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[394]*)set_state&nbsp;body.L.label&nbsp;&gt;&gt;=&nbsp;fun&nbsp;()&nbsp;-&gt;</div>
+      <div id="line000291" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000291| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[394]*)let&nbsp;fun_info&nbsp;&nbsp;&nbsp;=&nbsp;{&nbsp;info&nbsp;with&nbsp;ret_label&nbsp;=&nbsp;ret_label&nbsp;}&nbsp;in</div>
+      <div id="line000292" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000292| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[394]*)transfer_stmts&nbsp;body.L.stmts&nbsp;fun_info&nbsp;&gt;&gt;=&nbsp;fun&nbsp;()&nbsp;-&gt;</div>
+      <div id="line000293" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000293| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[394]*)restore_state&nbsp;slat&nbsp;&gt;&gt;=&nbsp;fun&nbsp;()&nbsp;-&gt;</div>
+      <div id="line000294" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000294| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*&nbsp;allocate&nbsp;abstract&nbsp;closure&nbsp;for&nbsp;l:&nbsp;record&nbsp;scope&nbsp;chain&nbsp;*)</div>
+      <div id="line000295" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000295| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[394]*)alloc_closure&nbsp;l&nbsp;prop_chain&nbsp;&gt;&gt;=&nbsp;fun&nbsp;()&nbsp;-&gt;</div>
+      <div id="line000296" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000296| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[394]*)return&nbsp;(VL.proc&nbsp;l))</div>
+      <div id="line000297" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000297| &nbsp;&nbsp;&nbsp;&nbsp;(*&nbsp;invariant:&nbsp;any&nbsp;proc&nbsp;l,&nbsp;has&nbsp;had&nbsp;its&nbsp;scopechain&nbsp;allocated&nbsp;in&nbsp;store&nbsp;*)</div>
+      <div id="line000298" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000298| &nbsp;</div>
+      <div id="line000299" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000299| (*&nbsp;&nbsp;transfer_gettable_event&nbsp;:&nbsp;label&nbsp;-&gt;&nbsp;info&nbsp;-&gt;&nbsp;VL&nbsp;-&gt;&nbsp;VL&nbsp;-&gt;&nbsp;(AL&nbsp;*&nbsp;SL)&nbsp;-&gt;&nbsp;AL&nbsp;*&nbsp;SL&nbsp;*&nbsp;VL&nbsp;*)</div>
+      <div id="line000300" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000300| and&nbsp;transfer_gettable_event&nbsp;clab&nbsp;info&nbsp;tabvlat&nbsp;idxvlat&nbsp;=&nbsp;</div>
+      <div id="line000301" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000301| &nbsp;&nbsp;(*&nbsp;&nbsp;inner_gettable_event&nbsp;:&nbsp;VL&nbsp;-&gt;&nbsp;VL&nbsp;-&gt;&nbsp;(AL&nbsp;*&nbsp;SL)&nbsp;-&gt;&nbsp;AL&nbsp;*&nbsp;SL&nbsp;*&nbsp;VL&nbsp;*)</div>
+      <div id="line000302" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000302| &nbsp;&nbsp;(*[647]*)let&nbsp;rec&nbsp;inner_gettable_event&nbsp;tabvlat&nbsp;acc&nbsp;=</div>
+      <div id="line000303" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000303| &nbsp;&nbsp;&nbsp;&nbsp;(*[1116]*)if&nbsp;VL.is_bot&nbsp;tabvlat&nbsp;(*&nbsp;strict&nbsp;*)</div>
+      <div id="line000304" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000304| &nbsp;&nbsp;&nbsp;&nbsp;then&nbsp;(*[141]*)return&nbsp;VL.bot</div>
+      <div id="line000305" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000305| &nbsp;&nbsp;&nbsp;&nbsp;else</div>
+      <div id="line000306" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000306| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[975]*)get_curr_state&nbsp;&gt;&gt;=&nbsp;fun&nbsp;slat&nbsp;-&gt;</div>
+      <div id="line000307" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000307| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[975]*)raw_get&nbsp;tabvlat&nbsp;idxvlat&nbsp;&gt;&gt;=&nbsp;fun&nbsp;v&nbsp;-&gt;</div>
+      <div id="line000308" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000308| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[975]*)lookup_event&nbsp;tabvlat&nbsp;&quot;__index&quot;&nbsp;&gt;&gt;=&nbsp;fun&nbsp;h&nbsp;-&gt;</div>
+      <div id="line000309" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000309| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[975]*)mvl_join</div>
+      <div id="line000310" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000310| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(if&nbsp;VL.may_be_table&nbsp;tabvlat</div>
+      <div id="line000311" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000311| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;then&nbsp;(*[518]*)return&nbsp;</div>
+      <div id="line000312" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000312| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(VL.join</div>
+      <div id="line000313" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000313| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(VL.exclude_nil&nbsp;v)</div>
+      <div id="line000314" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000314| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(if&nbsp;(*[518]*)VL.may_be_nil&nbsp;v&nbsp;&amp;&amp;&nbsp;(*[205]*)VL.may_be_nil&nbsp;h&nbsp;then&nbsp;(*[172]*)VL.nil&nbsp;else&nbsp;(*[346]*)VL.bot))</div>
+      <div id="line000315" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000315| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else&nbsp;(*[457]*)merror)</div>
+      <div id="line000316" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000316| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(mvl_join</div>
+      <div id="line000317" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000317| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(if&nbsp;VL.may_be_proc&nbsp;h</div>
+      <div id="line000318" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000318| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;then&nbsp;((*[45]*)transfer_calls&nbsp;clab&nbsp;h&nbsp;[tabvlat;idxvlat]&nbsp;info&nbsp;&gt;&gt;=&nbsp;(*--&nbsp;call&nbsp;the&nbsp;handler&nbsp;*)</div>
+      <div id="line000319" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000319| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;adjust_to_single)</div>
+      <div id="line000320" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000320| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else&nbsp;(*[930]*)merror)</div>
+      <div id="line000321" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000321| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(let&nbsp;h'&nbsp;=&nbsp;VL.exclude_proc&nbsp;h&nbsp;in</div>
+      <div id="line000322" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000322| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[975]*)if&nbsp;VL.leq&nbsp;h'&nbsp;acc</div>
+      <div id="line000323" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000323| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;then&nbsp;(*[506]*)merror&nbsp;(*&nbsp;already&nbsp;explored&nbsp;base&nbsp;values&nbsp;*)</div>
+      <div id="line000324" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000324| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else&nbsp;(*[469]*)inner_gettable_event&nbsp;h'&nbsp;(VL.join&nbsp;h'&nbsp;acc)))&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*--&nbsp;or&nbsp;repeat&nbsp;operation&nbsp;on&nbsp;it&nbsp;*)</div>
+      <div id="line000325" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000325| &nbsp;&nbsp;in</div>
+      <div id="line000326" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000326| &nbsp;&nbsp;(*[647]*)inner_gettable_event&nbsp;tabvlat&nbsp;VL.bot&nbsp;(*&nbsp;empty&nbsp;accumulator&nbsp;of&nbsp;explored&nbsp;'base'&nbsp;values&nbsp;*)</div>
+      <div id="line000327" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000327| &nbsp;</div>
+      <div id="line000328" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000328| (*&nbsp;&nbsp;transfer_lvalue_read&nbsp;:&nbsp;lvalue&nbsp;-&gt;&nbsp;info&nbsp;-&gt;&nbsp;(AL&nbsp;*&nbsp;SL)&nbsp;-&gt;&nbsp;(AL&nbsp;*&nbsp;SL&nbsp;*&nbsp;VL)&nbsp;*)</div>
+      <div id="line000329" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000329| and&nbsp;transfer_lvalue_read&nbsp;lv&nbsp;info&nbsp;=</div>
+      <div id="line000330" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000330| &nbsp;&nbsp;match&nbsp;lv&nbsp;with</div>
+      <div id="line000331" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000331| &nbsp;&nbsp;|&nbsp;L.Name&nbsp;x&nbsp;-&gt;</div>
+      <div id="line000332" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000332| &nbsp;&nbsp;&nbsp;&nbsp;(*[4183]*)read_name&nbsp;x</div>
+      <div id="line000333" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000333| &nbsp;&nbsp;|&nbsp;L.DynIndex&nbsp;(clab,e0,e1)&nbsp;-&gt;</div>
+      <div id="line000334" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000334| &nbsp;&nbsp;&nbsp;&nbsp;(*[591]*)transfer_exp&nbsp;e0&nbsp;info&nbsp;&gt;&gt;=&nbsp;adjust_to_single&nbsp;&gt;&gt;=&nbsp;fun&nbsp;vlat0&nbsp;-&gt;</div>
+      <div id="line000335" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000335| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[591]*)transfer_exp&nbsp;e1&nbsp;info&nbsp;&gt;&gt;=&nbsp;adjust_to_single&nbsp;&gt;&gt;=&nbsp;fun&nbsp;vlat1&nbsp;-&gt;</div>
+      <div id="line000336" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000336| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[591]*)transfer_gettable_event&nbsp;clab&nbsp;info&nbsp;vlat0&nbsp;vlat1</div>
+      <div id="line000337" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000337| &nbsp;</div>
+      <div id="line000338" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000338| (*&nbsp;&nbsp;transfer_lvalue_write_list&nbsp;:&nbsp;lvalue&nbsp;list&nbsp;-&gt;&nbsp;exp&nbsp;list&nbsp;-&gt;&nbsp;info&nbsp;-&gt;&nbsp;(AL&nbsp;*&nbsp;SL)&nbsp;-&gt;&nbsp;(AL&nbsp;*&nbsp;SL&nbsp;*&nbsp;unit)&nbsp;*)</div>
+      <div id="line000339" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000339| and&nbsp;transfer_lvalue_write_list&nbsp;lvals&nbsp;exps&nbsp;info&nbsp;=</div>
+      <div id="line000340" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000340| &nbsp;&nbsp;(*&nbsp;Three&nbsp;passes:&nbsp;1.&nbsp;evaluate&nbsp;lvalues&nbsp;down&nbsp;through&nbsp;recursion</div>
+      <div id="line000341" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000341| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.&nbsp;at&nbsp;end,&nbsp;evaluate&nbsp;rhs,&nbsp;left-to-right</div>
+      <div id="line000342" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000342| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3.&nbsp;perform&nbsp;assignment&nbsp;back&nbsp;through&nbsp;the&nbsp;recursion&nbsp;*)</div>
+      <div id="line000343" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000343| &nbsp;</div>
+      <div id="line000344" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000344| &nbsp;&nbsp;(*&nbsp;&nbsp;adjust_length&nbsp;:&nbsp;int&nbsp;-&gt;&nbsp;VL&nbsp;list&nbsp;-&gt;&nbsp;VL&nbsp;list&nbsp;*)</div>
+      <div id="line000345" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000345| &nbsp;&nbsp;(*[1119]*)let&nbsp;rec&nbsp;adjust_length&nbsp;lvallen&nbsp;vlats&nbsp;=&nbsp;match&nbsp;(lvallen,vlats)&nbsp;with</div>
+      <div id="line000346" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000346| &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;(0,[])&nbsp;&nbsp;&nbsp;&nbsp;-&gt;&nbsp;(*[1098]*)[]</div>
+      <div id="line000347" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000347| &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;(0,&nbsp;_)&nbsp;&nbsp;&nbsp;&nbsp;-&gt;&nbsp;(*[21]*)[]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*&nbsp;too&nbsp;many&nbsp;values:&nbsp;drop&nbsp;the&nbsp;rest&nbsp;*)</div>
+      <div id="line000348" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000348| &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;(n,[])&nbsp;&nbsp;&nbsp;&nbsp;-&gt;&nbsp;(*[11]*)VL.nil::(adjust_length&nbsp;(n-1)&nbsp;[])&nbsp;(*&nbsp;too&nbsp;few&nbsp;values:&nbsp;add&nbsp;nils&nbsp;*)</div>
+      <div id="line000349" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000349| &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;(n,vlat::vlats)&nbsp;-&gt;&nbsp;(*[1160]*)vlat::(adjust_length&nbsp;(n-1)&nbsp;vlats)</div>
+      <div id="line000350" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000350| &nbsp;&nbsp;in</div>
+      <div id="line000351" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000351| &nbsp;&nbsp;(*&nbsp;&nbsp;inner_write_list&nbsp;:&nbsp;lvalue&nbsp;list&nbsp;-&gt;&nbsp;exp&nbsp;list&nbsp;-&gt;&nbsp;info&nbsp;-&gt;&nbsp;(AL&nbsp;*&nbsp;SL)&nbsp;-&gt;&nbsp;(AL&nbsp;*&nbsp;SL&nbsp;*&nbsp;VL&nbsp;list)&nbsp;*)</div>
+      <div id="line000352" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000352| &nbsp;&nbsp;(*[1119]*)let&nbsp;rec&nbsp;inner_write_list&nbsp;lvs&nbsp;exps&nbsp;info&nbsp;=&nbsp;match&nbsp;lvs&nbsp;with</div>
+      <div id="line000353" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000353| &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;[]&nbsp;-&gt;</div>
+      <div id="line000354" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000354| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[1119]*)transfer_exp_list&nbsp;exps&nbsp;info&nbsp;&gt;&gt;=&nbsp;fun&nbsp;vlats&nbsp;-&gt;&nbsp;&nbsp;(*&nbsp;step&nbsp;2:&nbsp;evaluate&nbsp;rhs&nbsp;*)</div>
+      <div id="line000355" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000355| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[1119]*)let&nbsp;lvallen&nbsp;=&nbsp;List.length&nbsp;lvals&nbsp;in</div>
+      <div id="line000356" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000356| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*&nbsp;too&nbsp;few&nbsp;values:&nbsp;add&nbsp;nils,&nbsp;too&nbsp;many&nbsp;values:&nbsp;drop&nbsp;some&nbsp;*)</div>
+      <div id="line000357" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000357| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[1119]*)return&nbsp;(List.rev&nbsp;(adjust_length&nbsp;lvallen&nbsp;vlats))</div>
+      <div id="line000358" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000358| &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;lv::lvs&nbsp;-&gt;</div>
+      <div id="line000359" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000359| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(match&nbsp;lv&nbsp;with</div>
+      <div id="line000360" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000360| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Last.Name&nbsp;n&nbsp;-&gt;</div>
+      <div id="line000361" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000361| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[822]*)inner_write_list&nbsp;lvs&nbsp;exps&nbsp;info&nbsp;&gt;&gt;=&nbsp;fun&nbsp;vlats&nbsp;-&gt;</div>
+      <div id="line000362" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000362| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(match&nbsp;vlats&nbsp;with</div>
+      </div>
+      <div id="line000363" class="lineAllUnvisited"><img border="0" height="10" width="10"src="blank.png"/>000363| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;[]&nbsp;-&gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[0]*)mfailwith&nbsp;(&quot;missing&nbsp;rhs&nbsp;in&nbsp;name&nbsp;assignment:&nbsp;&quot;&nbsp;^&nbsp;n)</div>
+      <div id="fold000364">
+      <div id="line000364" class="lineAllVisited"><a href="javascript:fold('fold000364');"><img border="0" height="10" width="10" src="minus.png" title="fold code"/></a>000364| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;vlat::vlats&nbsp;-&gt;&nbsp;(*[822]*)write_name&nbsp;n&nbsp;vlat&nbsp;&gt;&gt;=&nbsp;fun&nbsp;()&nbsp;-&gt;&nbsp;(*[822]*)return&nbsp;vlats)</div>
+      <div id="line000365" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000365| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Last.DynIndex&nbsp;(clab,e0,e1)&nbsp;-&gt;</div>
+      <div id="line000366" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000366| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[349]*)transfer_exp&nbsp;e0&nbsp;info&nbsp;&gt;&gt;=&nbsp;adjust_to_single&nbsp;&gt;&gt;=&nbsp;fun&nbsp;vlat0&nbsp;-&gt;</div>
+      <div id="line000367" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000367| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[349]*)red_return&nbsp;(VL.only_tables&nbsp;vlat0)&nbsp;&gt;&gt;=&nbsp;fun&nbsp;vlat0&nbsp;-&gt;&nbsp;(*&nbsp;slight&nbsp;hack&nbsp;to&nbsp;reduce&nbsp;to&nbsp;bot&nbsp;on&nbsp;index&nbsp;error&nbsp;*)</div>
+      <div id="line000368" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000368| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[349]*)transfer_exp&nbsp;e1&nbsp;info&nbsp;&gt;&gt;=&nbsp;adjust_to_single&nbsp;&gt;&gt;=&nbsp;fun&nbsp;vlat1&nbsp;-&gt;</div>
+      <div id="line000369" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000369| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[349]*)inner_write_list&nbsp;lvs&nbsp;exps&nbsp;info&nbsp;&gt;&gt;=&nbsp;fun&nbsp;vlats&nbsp;-&gt;</div>
+      <div id="line000370" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000370| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(match&nbsp;vlats&nbsp;with</div>
+      </div>
+      <div id="line000371" class="lineAllUnvisited"><img border="0" height="10" width="10"src="blank.png"/>000371| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;[]&nbsp;-&gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[0]*)mfailwith&nbsp;&quot;missing&nbsp;rhs&nbsp;in&nbsp;dyn.&nbsp;indexed&nbsp;assignment&quot;</div>
+      <div id="fold000372">
+      <div id="line000372" class="lineAllVisited"><a href="javascript:fold('fold000372');"><img border="0" height="10" width="10" src="minus.png" title="fold code"/></a>000372| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;vlat::vlats&nbsp;-&gt;&nbsp;(*[349]*)write_dyn_prop&nbsp;vlat0&nbsp;vlat1&nbsp;vlat&nbsp;&gt;&gt;=&nbsp;fun&nbsp;()&nbsp;-&gt;&nbsp;(*[349]*)return&nbsp;vlats))</div>
+      <div id="line000373" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000373| &nbsp;&nbsp;in</div>
+      <div id="line000374" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000374| &nbsp;&nbsp;(*[1119]*)inner_write_list&nbsp;lvals&nbsp;exps&nbsp;info&nbsp;&gt;&gt;=&nbsp;fun&nbsp;vlats&nbsp;-&gt;&nbsp;(*&nbsp;step&nbsp;1:&nbsp;evaluate&nbsp;lvalues&nbsp;*)</div>
+      <div id="line000375" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000375| &nbsp;&nbsp;&nbsp;match&nbsp;vlats&nbsp;with</div>
+      <div id="line000376" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000376| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;[]&nbsp;&nbsp;&nbsp;-&gt;&nbsp;(*[1119]*)return&nbsp;()</div>
+      </div>
+      <div id="line000377" class="lineAllUnvisited"><img border="0" height="10" width="10"src="blank.png"/>000377| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;_::_&nbsp;-&gt;&nbsp;(*[0]*)mfailwith&nbsp;&quot;additional&nbsp;rhs&nbsp;in&nbsp;assignment&quot;</div>
+      <div id="fold000378">
+      <div id="line000378" class="lineNone"><a href="javascript:fold('fold000378');"><img border="0" height="10" width="10" src="minus.png" title="fold code"/></a>000378| &nbsp;</div>
+      <div id="line000379" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000379| (*&nbsp;&nbsp;transfer_arith_event&nbsp;:&nbsp;label&nbsp;-&gt;&nbsp;info&nbsp;-&gt;&nbsp;Ast.binop&nbsp;-&gt;&nbsp;string&nbsp;-&gt;&nbsp;VL&nbsp;-&gt;&nbsp;VL&nbsp;-&gt;&nbsp;(AL&nbsp;*&nbsp;SL)&nbsp;-&gt;&nbsp;AL&nbsp;*&nbsp;SL&nbsp;*&nbsp;VL&nbsp;*)</div>
+      <div id="line000380" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000380| and&nbsp;transfer_arith_event&nbsp;clab&nbsp;info&nbsp;op&nbsp;event&nbsp;op1&nbsp;op2&nbsp;=</div>
+      <div id="line000381" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000381| &nbsp;&nbsp;(*[299]*)let&nbsp;o1,o2&nbsp;=&nbsp;VL.coerce_tonum&nbsp;op1,&nbsp;VL.coerce_tonum&nbsp;op2&nbsp;in</div>
+      <div id="line000382" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000382| &nbsp;&nbsp;(*[299]*)mvl_join</div>
+      <div id="line000383" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000383| &nbsp;&nbsp;&nbsp;&nbsp;(if&nbsp;VL.may_be_number&nbsp;(VL.meet&nbsp;o1&nbsp;o2)&nbsp;&nbsp;(*&nbsp;--&nbsp;both&nbsp;operands&nbsp;are&nbsp;numeric?&nbsp;*)</div>
+      <div id="line000384" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000384| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;then&nbsp;(*[197]*)red_return&nbsp;(VL.binop&nbsp;op&nbsp;o1&nbsp;o2)&nbsp;&nbsp;(*&nbsp;--&nbsp;'+'&nbsp;here&nbsp;is&nbsp;the&nbsp;primitive&nbsp;'add'&nbsp;*)</div>
+      <div id="line000385" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000385| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else&nbsp;(*[102]*)merror)</div>
+      <div id="line000386" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000386| &nbsp;&nbsp;&nbsp;&nbsp;(getbinhandler&nbsp;op1&nbsp;op2&nbsp;event&nbsp;&gt;&gt;=&nbsp;fun&nbsp;h&nbsp;-&gt;</div>
+      <div id="line000387" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000387| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[299]*)if&nbsp;VL.may_be_proc&nbsp;h</div>
+      <div id="line000388" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000388| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;then&nbsp;(*&nbsp;--&nbsp;call&nbsp;the&nbsp;handler&nbsp;with&nbsp;both&nbsp;operands&nbsp;*)</div>
+      <div id="line000389" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000389| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[21]*)transfer_calls&nbsp;clab&nbsp;h&nbsp;[op1;op2]&nbsp;info&nbsp;&gt;&gt;=&nbsp;adjust_to_single</div>
+      <div id="line000390" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000390| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else&nbsp;(*&nbsp;--&nbsp;no&nbsp;handler&nbsp;available:&nbsp;default&nbsp;behavior&nbsp;*)</div>
+      <div id="line000391" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000391| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[278]*)merror)</div>
+      <div id="line000392" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000392| &nbsp;</div>
+      <div id="line000393" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000393| (*&nbsp;&nbsp;transfer_binop&nbsp;:&nbsp;op&nbsp;-&gt;&nbsp;label&nbsp;-&gt;&nbsp;info&nbsp;-&gt;&nbsp;VL&nbsp;-&gt;&nbsp;VL&nbsp;-&gt;&nbsp;(AL&nbsp;*&nbsp;SL)&nbsp;-&gt;&nbsp;(AL&nbsp;*&nbsp;SL&nbsp;*&nbsp;VL)&nbsp;*)</div>
+      <div id="line000394" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000394| and&nbsp;transfer_binop&nbsp;op&nbsp;clab&nbsp;info&nbsp;vlat0&nbsp;vlat1&nbsp;=&nbsp;match&nbsp;op&nbsp;with</div>
+      <div id="line000395" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000395| &nbsp;&nbsp;|&nbsp;Ast.Plus&nbsp;&nbsp;-&gt;&nbsp;(*[125]*)transfer_arith_event&nbsp;clab&nbsp;info&nbsp;op&nbsp;&quot;__add&quot;&nbsp;vlat0&nbsp;vlat1</div>
+      <div id="line000396" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000396| &nbsp;&nbsp;|&nbsp;Ast.Minus&nbsp;-&gt;&nbsp;(*[105]*)transfer_arith_event&nbsp;clab&nbsp;info&nbsp;op&nbsp;&quot;__sub&quot;&nbsp;vlat0&nbsp;vlat1</div>
+      <div id="line000397" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000397| &nbsp;&nbsp;|&nbsp;Ast.Times&nbsp;-&gt;&nbsp;(*[17]*)transfer_arith_event&nbsp;clab&nbsp;info&nbsp;op&nbsp;&quot;__mul&quot;&nbsp;vlat0&nbsp;vlat1</div>
+      <div id="line000398" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000398| &nbsp;&nbsp;|&nbsp;Ast.Div&nbsp;&nbsp;&nbsp;-&gt;&nbsp;(*[9]*)transfer_arith_event&nbsp;clab&nbsp;info&nbsp;op&nbsp;&quot;__div&quot;&nbsp;vlat0&nbsp;vlat1</div>
+      <div id="line000399" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000399| &nbsp;&nbsp;|&nbsp;Ast.Mod&nbsp;&nbsp;&nbsp;-&gt;&nbsp;(*[15]*)transfer_arith_event&nbsp;clab&nbsp;info&nbsp;op&nbsp;&quot;__mod&quot;&nbsp;vlat0&nbsp;vlat1</div>
+      <div id="line000400" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000400| &nbsp;&nbsp;|&nbsp;Ast.Pow&nbsp;&nbsp;&nbsp;-&gt;&nbsp;(*[28]*)transfer_arith_event&nbsp;clab&nbsp;info&nbsp;op&nbsp;&quot;__pow&quot;&nbsp;vlat0&nbsp;vlat1</div>
+      <div id="line000401" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000401| &nbsp;&nbsp;|&nbsp;_&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&gt;&nbsp;(*[312]*)red_return&nbsp;(VL.binop&nbsp;op&nbsp;vlat0&nbsp;vlat1)&nbsp;(*&nbsp;potentially&nbsp;reduce&nbsp;statelattice&nbsp;to&nbsp;bot&nbsp;*)</div>
+      <div id="line000402" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000402| &nbsp;</div>
+      <div id="line000403" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000403| (*&nbsp;&nbsp;transfer_exp&nbsp;:&nbsp;exp&nbsp;-&gt;&nbsp;info&nbsp;-&gt;&nbsp;(AL&nbsp;*&nbsp;SL)&nbsp;-&gt;&nbsp;(AL&nbsp;*&nbsp;SL&nbsp;*&nbsp;VL&nbsp;list)&nbsp;*)</div>
+      <div id="line000404" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000404| and&nbsp;transfer_exp&nbsp;e&nbsp;info&nbsp;=&nbsp;match&nbsp;e&nbsp;with</div>
+      <div id="line000405" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000405| &nbsp;&nbsp;|&nbsp;L.Lit&nbsp;l&nbsp;-&gt;</div>
+      <div id="line000406" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000406| &nbsp;&nbsp;&nbsp;&nbsp;(*[3058]*)transfer_lit&nbsp;l&nbsp;info&nbsp;&gt;&gt;=</div>
+      <div id="line000407" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000407| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;list_return</div>
+      <div id="line000408" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000408| &nbsp;&nbsp;|&nbsp;L.Lvalue&nbsp;lv&nbsp;-&gt;</div>
+      <div id="line000409" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000409| &nbsp;&nbsp;&nbsp;&nbsp;(*[4774]*)transfer_lvalue_read&nbsp;lv&nbsp;info&nbsp;&gt;&gt;=</div>
+      <div id="line000410" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000410| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;list_return</div>
+      <div id="line000411" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000411| &nbsp;&nbsp;|&nbsp;L.Unop&nbsp;(op,e)&nbsp;-&gt;</div>
+      <div id="line000412" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000412| &nbsp;&nbsp;&nbsp;&nbsp;(*[19]*)transfer_exp&nbsp;e&nbsp;info&nbsp;&gt;&gt;=&nbsp;adjust_to_single&nbsp;&gt;&gt;=&nbsp;fun&nbsp;vlat&nbsp;-&gt;</div>
+      <div id="line000413" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000413| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[19]*)red_return&nbsp;(VL.unop&nbsp;op&nbsp;vlat)&nbsp;&gt;&gt;=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*&nbsp;potentially&nbsp;reduce&nbsp;statelattice&nbsp;to&nbsp;bot&nbsp;*)</div>
+      <div id="line000414" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000414| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;list_return</div>
+      <div id="line000415" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000415| &nbsp;&nbsp;|&nbsp;L.Binop&nbsp;(clab,e0,op,e1)&nbsp;-&gt;</div>
+      <div id="line000416" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000416| &nbsp;&nbsp;&nbsp;&nbsp;(*[569]*)transfer_exp&nbsp;e0&nbsp;info&nbsp;&gt;&gt;=&nbsp;adjust_to_single&nbsp;&gt;&gt;=&nbsp;fun&nbsp;vlat0&nbsp;-&gt;&nbsp;&nbsp;(*&nbsp;left-to-right&nbsp;eval&nbsp;*)</div>
+      <div id="line000417" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000417| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[611]*)transfer_exp&nbsp;e1&nbsp;info&nbsp;&gt;&gt;=&nbsp;adjust_to_single&nbsp;&gt;&gt;=&nbsp;fun&nbsp;vlat1&nbsp;-&gt;</div>
+      <div id="line000418" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000418| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[611]*)transfer_binop&nbsp;op&nbsp;clab&nbsp;info&nbsp;vlat0&nbsp;vlat1&nbsp;&gt;&gt;=</div>
+      <div id="line000419" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000419| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;list_return&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*&nbsp;potentially&nbsp;reduce&nbsp;statelattice&nbsp;to&nbsp;bot&nbsp;*)</div>
+      <div id="line000420" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000420| &nbsp;&nbsp;|&nbsp;L.And&nbsp;(e0,e1)&nbsp;-&gt;</div>
+      <div id="line000421" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000421| &nbsp;&nbsp;&nbsp;&nbsp;(*[34]*)transfer_exp&nbsp;e0&nbsp;info&nbsp;&gt;&gt;=&nbsp;adjust_to_single&nbsp;&gt;&gt;=&nbsp;fun&nbsp;vlat0&nbsp;-&gt;&nbsp;&nbsp;(*&nbsp;left-to-right&nbsp;eval&nbsp;*)</div>
+      <div id="line000422" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000422| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[40]*)get_curr_state&nbsp;&gt;&gt;=&nbsp;fun&nbsp;slat0&nbsp;-&gt;</div>
+      <div id="line000423" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000423| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[40]*)transfer_exp&nbsp;e1&nbsp;info&nbsp;&gt;&gt;=&nbsp;adjust_to_single&nbsp;&gt;&gt;=&nbsp;fun&nbsp;vlat1&nbsp;-&gt;</div>
+      <div id="line000424" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000424| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[40]*)get_curr_state&nbsp;&gt;&gt;=&nbsp;fun&nbsp;slat1&nbsp;-&gt;</div>
+      <div id="line000425" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000425| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[40]*)and_join&nbsp;slat0&nbsp;vlat0&nbsp;slat1&nbsp;vlat1&nbsp;&gt;&gt;=</div>
+      <div id="line000426" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000426| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;list_return</div>
+      <div id="line000427" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000427| &nbsp;&nbsp;|&nbsp;L.Or&nbsp;(e0,e1)&nbsp;-&gt;</div>
+      <div id="line000428" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000428| &nbsp;&nbsp;&nbsp;&nbsp;(*[8]*)transfer_exp&nbsp;e0&nbsp;info&nbsp;&gt;&gt;=&nbsp;adjust_to_single&nbsp;&gt;&gt;=&nbsp;fun&nbsp;vlat0&nbsp;-&gt;&nbsp;&nbsp;(*&nbsp;left-to-right&nbsp;eval&nbsp;*)</div>
+      <div id="line000429" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000429| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[14]*)get_curr_state&nbsp;&gt;&gt;=&nbsp;fun&nbsp;slat0&nbsp;-&gt;</div>
+      <div id="line000430" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000430| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[14]*)transfer_exp&nbsp;e1&nbsp;info&nbsp;&gt;&gt;=&nbsp;adjust_to_single&nbsp;&gt;&gt;=&nbsp;fun&nbsp;vlat1&nbsp;-&gt;</div>
+      <div id="line000431" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000431| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[14]*)get_curr_state&nbsp;&gt;&gt;=&nbsp;fun&nbsp;slat1&nbsp;-&gt;</div>
+      <div id="line000432" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000432| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[14]*)or_join&nbsp;slat0&nbsp;vlat0&nbsp;slat1&nbsp;vlat1&nbsp;&gt;&gt;=</div>
+      <div id="line000433" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000433| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;list_return</div>
+      <div id="line000434" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000434| &nbsp;&nbsp;|&nbsp;L.Call&nbsp;(clab,e,es)&nbsp;-&gt;&nbsp;</div>
+      <div id="line000435" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000435| &nbsp;&nbsp;&nbsp;&nbsp;(*[538]*)transfer_exp&nbsp;e&nbsp;info&nbsp;&gt;&gt;=&nbsp;adjust_to_single&nbsp;&gt;&gt;=&nbsp;fun&nbsp;vlat&nbsp;-&gt;&nbsp;(*&nbsp;left-to-right&nbsp;eval&nbsp;*)</div>
+      <div id="line000436" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000436| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[538]*)transfer_exp_list&nbsp;es&nbsp;info&nbsp;&gt;&gt;=&nbsp;fun&nbsp;vlats&nbsp;-&gt;</div>
+      <div id="line000437" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000437| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[538]*)transfer_calls&nbsp;clab&nbsp;vlat&nbsp;vlats&nbsp;info</div>
+      <div id="line000438" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000438| &nbsp;&nbsp;|&nbsp;L.Methcall&nbsp;(clab,ilab,e,mname,es)&nbsp;-&gt;&nbsp;</div>
+      <div id="line000439" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000439| &nbsp;&nbsp;&nbsp;&nbsp;(*[46]*)transfer_exp&nbsp;e&nbsp;info&nbsp;&gt;&gt;=&nbsp;adjust_to_single&nbsp;&gt;&gt;=&nbsp;fun&nbsp;vlat&nbsp;-&gt;&nbsp;(*&nbsp;left-to-right&nbsp;eval&nbsp;*)</div>
+      <div id="line000440" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000440| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[46]*)transfer_gettable_event&nbsp;ilab&nbsp;info&nbsp;vlat&nbsp;(VL.string&nbsp;mname)&nbsp;&gt;&gt;=&nbsp;fun&nbsp;recv&nbsp;-&gt;</div>
+      <div id="line000441" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000441| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[46]*)transfer_exp_list&nbsp;es&nbsp;info&nbsp;&gt;&gt;=&nbsp;fun&nbsp;vlats&nbsp;-&gt;</div>
+      <div id="line000442" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000442| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[46]*)transfer_calls&nbsp;clab&nbsp;recv&nbsp;(vlat::vlats)&nbsp;info&nbsp;(*&nbsp;pass&nbsp;self&nbsp;(vlat)&nbsp;as&nbsp;first&nbsp;arg&nbsp;*)</div>
+      <div id="line000443" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000443| &nbsp;&nbsp;|&nbsp;L.Paren&nbsp;e&nbsp;-&gt;&nbsp;</div>
+      <div id="line000444" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000444| &nbsp;&nbsp;&nbsp;&nbsp;(*[69]*)transfer_exp&nbsp;e&nbsp;info&nbsp;&gt;&gt;=&nbsp;adjust_to_single&nbsp;&gt;&gt;=&nbsp;list_return</div>
+      <div id="line000445" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000445| &nbsp;</div>
+      <div id="line000446" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000446| (*&nbsp;&nbsp;transfer_exp_list&nbsp;:&nbsp;exp&nbsp;list&nbsp;-&gt;&nbsp;info&nbsp;-&gt;&nbsp;(AL&nbsp;*&nbsp;SL)&nbsp;-&gt;&nbsp;(AL&nbsp;*&nbsp;SL&nbsp;*&nbsp;VL&nbsp;list)&nbsp;*)</div>
+      <div id="line000447" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000447| and&nbsp;transfer_exp_list&nbsp;es&nbsp;info&nbsp;=</div>
+      <div id="line000448" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000448| &nbsp;&nbsp;match&nbsp;es&nbsp;with</div>
+      <div id="line000449" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000449| &nbsp;&nbsp;|&nbsp;[]&nbsp;&nbsp;&nbsp;&nbsp;-&gt;&nbsp;(*[628]*)return&nbsp;[]</div>
+      <div id="line000450" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000450| &nbsp;&nbsp;|&nbsp;[e]&nbsp;&nbsp;&nbsp;-&gt;&nbsp;(*[3619]*)transfer_exp&nbsp;e&nbsp;info</div>
+      <div id="line000451" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000451| &nbsp;&nbsp;|&nbsp;e::es&nbsp;-&gt;</div>
+      <div id="line000452" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000452| &nbsp;&nbsp;&nbsp;&nbsp;(*[788]*)transfer_exp&nbsp;e&nbsp;info&nbsp;&gt;&gt;=&nbsp;adjust_to_single&nbsp;&gt;&gt;=&nbsp;fun&nbsp;vlat&nbsp;-&gt;</div>
+      <div id="line000453" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000453| &nbsp;&nbsp;&nbsp;&nbsp;(*[788]*)transfer_exp_list&nbsp;es&nbsp;info&nbsp;&gt;&gt;=&nbsp;fun&nbsp;vlats&nbsp;-&gt;</div>
+      <div id="line000454" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000454| &nbsp;&nbsp;&nbsp;&nbsp;(*[788]*)return&nbsp;(vlat::vlats)</div>
+      <div id="line000455" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000455| &nbsp;</div>
+      <div id="line000456" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000456| (*&nbsp;&nbsp;transfer_stmts&nbsp;:&nbsp;stmts&nbsp;-&gt;&nbsp;info&nbsp;-&gt;&nbsp;(AL&nbsp;*&nbsp;SL)&nbsp;-&gt;&nbsp;(AL&nbsp;*&nbsp;SL&nbsp;*&nbsp;unit)&nbsp;*)</div>
+      <div id="line000457" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000457| and&nbsp;transfer_stmts&nbsp;ss&nbsp;info&nbsp;=</div>
+      <div id="line000458" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000458| &nbsp;&nbsp;match&nbsp;ss&nbsp;with</div>
+      <div id="line000459" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000459| &nbsp;&nbsp;|&nbsp;[]&nbsp;-&gt;</div>
+      <div id="line000460" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000460| &nbsp;&nbsp;&nbsp;&nbsp;(*[767]*)return&nbsp;()&nbsp;(*&nbsp;empty&nbsp;sequence&nbsp;does&nbsp;not&nbsp;necessarily&nbsp;mean&nbsp;'Return'</div>
+      <div id="line000461" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000461| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;only&nbsp;when&nbsp;falling&nbsp;through&nbsp;a&nbsp;procedure</div>
+      <div id="line000462" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000462| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;patch:&nbsp;add&nbsp;an&nbsp;explicit&nbsp;'Return&nbsp;nil'&nbsp;to&nbsp;all&nbsp;procedures&nbsp;in&nbsp;parser&nbsp;(when&nbsp;absent)&nbsp;*)</div>
+      <div id="line000463" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000463| &nbsp;&nbsp;|&nbsp;s::ss&nbsp;-&gt;</div>
+      <div id="line000464" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000464| &nbsp;&nbsp;&nbsp;&nbsp;(*[3226]*)let&nbsp;lab&nbsp;=&nbsp;s.L.stmt_pos.L.line_label&nbsp;in</div>
+      <div id="line000465" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000465| &nbsp;&nbsp;&nbsp;&nbsp;(*[3226]*)record_state&nbsp;lab&nbsp;&gt;&gt;=&nbsp;fun&nbsp;()&nbsp;-&gt;&nbsp;(*&nbsp;join&nbsp;into&nbsp;prev.elm.&nbsp;*)</div>
+      <div id="line000466" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000466| &nbsp;&nbsp;&nbsp;&nbsp;(*[3329]*)set_state&nbsp;lab&nbsp;&gt;&gt;=&nbsp;fun&nbsp;()&nbsp;-&gt;&nbsp;&nbsp;&nbsp;&nbsp;(*&nbsp;and&nbsp;read&nbsp;off&nbsp;joined&nbsp;result&nbsp;*)</div>
+      <div id="line000467" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000467| &nbsp;&nbsp;&nbsp;&nbsp;(match&nbsp;s.L.stmt&nbsp;with</div>
+      <div id="line000468" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000468| &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;L.Break&nbsp;-&gt;</div>
+      <div id="line000469" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000469| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[53]*)lookup_state&nbsp;(fst&nbsp;info.break_labels)&nbsp;&gt;&gt;=&nbsp;fun&nbsp;slat_entry&nbsp;-&gt;&nbsp;(*&nbsp;lookup&nbsp;old&nbsp;env&nbsp;and&nbsp;restore&nbsp;it&nbsp;*)</div>
+      <div id="line000470" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000470| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[53]*)restore_scope_chain&nbsp;(slat_entry.SL.env)&nbsp;&gt;&gt;=&nbsp;fun&nbsp;()&nbsp;-&gt;</div>
+      <div id="line000471" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000471| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[53]*)record_state&nbsp;(snd&nbsp;info.break_labels)&nbsp;&gt;&gt;=&nbsp;fun&nbsp;()&nbsp;-&gt;&nbsp;(*join&nbsp;state&nbsp;into&nbsp;outer&nbsp;break&nbsp;label&nbsp;*)</div>
+      <div id="line000472" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000472| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[53]*)restore_state&nbsp;SL.bot&nbsp;&gt;&gt;=&nbsp;fun&nbsp;()&nbsp;-&gt;&nbsp;&nbsp;(*&nbsp;i.e.,&nbsp;unreachable&nbsp;*)</div>
+      <div id="line000473" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000473| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[53]*)return&nbsp;()</div>
+      <div id="line000474" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000474| &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;L.If&nbsp;(e,bl1,bl2)&nbsp;-&gt;</div>
+      <div id="line000475" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000475| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[145]*)curr_scope_chain&nbsp;&gt;&gt;=&nbsp;fun&nbsp;env&nbsp;-&gt;</div>
+      <div id="line000476" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000476| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[145]*)transfer_exp&nbsp;e&nbsp;info&nbsp;&gt;&gt;=&nbsp;adjust_to_single&nbsp;&gt;&gt;=&nbsp;fun&nbsp;_vlat&nbsp;-&gt;</div>
+      <div id="line000477" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000477| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[145]*)let&nbsp;thenbranch&nbsp;=&nbsp;transfer_block&nbsp;bl1&nbsp;info&nbsp;in</div>
+      <div id="line000478" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000478| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[145]*)let&nbsp;elsebranch&nbsp;=&nbsp;transfer_block&nbsp;bl2&nbsp;info&nbsp;in</div>
+      <div id="line000479" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000479| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[145]*)branch_and_join&nbsp;env&nbsp;thenbranch&nbsp;elsebranch&nbsp;&gt;&gt;=&nbsp;fun&nbsp;()&nbsp;-&gt;</div>
+      <div id="line000480" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000480| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[145]*)transfer_stmts&nbsp;ss&nbsp;info</div>
+      <div id="line000481" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000481| &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;L.WhileDo&nbsp;(e,bl,endlab)&nbsp;-&gt;</div>
+      <div id="line000482" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000482| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[104]*)let&nbsp;loop_info&nbsp;=&nbsp;{&nbsp;info&nbsp;with&nbsp;break_labels&nbsp;=&nbsp;(lab,endlab)&nbsp;}&nbsp;in</div>
+      <div id="line000483" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000483| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[104]*)curr_scope_chain&nbsp;&gt;&gt;=&nbsp;fun&nbsp;env&nbsp;-&gt;</div>
+      <div id="line000484" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000484| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[104]*)let&nbsp;test&nbsp;=&nbsp;transfer_exp&nbsp;e&nbsp;info&nbsp;&gt;&gt;=&nbsp;adjust_to_single&nbsp;in</div>
+      <div id="line000485" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000485| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[104]*)let&nbsp;body&nbsp;=&nbsp;transfer_block&nbsp;bl&nbsp;loop_info&nbsp;&gt;&gt;=&nbsp;fun&nbsp;()&nbsp;-&gt;&nbsp;(*[207]*)restore_scope_chain&nbsp;env&nbsp;in</div>
+      <div id="line000486" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000486| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[104]*)loop&nbsp;test&nbsp;body&nbsp;&gt;&gt;=&nbsp;fun&nbsp;()&nbsp;-&gt;</div>
+      <div id="line000487" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000487| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*&nbsp;joined&nbsp;&quot;breaked&nbsp;state&quot;&nbsp;with&nbsp;post&nbsp;condition&nbsp;*)</div>
+      <div id="line000488" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000488| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[104]*)record_state&nbsp;endlab&nbsp;&gt;&gt;=&nbsp;fun&nbsp;()&nbsp;-&gt;</div>
+      <div id="line000489" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000489| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[104]*)set_state&nbsp;endlab&nbsp;&gt;&gt;=&nbsp;fun&nbsp;()&nbsp;-&gt;</div>
+      <div id="line000490" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000490| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[104]*)transfer_stmts&nbsp;ss&nbsp;info</div>
+      <div id="line000491" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000491| &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;L.Doend&nbsp;bl&nbsp;-&gt;</div>
+      <div id="line000492" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000492| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[38]*)curr_scope_chain&nbsp;&gt;&gt;=&nbsp;fun&nbsp;env&nbsp;-&gt;</div>
+      <div id="line000493" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000493| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[38]*)transfer_block&nbsp;bl&nbsp;info&nbsp;&gt;&gt;=&nbsp;fun&nbsp;()&nbsp;-&gt;</div>
+      <div id="line000494" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000494| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[38]*)restore_scope_chain&nbsp;env&nbsp;&gt;&gt;=&nbsp;fun&nbsp;()&nbsp;-&gt;</div>
+      <div id="line000495" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000495| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[38]*)transfer_stmts&nbsp;ss&nbsp;info</div>
+      <div id="line000496" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000496| &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;L.Assign&nbsp;(lvs,es)&nbsp;-&gt;</div>
+      <div id="line000497" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000497| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[1119]*)transfer_lvalue_write_list&nbsp;lvs&nbsp;es&nbsp;info&nbsp;&gt;&gt;=&nbsp;fun&nbsp;()&nbsp;-&gt;</div>
+      <div id="line000498" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000498| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[1119]*)transfer_stmts&nbsp;ss&nbsp;info</div>
+      <div id="line000499" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000499| &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;L.Local&nbsp;(xs,es)&nbsp;-&gt;</div>
+      <div id="line000500" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000500| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[778]*)transfer_exp_list&nbsp;es&nbsp;info&nbsp;&gt;&gt;=&nbsp;fun&nbsp;vlats&nbsp;-&gt;&nbsp;(*&nbsp;left-to-right&nbsp;eval&nbsp;*)</div>
+      <div id="line000501" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000501| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[778]*)enter_scope&nbsp;lab&nbsp;&gt;&gt;=&nbsp;fun&nbsp;()&nbsp;-&gt;</div>
+      <div id="line000502" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000502| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[778]*)add_locals&nbsp;xs&nbsp;vlats&nbsp;&gt;&gt;=&nbsp;fun&nbsp;()&nbsp;-&gt;</div>
+      <div id="line000503" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000503| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[778]*)transfer_stmts&nbsp;ss&nbsp;info</div>
+      <div id="line000504" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000504| &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;L.Callstmt&nbsp;(e,es)&nbsp;-&gt;</div>
+      <div id="line000505" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000505| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[621]*)transfer_exp&nbsp;e&nbsp;info&nbsp;&gt;&gt;=&nbsp;adjust_to_single&nbsp;&gt;&gt;=&nbsp;fun&nbsp;vlat&nbsp;-&gt;&nbsp;(*&nbsp;left-to-right&nbsp;eval&nbsp;*)</div>
+      <div id="line000506" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000506| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[621]*)transfer_exp_list&nbsp;es&nbsp;info&nbsp;&gt;&gt;=&nbsp;fun&nbsp;vlats&nbsp;-&gt;</div>
+      <div id="line000507" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000507| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[621]*)transfer_calls&nbsp;lab&nbsp;vlat&nbsp;vlats&nbsp;info&nbsp;&gt;&gt;=&nbsp;fun&nbsp;_vlats&nbsp;-&gt;&nbsp;(*&nbsp;stmt&nbsp;call,&nbsp;so&nbsp;ignore&nbsp;results&nbsp;*)</div>
+      <div id="line000508" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000508| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[621]*)transfer_stmts&nbsp;ss&nbsp;info</div>
+      <div id="line000509" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000509| &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;L.Methcallstmt&nbsp;(ilab,e,mname,es)&nbsp;-&gt;</div>
+      <div id="line000510" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000510| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[10]*)transfer_exp&nbsp;e&nbsp;info&nbsp;&gt;&gt;=&nbsp;adjust_to_single&nbsp;&gt;&gt;=&nbsp;fun&nbsp;vlat&nbsp;-&gt;&nbsp;(*&nbsp;left-to-right&nbsp;eval&nbsp;*)</div>
+      <div id="line000511" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000511| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[10]*)transfer_gettable_event&nbsp;ilab&nbsp;info&nbsp;vlat&nbsp;(VL.string&nbsp;mname)&nbsp;&gt;&gt;=&nbsp;fun&nbsp;recv&nbsp;-&gt;</div>
+      <div id="line000512" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000512| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[10]*)transfer_exp_list&nbsp;es&nbsp;info&nbsp;&gt;&gt;=&nbsp;fun&nbsp;vlats&nbsp;-&gt;</div>
+      <div id="line000513" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000513| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[10]*)transfer_calls&nbsp;lab&nbsp;recv&nbsp;(vlat::vlats)&nbsp;info&nbsp;&gt;&gt;=&nbsp;fun&nbsp;_vlats&nbsp;-&gt;&nbsp;(*&nbsp;pass&nbsp;self&nbsp;(vlat)&nbsp;as&nbsp;first&nbsp;arg&nbsp;*)</div>
+      <div id="line000514" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000514| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[10]*)transfer_stmts&nbsp;ss&nbsp;info</div>
+      <div id="line000515" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000515| &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;L.Return&nbsp;es&nbsp;-&gt;</div>
+      <div id="line000516" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000516| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[461]*)let&nbsp;ret_label&nbsp;&nbsp;=&nbsp;info.ret_label&nbsp;in</div>
+      <div id="line000517" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000517| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[461]*)transfer_exp_list&nbsp;es&nbsp;info&nbsp;&gt;&gt;=&nbsp;fun&nbsp;vlats&nbsp;-&gt;</div>
+      <div id="line000518" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000518| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[461]*)alloc_resstore&nbsp;ret_label&nbsp;vlats&nbsp;&gt;&gt;=&nbsp;fun&nbsp;ret_store&nbsp;-&gt;</div>
+      <div id="line000519" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000519| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[461]*)restore_state&nbsp;{&nbsp;SL.bot&nbsp;with&nbsp;SL.store&nbsp;=&nbsp;ret_store&nbsp;}&nbsp;&gt;&gt;=&nbsp;fun&nbsp;()&nbsp;-&gt;</div>
+      <div id="line000520" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000520| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[461]*)record_state&nbsp;ret_label&nbsp;&gt;&gt;=&nbsp;fun&nbsp;()&nbsp;-&gt;</div>
+      <div id="line000521" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000521| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*[461]*)restore_state&nbsp;SL.bot&nbsp;(*&nbsp;i.e.,&nbsp;unreachable&nbsp;*)</div>
+      <div id="line000522" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000522| &nbsp;&nbsp;&nbsp;&nbsp;)</div>
+      <div id="line000523" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000523| (*&nbsp;Since&nbsp;return&nbsp;is&nbsp;a&nbsp;control-delimiter,</div>
+      <div id="line000524" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000524| &nbsp;&nbsp;&nbsp;neither&nbsp;a&nbsp;semantics&nbsp;nor&nbsp;an&nbsp;analysis&nbsp;of&nbsp;a&nbsp;statement&nbsp;list</div>
+      <div id="line000525" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000525| &nbsp;&nbsp;&nbsp;should&nbsp;be&nbsp;a&nbsp;simple&nbsp;fold&nbsp;*)</div>
+      <div id="line000526" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000526| &nbsp;</div>
+      <div id="line000527" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000527| (*&nbsp;&nbsp;transfer_block&nbsp;:&nbsp;block&nbsp;-&gt;&nbsp;info&nbsp;-&gt;&nbsp;(AL&nbsp;*&nbsp;SL)&nbsp;-&gt;&nbsp;(AL&nbsp;*&nbsp;SL&nbsp;*&nbsp;unit)&nbsp;&nbsp;*)</div>
+      <div id="line000528" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000528| and&nbsp;transfer_block&nbsp;bl&nbsp;info&nbsp;=&nbsp;match&nbsp;bl&nbsp;with</div>
+      <div id="line000529" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000529| &nbsp;&nbsp;|&nbsp;None&nbsp;&nbsp;&nbsp;&nbsp;-&gt;&nbsp;(*[92]*)return&nbsp;()</div>
+      <div id="line000530" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000530| &nbsp;&nbsp;|&nbsp;Some&nbsp;bl&nbsp;-&gt;&nbsp;(*[340]*)transfer_stmts&nbsp;bl.L.stmts&nbsp;info</div>
+      <div id="line000531" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000531| &nbsp;</div>
+      <div id="line000532" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000532| (*&nbsp;&nbsp;transfer_prog&nbsp;:&nbsp;Last.prog&nbsp;-&gt;&nbsp;AL&nbsp;&nbsp;*)</div>
+      <div id="line000533" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000533| let&nbsp;transfer_prog&nbsp;p&nbsp;=</div>
+      <div id="line000534" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000534| &nbsp;&nbsp;(*[172]*)let&nbsp;init&nbsp;=&nbsp;(AL.init,&nbsp;SL.init)&nbsp;in</div>
+      <div id="line000535" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000535| &nbsp;&nbsp;(*[172]*)let&nbsp;info&nbsp;=&nbsp;{&nbsp;fun_map&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;p.L.fun_map;</div>
+      <div id="line000536" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000536| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break_labels&nbsp;&nbsp;&nbsp;=&nbsp;(p.L.ret_label,p.L.ret_label);</div>
+      <div id="line000537" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000537| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ret_label&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;p.L.ret_label&nbsp;}&nbsp;in</div>
+      <div id="line000538" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000538| &nbsp;&nbsp;(*[172]*)let&nbsp;stmts&nbsp;=&nbsp;match&nbsp;p.L.last&nbsp;with</div>
+      </div>
+      <div id="line000539" class="lineAllUnvisited"><img border="0" height="10" width="10"src="blank.png"/>000539| &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;None&nbsp;&nbsp;&nbsp;&nbsp;-&gt;&nbsp;(*[0]*)[]</div>
+      <div id="fold000540">
+      <div id="line000540" class="lineAllVisited"><a href="javascript:fold('fold000540');"><img border="0" height="10" width="10" src="minus.png" title="fold code"/></a>000540| &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Some&nbsp;bl&nbsp;-&gt;&nbsp;(*[172]*)bl.L.stmts&nbsp;in</div>
+      <div id="line000541" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000541| &nbsp;&nbsp;(*[172]*)let&nbsp;rec&nbsp;loop&nbsp;prev&nbsp;=</div>
+      <div id="line000542" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000542| &nbsp;&nbsp;&nbsp;&nbsp;(*[444]*)let&nbsp;(alat,slat,())&nbsp;=&nbsp;transfer_stmts&nbsp;stmts&nbsp;info&nbsp;prev&nbsp;in</div>
+      <div id="line000543" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000543| &nbsp;&nbsp;&nbsp;&nbsp;(*[444]*)if&nbsp;AL.leq&nbsp;alat&nbsp;(fst&nbsp;prev)</div>
+      <div id="line000544" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000544| &nbsp;&nbsp;&nbsp;&nbsp;then&nbsp;((*[172]*)alat,slat)</div>
+      <div id="line000545" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000545| &nbsp;&nbsp;&nbsp;&nbsp;else&nbsp;(*[272]*)loop&nbsp;(alat,&nbsp;SL.init)</div>
+      <div id="line000546" class="lineNone"><img border="0" height="10" width="10"src="dash.png"/>000546| &nbsp;&nbsp;in</div>
+      <div id="line000547" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000547| &nbsp;&nbsp;(*[172]*)let&nbsp;(alat,slat)&nbsp;=&nbsp;loop&nbsp;init&nbsp;in</div>
+      <div id="line000548" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000548| &nbsp;&nbsp;(*[172]*)let&nbsp;alat&nbsp;=&nbsp;AL.add&nbsp;alat&nbsp;p.L.ret_label&nbsp;slat&nbsp;in&nbsp;(*&nbsp;add&nbsp;extra&nbsp;end-of-program&nbsp;label&nbsp;to&nbsp;lattice&nbsp;*)</div>
+      <div id="line000549" class="lineAllVisited"><img border="0" height="10" width="10"src="dash.png"/>000549| &nbsp;&nbsp;(*[172]*)alat</div>
+      </div>
+    </code>
+    <br/>
+    <div id="navigator" style="border: solid black 1px; position: fixed; z-index:100; right: 10px; top: 10px; bottom: 10px; width: 16px;">
+      <table width="100%" height="100%" border="0" cellspacing="0">
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="red" style="cursor: pointer;" onclick="javascript:jump('line000031');" title="jump to line 31"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="red" style="cursor: pointer;" onclick="javascript:jump('line000058');" title="jump to line 58"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="red" style="cursor: pointer;" onclick="javascript:jump('line000074');" title="jump to line 74"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="red" style="cursor: pointer;" onclick="javascript:jump('line000157');" title="jump to line 157"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="red" style="cursor: pointer;" onclick="javascript:jump('line000160');" title="jump to line 160"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="red" style="cursor: pointer;" onclick="javascript:jump('line000233');" title="jump to line 233"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="red" style="cursor: pointer;" onclick="javascript:jump('line000285');" title="jump to line 285"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="red" style="cursor: pointer;" onclick="javascript:jump('line000363');" title="jump to line 363"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="red" style="cursor: pointer;" onclick="javascript:jump('line000371');" title="jump to line 371"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="red" style="cursor: pointer;" onclick="javascript:jump('line000377');" title="jump to line 377"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="red" style="cursor: pointer;" onclick="javascript:jump('line000539');" title="jump to line 539"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+        <tr><td bgcolor="gray"></td></tr>
+      </table>
+    </div>
+    <div class="section">Legend:</div>
+    &nbsp;&nbsp;&nbsp;<span class="lineNone">some code</span>&nbsp;-&nbsp;line containing no point<br/>
+    &nbsp;&nbsp;&nbsp;<span class="lineAllVisited">some code</span>&nbsp;-&nbsp;line containing only visited points<br/>
+    &nbsp;&nbsp;&nbsp;<span class="lineAllUnvisited">some code</span>&nbsp;-&nbsp;line containing only unvisited points<br/>
+    &nbsp;&nbsp;&nbsp;<span class="lineMixed">some code</span>&nbsp;-&nbsp;line containing both visited and unvisited points<br/>
+    <br/>
+    <hr class="codeSep"/>
+    <p class="footer">Generated by <a href="http://bisect.x9c.fr">Bisect 1.3</a> on 2016-07-04 18:00:18</p>
+  </body>
+</html>
