@@ -13,32 +13,6 @@ function onFileChange(evt){
 
 document.getElementById('fileinput').addEventListener('change', onFileChange, false);
 
-// Registered helper accumulates a list of 'lint'-like hints
-CodeMirror.registerHelper("lint", "lua", function(text) {
-    var obj = parsePPrint(text);
-//  console.log("lint helper: ", obj, obj.errors);
-    var line = obj.errors.line - 1;
-    var column = obj.errors.column - 1;
-    var found = [];
-    found.push({ from:     CodeMirror.Pos(line, column),
-		 to:       CodeMirror.Pos(line, column + 1),
-		 message:  obj.errors.msg,
-		 severity: "error"
-	       });
-    console.log("warnings: ", obj.warnings);
-    var warnings = obj.warnings;
-    for (num in warnings) {
-	var warning = warnings[num];
-	console.log("warning: ", warning);
-	found.push({ from:     CodeMirror.Pos(warning.line - 1, 1),
-		     to:       CodeMirror.Pos(warning.line - 1, 1),
-		     message:  warning.msg,
-		     severity: "warning"
-		   });
-    };
-    return found;
-});
-
 var heaps = {};     // global string array
 var label_map = {}; // global int array
 var cache = {};     // global dom/html array
@@ -85,8 +59,7 @@ var orig_editor = CodeMirror.fromTextArea(document.getElementById("original"), {
 //  readOnly        : "nocursor",
     lineNumbers     : true,
     firstLineNumber : 0, 
-    gutters         : ["CodeMirror-lint-markers","CodeMirror-linenumbers"],
-    lint            : true
+    gutters         : ["CodeMirror-lint-markers","CodeMirror-linenumbers"]
 //  textHover       : true
 });
 
