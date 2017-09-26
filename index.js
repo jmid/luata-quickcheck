@@ -3,7 +3,7 @@ function onFileChange(evt){
     var file = evt.target.files[0];
     if (file) {
         var r = new FileReader();
-        r.onload = function(e) { 
+        r.onload = function(e) {
                      var contents = e.target.result;
                      orig_editor.setValue(contents);
                    };
@@ -13,31 +13,6 @@ function onFileChange(evt){
 
 document.getElementById('fileinput').addEventListener('change', onFileChange, false);
 
-// Registered helper accumulates a list of 'lint'-like hints
-CodeMirror.registerHelper("lint", "lua", function(text) {
-    var obj = parsePPrint(text);
-//  console.log("lint helper: ", obj, obj.errors);
-    var line = obj.errors.line - 1;
-    var column = obj.errors.column - 1;
-    var found = [];
-    found.push({ from:     CodeMirror.Pos(line, column),
-		 to:       CodeMirror.Pos(line, column + 1),
-		 message:  obj.errors.msg,
-		 severity: "error"
-	       });
-    console.log("warnings: ", obj.warnings);
-    var warnings = obj.warnings;
-    for (num in warnings) {
-	var warning = warnings[num];
-	console.log("warning: ", warning);
-	found.push({ from:     CodeMirror.Pos(warning.line - 1, 1),
-		     to:       CodeMirror.Pos(warning.line - 1, 1),
-		     message:  warning.msg,
-		     severity: "warning"
-		   });
-    };
-    return found;
-});
 
 var heaps = {};     // global string array
 var label_map = {}; // global int array
@@ -51,7 +26,7 @@ CodeMirror.registerHelper("textHover", "lua", function(cm, data, node) {
 	cm.setCursor({ line: line, ch: 0});
 	return cache[line]; // already in cache? don't recompute
     }
-    
+
     html = '<h4>Abstract state at line ' + line
     	     + ' label ' + label_map[line] + '</h4><hr>';  // (token is null)
 
@@ -78,15 +53,14 @@ CodeMirror.registerHelper("textHover", "lua", function(cm, data, node) {
     cache[line] = result; // record in cache
     return result;
 });
-      
+
 var orig_editor = CodeMirror.fromTextArea(document.getElementById("original"), {
     mode            : 'text/x-lua',
     theme           : "eclipse",
 //  readOnly        : "nocursor",
     lineNumbers     : true,
-    firstLineNumber : 0, 
-    gutters         : ["CodeMirror-lint-markers","CodeMirror-linenumbers"],
-    lint            : true
+    firstLineNumber : 0,
+    gutters         : ["CodeMirror-lint-markers","CodeMirror-linenumbers"]
 //  textHover       : true
 });
 
@@ -96,28 +70,35 @@ var internal_editor = CodeMirror.fromTextArea(document.getElementById("internal"
     styleActiveLine : true,
     readOnly        : "nocursor",
     lineNumbers     : true,
-    firstLineNumber : 0, 
+    firstLineNumber : 0,
     gutters         : ["CodeMirror-linenumbers"],
     textHover       : true
 });
 
 function analyze() {
-    var obj = parsePPrint(orig_editor.getValue());
-//  console.log("last is ", obj.last);
-    console.log("errors is ", obj.errors);
-//  console.log("heaps is ", obj.heaps);
-//  console.log("heaps[0] is ", obj.heaps[0]);
-//  console.log("label_map is ", obj.label_map);
-//  console.log("label_map[0] is ", obj.label_map[0]);
-//  console.log("concat result", vlConcat("foo"));
-  
-    if (obj.last != null) {
-        internal_editor.setValue(obj.last);
-        heaps = heapsAsStrArray(obj.heaps);
-        label_map = obj.label_map;
-        cache = {};
+    var btn = document.getElementById('analyze')
+    btn.disabled = true;
+    btn.textContent = "Analyzing ..."
+
+    var myWorker = new Worker("worker.js");
+
+    myWorker.postMessage(orig_editor.getValue());
+    myWorker.onmessage = function(e) {
+        obj = e.data;
+        console.log("errors is ", obj.errors);
+
+        if (obj.last != null) {
+            internal_editor.setValue(obj.last);
+            heaps = heapsAsStrArray(obj.heaps);
+            label_map = obj.label_map;
+            cache = {};
+        } else {
+            console.log("no update, since no last");
+        }
+        btn.disabled = false;
+        btn.textContent = "Analyze"
+        console.log('Message received from worker');
     }
-    else { console.log("no update, since no last"); }
 }
 
 var abutton = document.getElementById('analyze');
@@ -179,7 +160,7 @@ function progSelect() {
     else if (choice == 'fac')    { orig_editor.setValue(fac); }
     else if (choice == 'record') { orig_editor.setValue(record); }
     else                         { orig_editor.setValue(seterror); }
-    
+
     //    console.log("Selected options ", pselect.options, " index ", pselect.selectedIndex);
     console.log("Selected value ", pselect.value);
 //    console.log("Text ", pselect.options[pselect.selectedIndex].text);
