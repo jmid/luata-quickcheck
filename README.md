@@ -5,7 +5,7 @@ This is a static analysis for conservatively inferring run-time types
 of Lua programs. It forms the case study contained in the paper
 
     QuickChecking Static Analysis Properties
-    Jan Midtgaard and Anders Møller
+    Jan Midtgaard and Anders MÃ¸ller
     Proceedings of ICST'15
     http://janmidtgaard.dk/papers/Midtgaard-Moeller:ICST15.pdf
 
@@ -51,7 +51,15 @@ The web interface further requires:
 - [Js_of_ocaml](http://ocsigen.org/js_of_ocaml/) (available through OPAM)
 - [CodeMirror](http://codemirror.net) (included)
 - [TextHover addon]("https://github.com/angelozerr/CodeMirror-XQuery/tree/master/codemirror-extension/addon/hover") to CodeMirror (also included)
- 
+
+
+License:
+--------
+
+The analysis is released under a BSD license.
+The visualizer builds on [CodeMirror](https://github.com/codemirror/CodeMirror) which is MIT licensed,
+and the [TextHover addon]("https://github.com/angelozerr/CodeMirror-XQuery/tree/master/codemirror-extension/addon/hover") by [Angelo Zerr](https://github.com/angelozerr).
+
 
 Analysis instructions:
 ----------------------
